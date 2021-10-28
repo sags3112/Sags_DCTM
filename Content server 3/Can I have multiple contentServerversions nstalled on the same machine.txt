@@ -1,0 +1,133 @@
+On Windows machines, the answer is no. On UNIX machines, yes you can have multiple Content Server versions installed on the same machine. To achieve this, each Content Server installation must have its own set of environment variables. Each installation can either have its own installation owner and that account have its' own environment variables or each installation can share the same installation owner account, but use a different set of environment variables for each installation.
+
+For example, if each Content Server Installation has its own installation owner then the environment variables will be setup in each of the installation owner's profile or .chsrc, or .login.
+
+Below is an example of each Content Server installation sharing the same installation owner account.
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+The following information is only intended to be an example only as a courtesy to assist with setting up multiple Content Server installations on the same UNIX machine. Each site will have their own specific requirements. For assistance with setting up environment variables please contact your UNIX System Administrator.
+
+1. In the installation owner's (in this example the installation owner account is called dmadmin) home directory create a file called .51 that contains the required environment variables for one Content Server installation. For example:
+
+setenv DOCUMENTUM /export/akira3/dm51
+
+setenv DM_HOME $DOCUMENTUM/product/5.1
+
+setenv DOCUMENTUM_SHARED $DM_HOME/dfc_share
+
+setenv DFC_DATA $DM_HOME/dfc
+
+setenv JAVA_HOME /usr/j2sdk1_3_1_04
+
+#
+
+setenv LD_LIBRARY_PATH $DM_HOME/bin:$DOCUMENTUM/share/clients/unix/solaris:/usr/
+
+lib:$JAVA_HOME/jre/lib/:/usr/lib/security:$DOCUMENTUM_SHARED/dfc:$DM_HOME/verity
+
+/_ssol26/bin
+
+#
+
+setenv CLASSPATH .:$DM_HOME/bin:$DOCUMENTUM_SHARED/dctm.jar:$DFC_DATA/dfc.jar:$D
+
+M_HOME/dfc:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/bin:$DM_HOME/classes/com/documen
+
+tum/ldap/ldapjdk.jar:$DM_HOME/classes/com/documentum/ldap/ldapfilt.jar
+
+#
+
+setenv DISPLAY akira:0.0
+
+setenv ORACLE_HOME /export/akira2/oracle92/product/9.2
+
+setenv ORACLE_BASE /export/akira2/oracle92
+
+setenv ORACLE_SID akira92
+
+set path=(/bin /usr/bin /usr/dt/bin /usr/openwin/bin /usr/ucb /etc .)
+
+set path = ($path $DM_HOME/bin )
+
+set path = ($path $DOCUMENTUM/dba )
+
+set path = ($path $ORACLE_HOME/bin )
+
+set path = ($path $JAVA_HOME/bin )
+
+set path = ($path /usr/sbin )
+
+set path = ($path /usr/local/bin )
+
+set path = ($path /usr/ccs/bin)
+
+echo "You are now using" `documentum -v`
+
+2. In the same directory, create a file called .52 containing the required environment variables for another Content Server installation. For example:
+
+setenv DOCUMENTUM /export/akira4/dm52
+
+setenv DM_HOME $DOCUMENTUM/product/5.2
+
+setenv DOCUMENTUM_SHARED $DM_HOME/dfc_share
+
+setenv JAVA_HOME /usr/j2sdk1_3_1_04
+
+#
+
+setenv LD_LIBRARY_PATH $DM_HOME/bin:$JAVA_HOME/lib:$JAVA_HOME/jre/lib/:$DOCUMENT
+
+UM_SHARED/dfc:$DOCUMENTUM/fulltext/verity271/_ssol26/bin:/usr/lib
+
+#
+
+setenv CLASSPATH .:$DOCUMENTUM_SHARED/dctm.jar:$DM_HOME/bin:$DM_HOME/classes:$DO
+
+CUMENTUM/share/dfc/dfc.jar:$DM_HOME/dfc:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/bin:$DOCUMENTUM/product/5.2/dfc_share/config
+
+#
+
+setenv DISPLAY akira:0.0
+
+setenv ORACLE_HOME /export/akira2/oracle92/product/9.2
+
+setenv ORACLE_BASE /export/akira2/oracle92
+
+setenv ORACLE_SID akira92
+
+set path=(/bin /usr/bin /usr/dt/bin /usr/openwin/bin /usr/ucb /etc .)
+
+set path = ($path $DM_HOME/bin )
+
+set path = ($path $DOCUMENTUM/dba )
+
+set path = ($path $ORACLE_HOME/bin )
+
+set path = ($path $JAVA_HOME/bin )
+
+set path = ($path /usr/sbin )
+
+set path = ($path /usr/local/bin )
+
+set path = ($path /usr/ccs/bin)
+
+echo "You are now using" `documentum -v`
+
+3. The .cshrc file for the installation owner account will contain the following entries:
+
+alias 51 'source ~dmadmin/.51'
+
+alias 52 'source ~dmadmin/.52'
+
+echo "Type 51 to load eContent Server 5.1 for Oracle 9.2"
+
+echo "Type 52 to load Content Server 5.2 for Oracle 8.1.7"
+
+4. When the installation owner account logs into the UNIX machine they will see the following message:
+
+Type 51 to load eContent Server 5.1 for Oracle 9.2
+
+Type 52 to load Content Server 5.2 for Oracle 8.1.7
+
+5. At this time, all you have to do is type either 51 or 52 depending on which installation you wish to use and your account will be pointing to the installation that you want. 

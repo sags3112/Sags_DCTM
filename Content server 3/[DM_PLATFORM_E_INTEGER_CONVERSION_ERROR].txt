@@ -1,0 +1,158 @@
+
+What could cause the error "DM_PLATFORM_E_INTEGER_CONVERSION_ERROR" 
+
+http://solutions.emc.com/emcsolutionview.asp?id=esg26138
+        
+ID:    esg26138   
+ 
+SOLUTION   
+ 
+The error above may be due to a problem in the DMCL persistent cache. One instance where this error appeared may have been caused by an unexpeted crash of the client process. 
+ 
+
+When the application was restarted, any query where the 'next' api returned NULL would cause the error to be thrown. There may be other ways in which the error could appear if there is a problem in the cache. 
+ 
+
+Here is an example from the DMCL trace: 
+ 
+
+# [ 1 ] Wed Jan 7 13:05:39 2004 697591 ( 0.000 sec) ( 4 rpc) API> get,apisession,apiconfig,r_dmcl_version 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 698079 ( 0.000 sec) ( 4 rpc) Res: '5.2.0.185 sun5' 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 714969 ( 0.000 sec) ( 4 rpc) API> query_cmd,s0,T,F,,,,,select r_object_id from loan_folder where loan_number='0067182162' 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 715589 ( 0.001 sec) ( 4 rpc) Server RPC: EXEC (0000000000000000) select r_object_id from loan_folder where loan_number='0067182162' 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 727294 ( 0.012 sec) ( 5 rpc) Res: 'q0' 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 771810 ( 0.000 sec) ( 5 rpc) API> next,s0,q0 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 772319 ( 0.001 sec) ( 5 rpc) Res: ' ' 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 772565 ( 0.000 sec) ( 5 rpc) API> getmessage,s0,3 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 772823 ( 0.000 sec) ( 5 rpc) Server RPC: GET_ERRORS (0000000000000000) 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 775339 ( 0.003 sec) ( 6 rpc) Server RPC: MultiNext (1) 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 777979 ( 0.005 sec) ( 7 rpc) Res: '[DM_PLATFORM_E_INTEGER_CONVERSION_ERROR]error: "The server was unable to convert the following string (String Unavailable) to an integer or long." 
+ 
+
+[DM_PLATFORM_E_INTEGER_CONVERSION_ERROR]error: "The server was unable to convert the following string (String Unavailable) to an integer or long." 
+ 
+
+[DM_PLATFORM_E_INTEGER_CONVERSION_ERROR]error: "The server was unable to convert the following string (String Unavailable) to an integer or long." 
+
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 778510 ( 0.000 sec) ( 7 rpc) API> reset,s0,q0 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 778823 ( 0.000 sec) ( 7 rpc) Res: ' ' 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 779045 ( 0.000 sec) ( 7 rpc) API> getmessage,s0,3 
+ 
+# [ 1 ] Wed Jan 7 13:05:39 2004 779370 ( 0.000 sec) ( 7 rpc) Res: '[DM_API_E_EXIST]error: "Document/object specified by q0 does not exist." 
+ 
+Resolution:
+
+If this condition occurs, engineering believes that clearing the DMCL cache directories on the client application machine, then restarting the client process will correct the problem. Please see the referenced support note # 24004 for information clearing these caches.  
+ 
+---------------------------------------------------------------------
+ 
+---------------------------------------------------------------------
+http://solutions.emc.com/emcsolutionview.asp?id=esg24004
+ 
+ID:    esg24004
+
+What is dm_cache_config?
+ 
+A cache config object identifies a group of queries, objects, or both to be cached on the client and refreshed at defined intervals. Type dm_cache_config is new to 5.2 server. This type is SysObject subtype and it is persistent and may not be versioned. 
+ 
+
+It is created by applications to check coherency of objects and queries in groups. It is intended for objects and queries that change infrequently. It is also reduces server round trips by: 
+ 
+
+- Checking a group of objects all once 
+ 
+- Reduces the frequency of checks 
+ 
+- Allows the server to make the checks asynchronously. 
+ 
+ 
+ 
+Starting with 5.2 cache queries will be enabled by default. The cache_queries flag is still supported but if client_persistent_caching is false then cache query operations will be disabled regardless of the cache_queries setting. 
+ 
+
+You may disable the cache query in the dmcl.ini file as follow: 
+ 
+
+[DMAPI_CONFIGURATION] 
+ 
+client_persistent_caching = F 
+ 
+
+To remove items form the cache: 
+ 
+- There is no interface provided to removed individual items from the cache therefore, objects in the cache can be removed in any of the following ways: 
+ 
+- With the flush API call 
+ 
+flush,c,persistentcache 
+ 
+flush,c,persistentobjcache 
+ 
+- By updating the dm_docbase_config.client_pcaching_change 
+ 
+http://solutions.emc.com/emcsolutionview.asp?id=esg26138
+
+ 
+Here's the summary for error:
+
+ 
+- The error [DM_PLATFORM_E_INTEGER_CONVERSION_ERROR] may have been caused by some corruption in the cache.
+- To clear the cache with API
+             API>flushcache,c 
+             API>flush,c,persistentcache 
+             API>flush,c,persistentobjcache 
+             API>flush,c,querycache 
+ 
+Here's explanation from Content Server API Reference Manual 5.3 SP1 pages 213-217:
+------------------------
+Flushcache
+ 
+Purpose Removes objects from the server and client in-memory caches. (It does not remove
+objects from a persistent cache. Use Flush to remove objects from a persistent
+cache.)
+ 
+------------------------
+Flush
+ 
+Purpose Removes cached queries from the client’s query caches; ACLs or groups from the
+session cache; objects from the persistent client caches; or non-persistent objects
+from the data dictionary cache.
+ 
+
+Flushing the persistent client cache
+
+Flushing a persistent cache, or any part of it, flushes the cache for the user who executes
+the Flush method. It is not possible to flush another user’s cache.
+There are three options for flushing a persistent client cache. You can flush the entire
+cache (objects and queries), only the objects in the cache, or only the query results. To
+flush the entire cache, include the persistentcache keyword. To flush only the objects,
+include the persistentobcache keyword. To flush only the query results, use the
+querycache keyword .
+If you flush the query cache files, the method removes all files from the cache file in the
+user’s client local area and recreates the cache.map file without entries. (The cache.map
+file maps the entries in an executed cached query to the results file.) The next time the
+user executes a cached query, a new result set is cached.
+
+------------------------
+ 
+
+- To clear the cache on Application Server,
+ Stop the Application Server
+ Search for dmcl folder 
+ Remove contents of dmcl folder (e.g. C:\Windows\System32\dmcl)
+ 
+************************
+

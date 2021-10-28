@@ -1,0 +1,40 @@
+esg5460
+
+How do you verify that SQL Server is running in case-sensitive mode?
+
+Solution:
+
+For a successful install of content server running on SQLServer database, the install mode should be case-sensitive. You can check if SQL Server is installed in case-sensitive with any one of the following methods: 
+
+Option 1: 
+create table t(x char(1)) 
+insert into t values('A') 
+
+This query should not return any rows if SQL Server is installed in case-sensitive mode 
+select * from t where x ='a' 
+
+Option 2: 
+Use the Enterprise Manager. Right click on the server, choose Properties. On 
+the General tab, take a look at the server collation entry. <collation>_CI is 
+case insensitive _CS is case sensitive. 
+
+Option 3: 
+From the query analyzer run the following query 
+SELECT SERVERPROPERTY('Collation') 
+
+Option 4: 
+sp_helpdb 'database_name' 
+
+Example: 
+
+sp_helpdb 'DM_mjw_test_docbase' 
+
+DM_mjw_test_docbase 200.00 MB sa 11 Feb 20 2004 Status=ONLINE, Updateability=READ_WRITE, UserAccess=MULTI_USER, Recovery=FULL, Version=539, Collation=SQL_Latin1_General_CP1_CS_AS, SQLSortOrder=51, IsTornPageDetectionEnabled, IsAutoCreateStatistics, IsAutoUpdateStatistics 80 
+
+Under the status field you see that the Collation=SQL_Latin1_General_CP1_CS_AS 
+
+The value _CS_ means that the DB is in Case Sensitive mode. If it were _CI_ this would mean that it is in Case Insensitive mode. 
+
+If you try to install Documentum on SQL Server running in case-insensitive mode, you might get an error similar to: "Error: the database is not case sensitive. Error from database system is: -- Object already exists -- STATE=23000, CODE=2627, MSG=[Microsoft][ODBC SQL Server Driver][SQL Server]Violation of PRIMARY KEY constraint 'PK__dmdbtest__1F8E9120'. Cannot insert duplicate key in object 'dmdbtest'." 
+
+To fix the problem, you will need to reinstall SQL Server in case-sensitive mode. Please contact your Database Administrator for assistance with this. 

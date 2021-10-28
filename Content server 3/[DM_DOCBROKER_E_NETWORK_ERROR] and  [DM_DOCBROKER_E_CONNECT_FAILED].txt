@@ -1,0 +1,42 @@
+What can cause the errors [DM_DOCBROKER_E_NETWORK_ERROR] and  [DM_DOCBROKER_E_CONNECT_FAILED]
+
+esg9625 
+
+
+Resolution:
+
+If the server log contains the following set of errors every five minutes: 
+
+
+Fri Mar 02 10:22:14 2001 538000 [DM_DOCBROKER_E_NETWORK_ERROR]error: "An error occurred performing a network operation: (Unknown error code 112 (_nl_error_ = 10061)). Network specific error: (Winsock error: connection refused; server probably not running)." 
+
+Fri Mar 02 10:22:14 2001 578000 [DM_DOCBROKER_E_CONNECT_FAILED]error: "Unable to connect to DocBroker. Please check your dmcl.ini file for a correct host. Network address: (INET_ADDR: family: 2, port: 1489, host: wwcs032 (172.16.73.102, ac104966))." 
+
+
+The error message has to do with the server.ini file and the docbroker process, regardless of the suggestion of checking the dmcl.ini file. 
+
+
+SOLUTION: 
+
+1. Check server.ini file and found that one of the three projection target says: 
+
+[DOCBROKER_PROJECTION_TARGET_2] 
+
+host = wwcs032 
+
+
+2. However, the docbroker on machine 'wwcs032' is down thus the above error about failing to connect to that docbroker on wwcs032. 
+
+
+To resolve the problem, take either one of these two steps: 
+
+
+1. Comment out the [DOCBROKER_PROJECTION_TARGET_2] host entry so that the server will stop trying to project to wwcs032, for example: 
+
+
+[DOCBROKER_PROJECTION_TARGET_2] 
+
+#host = wwcs032 
+
+
+2. Or start up the docbroker on machine wwcs032 so that the server can connect to it successfully

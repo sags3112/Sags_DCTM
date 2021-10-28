@@ -1,0 +1,21 @@
+Make sure the ":dm_mount_point" object is set to the correct "file_system_path," and that the "dm_location" object is set to the correct "file_system_path." 
+
+
+Perform a dql "select" statement, as enclosed below, to see what "mount_point_name" is set for the "object_name": 
+
+
+select object_name, file_system_path, mount_point_name from dm_location 
+
+
+
+Then perform another "select" statement to see if the "correct file_system_path" is set for the "dm_mount_point" object. This time the select statement should appear similar to the following: 
+
+
+select object_name, file_system_path from dm_mount_point 
+
+
+
+Finally, correct the path if necessary.
+
+
+*********

@@ -1,0 +1,16 @@
+Disappearing CS and Docbroker from Server Manager
+
+I had a hard disk issue this past week (bad sectors -all happy now) BUT now I am missing the docbase and docbroker entries from my server manager application.  How does Server manager determine the docbase and docbroker installed?
+
+
+My docbase and docbroker service are up and running fine.  Just not accessible through server manager.
+
+
+
+
+Server manager search docbase and docbroker from windows registry as following path
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Documentum\DOCBASES
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Documentum\DOCBROKERS
+
+Maybe above entries is empty.

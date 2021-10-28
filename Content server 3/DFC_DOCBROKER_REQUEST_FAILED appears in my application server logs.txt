@@ -1,0 +1,21 @@
+esg98459 
+
+Symptoms
+
+Seeing DFC_DOCBROKER_REQUEST_FAILED in your application server logs and the WDK application does not start correctly.
+
+
+
+Cause
+
+You have failed to add the connection broker (formerly docbroker) to the dfc.properties file.
+
+
+
+Resolution
+
+To configure connections in dfc.properties before deployment:
+1. Unpack the application WAR file.
+2. Open the file dfc.properties in WEB-INF/classes.
+3. Add the fully qualified host name or IP address for the docbroker to the following key. You can add backup hosts by incrementing the index number within brackets: dfc.docbroker.host[0]=host_name
+4. If you wish to use a port for the docbroker other than the default of 1489, add a port key to dfc.properties: dfc.docbroker.port=port_number

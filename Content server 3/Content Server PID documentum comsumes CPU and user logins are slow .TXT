@@ -1,0 +1,54 @@
+esg93377
+
+
+Content Server PID documentum comsumes CPU and user logins are slow 
+ 
+ 
+ 
+ 
+Symptoms
+
+Content Server exhibits extremely poor performance for any login action. The Content Server PID "documentum" runs at 30% to 80%, and the the main desktop for Windows is almost unusable. After Content Server reboot the server quickly slows down again.
+
+ 
+
+Cause
+
+There are too many session logs, such as 50k, for any one user or many users. This causes a problem for Windows Explorer since it must open the session directory to create new session logs. Session directories are named by the user login name, therefore it is easy to see how many users have used the docbase if the docbase has not been maintained.
+
+ 
+
+Every login from any user will always create a session log and this is cannot be turned off. An example location would look like this: C:\Documentum\dba\log\0005073a. 
+
+ 
+
+Under this directory could be as few as five (5) session folders or hundreds, depending on user load.
+
+ 
+
+The problem can be confirmed by dmcl tracing any client.  Review the dmcl trace file.  
+
+If the authenticaion call is taking an extremley long time to complete, such as 35000 ms, and if the user validation source is confirmed to be valid and is known to be working, excesssive session logs should be suspected.
+
+ 
+
+Resolution
+
+1. Stop the docbase, docbroker and java method server in that order.
+
+2. Rename the folder which is the docbase id in hex ie 0005073a from example above.
+
+3. Restart docbroker, docbase and java method server.
+
+4. Resume normal usage activity.
+
+
+
+
+	 OR 
+
+RUN THE DM_LOGE PURGE JOB BY MAKING CUTOFF DAY TO 5 FROM 30
+
+
+-	Please try to add the parameter under [SERVER_STARTUP] in server.ini and restart your docbase services and let us know how it goes
+IP_MODE=V4ONLY (Try it in all upper case)
