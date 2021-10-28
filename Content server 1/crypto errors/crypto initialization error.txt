@@ -1,0 +1,20 @@
+ the docbase is not able to access the AEK file, you will see this error in the docbase log. 
+
+Error in docbase log: 
+[DM_SESSION_I_INIT_BEGIN]info: "Initialize Start Up - Phase 2." 
+# Making docbase config object. 
+# Making server config object. 
+Mon Aug 04 13:40:58 2003 657000 [DM_SESSION_I_INIT_BEGIN]info: "Initialize Crypto Objects." 
+Mon Aug 04 13:40:58 2003 657000 [DM_SESSION_E_INIT_FAILURE1]error: "Failure to complete Crypto Objects initialization." 
+Mon Aug 04 13:40:58 2003 667000 [DM_SERVER_I_START_ID]info: "Docbase 52test was not successfully opened. Docbase id: (154849)" 
+
+When copying a Content Server installation to a new machine using Database utilities (for example, Oracle export and import), or installing additional Content Servers that share a single Docbase (for example, installing a Content Server on a second node in a cluster, installing a remote Content Server when using distributed content), follow these instructions. 
+
+1. Copy the AEK file from the primary/original site: 
+
+$DOCUMENTUM/dba/secure/aek.key as 
+$DOCUMENTUM/dba/secure/aek.key to secondary sites 
+
+2. On secondary system: 
+cd $DM_HOME/bin 
+dm_encrypt_password -docbase <docbase name> -rdbms -encrypt <database password>

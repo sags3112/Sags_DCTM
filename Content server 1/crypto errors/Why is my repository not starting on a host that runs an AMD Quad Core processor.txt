@@ -1,0 +1,37 @@
+Symptoms
+
+When starting a repository that has been moved to a host with an AMD Quad Core processor, you may see the following errors in the repository log and it will not start.
+
+
+
+
+
+Last SQL statement executed by DB was:
+ÿÿÿÿ
+documentum: dmshared.cxx:1267: dmBool dmMapSharedRoot(dmOSError*): Assertion `!dmShared_UsesTrueSharedMemory()' failed.
+ Last SQL statement executed by DB was:
+ÿÿÿÿ
+Mon Aug 10 14:42:53 2009 535846 [DM_CRYPTO_E_PASSWORD_DECRYPTION_FAILED]error:  "Decryption of password present in file /apps/documentum/dba/config/rdval/dbpasswd.txt failed, status - 1058275329"
+Mon Aug 10 14:42:53 2009 537612 [DM_SESSION_E_CANT_READ_DB_PASSWORD]error:  "The database password cannot be read for document base rdval."
+
+
+
+
+
+Cause
+
+This is actually due to bug CS-3067.  The bug for CS-3067 is for a different problem where you cannot install the Content Server on an AMD Quad Core processor and it returns a different error.
+
+
+
+
+
+However, if you installed the Content Server on a different processor and then moved the Content Server, through a VMWare image, to a host with an AMD Quad Core processor, you will have bypassed the original installation issue, but will see the errors from above when starting the repository.
+
+
+
+
+Resolution
+
+The bug fix for CS-3067 has been included in both SP1 and SP2 for Content Server 6.5.  Applying this patch will get you past this error and the repository will now start without error.
+

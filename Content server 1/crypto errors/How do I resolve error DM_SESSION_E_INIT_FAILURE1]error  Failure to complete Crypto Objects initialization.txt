@@ -1,0 +1,18 @@
+
+How do I resolve error "DM_SESSION_E_INIT_FAILURE1]error:  Failure to complete Crypto Objects initialization.", when I start a remote 5.2 server that's part of a single Docbase multiple Server environment?
+ 
+ 
+The aek file needs to be the same on all Server machines that are part of a single Docbase multiple Server environment. The aek file should be copied from the primary Server machine to all of the remote Server machines. 
+
+1. Copy the AEK file from the primary/original site: 
+$DOCUMENTUM/dba/secure/aek.key as 
+$DOCUMENTUM/dba/secure/aek.key to secondary sites 
+
+2. On the remote servers run the following command, do: 
+A. cd %DM_HOME%\bin 
+B. dm_encrypt_password -docbase <docbase name> -rdbms 
+-encrypt <database password> 
+
+3. Restart the remote server. 
+
+NOTE: The aek.key file cannot be used across platforms. An AEK file created under Windows cannot be used on a UNIX system and vise-versa.

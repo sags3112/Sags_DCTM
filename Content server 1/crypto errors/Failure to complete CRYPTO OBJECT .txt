@@ -1,0 +1,57 @@
+9.)  In the docbase log do you see the following:  Failure to complete CRYPTO OBJECT initialization.
+
+For a 5.2.5 docbase  - use SN 27127
+
+For a 5.3 docbase - use  SN 74708
+
+SN- 74708
+
+
+	1. Shutdown all the docbase on the target server 
+
+	2. Backup the database 
+
+	3. Rename the aek.key file located under Documentum\dba\secure
+
+	4. From SQL on the database: 
+		update dm_docbase_config_s set i_crypto_key = ' ';   <--- single space
+	5. From SQL: 
+		select r_object_id from dmi_vstamp_s where i_application = 'dm_docbase_config_crypto_key_init'; 
+	6. From SQL: 
+		delete from dmi_object_type where r_object_id = 'returned r_object_id from above'; 
+		commit; 
+	7. From SQL: 
+		delete from dmi_vstamp_s where r_object_id = 'returned r_object_id from step above' 
+		commit; 
+	8. From SQL: 
+		update dm_docbase_config_s set i_ticket_crypto_key = ' ' (note empty space - one space between the quotes) 
+		commit; 
+	9. From SQL: 
+		select r_object_id from dmi_vstamp_s where i_application = 'dm_docbase_config_ticket_crypto_key_init'; 
+		 
+	10. From SQL: 
+		delete from dmi_object_type where r_object_id = '<id from above>' 
+		commit; 
+	11. From SQL: 
+		delete from dmi_vstamp_s where r_object_id = 'id from above' 
+		commit; 
+	12. Run this file from $DM_HOME/bin: dm_crypto_create 
+
+	13. To re-encrypt the dbpasswd.txt file do the following:
+
+		open the dbpasswd.txt file from Documentum\dba\config\<docbasename>
+		clear the document
+		add your password (only the password)
+		cd $DM_HOME/bin 
+
+		run:
+		%> dm_encrypt_password -docbase <docbase name> -rdbms -encrypt <database password> 
+
+	14. You need to do all modification on the database for each docbase - BUT NOT step 11 - just do step 11 ONCE. 
+	15. Startup the docbases.  
+
+
+For CS 6.0
+
+SN-
+esg96192
