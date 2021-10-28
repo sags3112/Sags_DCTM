@@ -1,0 +1,125 @@
+sag3112: hello harry
+sag3112: need help from u sir
+hdedrickson: no i never seen that error before
+sag3112: ok
+hdedrickson: did you install an OS ?
+hdedrickson: or use a preexisting vmdk file
+sag3112: os is already on the box
+sag3112: 2003 server 
+hdedrickson: the image
+sag3112: i jst thought of creating image of the box
+hdedrickson: is it from preexisting OS
+sag3112: yaa
+hdedrickson: who gave you the image
+sag3112: no one ..jst coped from torfile machine folder called server
+sag3112: and installed vm server on teh lab
+sag3112: and then tried created the image ie by selecting the option new virtual image option from vm server console
+hdedrickson: and you selected use an existing disk file ?
+sag3112: 1 mnt pls
+sag3112: i did not see any option like tht
+hdedrickson: ok you did it wrong..
+hdedrickson: start over
+sag3112: ok
+sag3112: can u pls tell me the stps
+hdedrickson: best thing is for start with over
+hdedrickson: well icant conduct a training session here in IM chat
+sag3112: if u have any screen shots it will be grt
+sag3112: k
+hdedrickson: so what you need to do is start from  scratch and learn how to install a OS from an ISO image
+hdedrickson: do you have msoft license keys?
+hdedrickson: this way you can customized the disk image size
+hdedrickson: and allocate it
+sag3112: no
+sag3112: no licence key
+hdedrickson: where do you get the OS for your LABS ?
+sag3112: IT people have installed this
+hdedrickson: i see
+hdedrickson: this will have to change i think
+hdedrickson: I 'll talk to bob and folks about this..
+hdedrickson: you need to free and unfettered access to various flavors of operating systems....
+sag3112: ok
+sag3112: jst pls give him an idea that let team know the process when he is herr
+hdedrickson: how they are installed what versions are used impact our server
+hdedrickson: anyway when you create a new machine
+hdedrickson: you use custom
+sag3112: ok
+hdedrickson: then you click next
+hdedrickson: then allow workstation 6.0
+hdedrickson: then next
+hdedrickson: then select Msoft windows then pick the drop down box and pick a specific version
+hdedrickson: you need to know what this image is .,..
+hdedrickson: click next
+hdedrickson: then you type a name for machine , here you should have a descriptive name
+hdedrickson: and then pick the path where the vmmachine will live
+sag3112: k
+hdedrickson: then you pick # of cpus's click next
+hdedrickson: then select memory allocation
+hdedrickson: then select networking.... bridge is the default
+hdedrickson: however Oracle will not run without a fixed IP
+sag3112: what abt teh option access rights
+hdedrickson: then pick default for LSI logic
+sag3112: shall i use the chk mark
+hdedrickson: for bus type
+hdedrickson: then you select use an existing disk
+hdedrickson: then you browse to vmdk file you downloaded...
+hdedrickson: then select open
+hdedrickson: then select finish...
+hdedrickson: then select Ok
+sag3112: thnks man..
+sag3112: got it..
+hdedrickson: now the problem
+sag3112: but small confuision here...
+hdedrickson: you need to know the login password , for the OS
+hdedrickson: since you are using a prebuilt OS
+sag3112: u said select use an existing disk
+hdedrickson: and your dependent on the image being clean and in functional order.
+sag3112: wht i have to select 
+hdedrickson: otherwise you are just using garbabe
+hdedrickson: you pick an image from someone else vmware workstation someone who has gone thru the process of creating an OS from scratch
+hdedrickson: all your doing is using someone else already created virtual machine
+sag3112: ok
+hdedrickson: the file is .vmdk
+sag3112: i cant create new one
+hdedrickson: you creating a new one
+hdedrickson: are
+hdedrickson: but using a preexisting image
+hdedrickson: you cant create a new image without installing an OS or you can use one that already one
+hdedrickson: those are your choices
+sag3112: ok
+hdedrickson: vmware doesnt install an OS
+hdedrickson: you have to install it
+sag3112: k
+hdedrickson: once you install you can copy the images all over the place
+hdedrickson: however the hostname, licenses, IP's are duplicated
+sag3112: ok
+sag3112: got it sir
+hdedrickson: using other peoples images while fast make you dependent on others...and prone to thier problems
+sag3112: yaaaaaaa
+hdedrickson: you all need to be self sufficient
+sag3112: right !!
+hdedrickson: buts that our goal
+hdedrickson: so it will take some time
+hdedrickson: if you have a lack of resouces
+hdedrickson: I will talk to your managers,
+sag3112: ok
+hdedrickson: bob will be good for that
+sag3112: yaaaaa
+sag3112: one more qstion
+sag3112: jst guide us what to learn from bob when he is here..asome thing like what concepts if we cover it will be ok
+sag3112: jst give us in nut shell
+sag3112: what points if we know it will be good in the long run
+hdedrickson: bob and I alreay have talked ..
+sag3112: ohhhhhhhhh
+hdedrickson: so he knows what to look for
+sag3112: k
+sag3112: thnks
+sag3112: np then
+hdedrickson: so you need to buddy up with folks you already have images built , send out a note what you are looking for 
+hdedrickson: to server_support
+hdedrickson: or TS_SERVER
+hdedrickson: and ask for map locations for vmdk files
+sag3112: k
+hdedrickson: as to the vmware application isself 
+hdedrickson: you may want to check how it was installed
+hdedrickson: and you have full rights
+sag3112: k

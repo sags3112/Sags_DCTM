@@ -1,0 +1,31 @@
+Symptoms
+Content Addressable Storage option on DA is greyed out or cannot save contents into ca_store (Centera file pool).
+Cause
+EMC Centera plug-in or PEA file is not configured correctly.
+Resolution
+1. Enable EMC Centera support when installing or configuring repository.
+
+2. Obtain Centera Profile (PEA file - Pool Entry Authorization) from Centera admin.
+
+3. Make sure emcplugin.dll is in the $DM_HOME\bin folder.
+
+4. Follow the DA user guide and Content Server admin guide to set up ca_store using DA.
+Plugin Name: CSEC Plugin
+mailto:10.10.10.10@c:\Documentum\dba\config\docbase_name\ca_store01_centera_profile.pea
+Storage Parameters: IP_address|hostname{,IP_address|hostname}"Centera_profile_in_full_path
+e.g. 10.10.10.10"c:\Documentum\dba\config\docbase_name\ca_store01_centera_profile.pea
+Note: Replace " by a question mark.
+
+5. Use the following APIs to test.
+API> create,c,dm_document
+API> set,c,l,object_name
+API> TestCAStore
+API> setfile,c,l,c:\TestCAStore.txt,crtext
+API> set,c,l,a_storage_type
+API> <ca_store_name>
+API> setcontentattrs,c,l,crtext,0,,'retain_for="900"'
+API> link,c,l,/Temp
+API> save,c,l
+API> getpath,c,<r_object_id>
+---Returns Centera content address---
+Note: Retention is a very important feature in Centera, if you need to setup retention period for testing, you can use the API command listed above API>setcontentattrs,c,l,crtext,0,,'retain_for="900"'. It means the content stores in the filestore will not be able to delete in 15 minutes after creation time. You can also specify in date format as well.

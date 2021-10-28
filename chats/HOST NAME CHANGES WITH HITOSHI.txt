@@ -1,0 +1,88 @@
+hitoshi_ito2006: on webex now. I will let you know when i am free
+sag3112: k
+hitoshi_ito2006: or you can just type in your question and I will answer when i have time
+sag3112: ok
+sag3112: Issue: 
+
+Currently, our Documentum Content Server and Oracle database are each on SUN Solaris 10 servers. We are being required to change the names on both of  these servers. What are the concerns and impact on Documentum regarding a server name change? How imbedded are the server names throughout Documentum? What  must be done to have Documentum work with the name changes??
+sag3112: so i replied ct 
+ 
+
+sag3112: Hi Mark, 
+
+If you want to change the name of Content Server box, there is no known issues in version 5.3 SPx. But Oracle database in general will have issues if you change host name after installation. Please get in touch with your DBA in changing the Database machine name.
+
+Let me know if you need any thing more. 
+
+sag3112: now ct done the changes to CS box and oracle box
+sag3112: Sagar,
+
+ 
+
+We have completed testing of the server name change in our lab environment. The necessary modifications to effect the server name change were made to the operating system and Oracle. All looked good at this point. It was not until I attempted to bring the Documentum Content Server online that problems occurred. After starting the Docbroker and repositories, I attempted to log into Documentum. At this point, the login failed with errors related to the Docbroker not seeing the repositories. Looking further into the problem revealed that the content server was looking for the old server name.
+
+ 
+
+Apparently the server name is embedded in files on the content server. A search for files containing the old server name was done on the content server.
+sag3112: The search revealed that files such as dmcl.ini, dm_launch_Docbroker, dm_stop_Docbroker, uninstall.ini, webcache.ini, server.ini, etc. contain the old server name. Does Documentum have any documentation covering this issue? Is there a document that lists the files where the server name is embedded? Can you provide some help in this matter?
+hitoshi_ito2006: looks like there are lots of things you have to take care.
+hitoshi_ito2006: refer customer to the following forum threads
+hitoshi_ito2006: forums.emc.com/forums/thread.jspa?tstart=0&threadID=66196
+hitoshi_ito2006: //forums.emc.com/forums/thread.jspa?tstart=0&threadID=57850
+hitoshi_ito2006: what's the OS?
+hitoshi_ito2006: ok so basically you can tell it's not a supported procedure
+hitoshi_ito2006: too many things to consider
+hitoshi_ito2006: but the forums I gave you have lots of good insight
+hitoshi_ito2006: here are some chats I had with Harry:
+hitoshi_ito2006: Harry Dedrickson: less a matter of supported
+Harry Dedrickson: and more a matter of will it work
+Harry Dedrickson: the customer needs to understand this can break many integrations....
+Harry Dedrickson: FAST
+Harry Dedrickson: CTS
+hitoshi_ito2006: Harry Dedrickson: UNIX is easy
+Harry Dedrickson: MSOFT more to consider
+Harry Dedrickson: there should be sn's on this
+hitoshi_ito2006: So basically, can I say (it would work, but) we don't support it
+hitoshi_ito2006: ?
+Harry Dedrickson: its more of best practices
+Harry Dedrickson: we expect like any application vendor that the system will remain stable
+Harry Dedrickson: what happens if you change the hostname for Oracle
+Harry Dedrickson: it breaks the database listener
+sag3112: hey..
+sag3112: jst now came to seet
+sag3112: after meeting with praveen
+sag3112: u there
+hitoshi_ito2006: yes
+sag3112: u said its supported procedure
+sag3112: right
+sag3112: sorry its not supported procedure
+hitoshi_ito2006: it will work, but not documented by us
+sag3112: ok
+hitoshi_ito2006: according to Harry (PSE), best practice is not to change system after installation
+sag3112: but we said in the mail that 
+sag3112: Hi Mark, 
+
+If you want to change the name of Content Server box, there is no known issues in version 5.3 SPx. But Oracle database in general will have issues if you change host name after installation. Please get in touch with your DBA in changing the Database machine name.
+
+Let me know if you need any thing more. 
+
+ 
+
+hitoshi_ito2006: Right, so there is no issue and docbase will work even after the change, but the step by step procedure is not available from us.
+hitoshi_ito2006: there are so many things to consider.
+hitoshi_ito2006: user authentication, docbroker (projection host), acs, replication, etc.
+sag3112: k
+sag3112: shall i say ct that pls go through the 
+sag3112: Hitoshi Ito: forums.emc.com/forums/thread.jspa?tstart=0&threadID=66196
+Hitoshi Ito: //forums.emc.com/forums/thread.jspa?tstart=0&threadID=57850
+hitoshi_ito2006: you can say "There are some good forum thread you can refer to. For example, ..." and then suggest those 2 links.
+sag3112: ok
+hitoshi_ito2006: but tell them that it's not from EMC, so it could still be missing something. We do not guarantee the validity of anything described in forum threads.
+sag3112: hitoshi jst watched the forums
+sag3112: //forums.emc.com/forums/thread.jspa?tstart=0&threadID=57850
+sag3112: If at all cts says that I haven't done...this changes..
+sag3112: if cts says can u do it for me by having webex..
+sag3112: we have to do it
+sag3112: or whats the procedure
+hitoshi_ito2006: no need to do webex. it's not supported by us. refer them to consulting
+sag3112: ok

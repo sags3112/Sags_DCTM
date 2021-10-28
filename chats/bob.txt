@@ -1,0 +1,148 @@
+
+Show Recent Messages (F3)
+
+sag3112: hi bob
+Bob Philipp: hi
+sag3112: Pls let me know if you are free
+Bob Philipp: in a meeting
+sag3112: k
+Bob Philipp: what is the issue?
+sag3112: I need General info on what is dmdbtest,why we use it..
+sag3112: tried in Poerlink..
+sag3112: but no clear documentation..
+sag3112: there are a lot of support notes on it but nothng really well documented..
+sag3112: can you please share some info on this
+Bob Philipp: what it does?
+sag3112: yaa
+Bob Philipp: it tests database connection
+sag3112: how to use it...why we use it..
+sag3112: etc..
+Bob Philipp: it opens a temp file
+Bob Philipp: writes it and then deletes it
+Bob Philipp: that is what it does
+sag3112: ok
+Bob Philipp: weput it in the install
+Bob Philipp: we put it in the install
+Bob Philipp: to test that the conf set is good
+sag3112: to test d/b configuration is good or not
+sag3112: right !!
+Bob Philipp: depends on the issue
+sag3112: k
+Bob Philipp: if install in failing
+Bob Philipp: and you think it is a database issue 
+Bob Philipp: then yes
+Bob Philipp: but
+Bob Philipp: what I check first
+Bob Philipp: can you connect with sqlplus first
+Bob Philipp: I should have asked what is the database?
+sag3112: bob sorry to interupt you..
+Bob Philipp: NP
+sag3112: 1 mnt pls
+sag3112: i have dmdbtest syntax
+sag3112: 
+dmdbtest -D<Oracle sid> -S<Server Connect> -U<User Name> -P<password> 
+Bob Philipp: no
+sag3112: tried understanding above value
+Bob Philipp: here is how I test
+sag3112: but not able to get inof on -S<server connect>
+sag3112: k
+Bob Philipp: 1) connect with sqlplus
+sag3112: k
+Bob Philipp: sqlplus account/password@sid
+sag3112: yaa
+Bob Philipp: 2) dmdbtest
+Bob Philipp: and I was wrong
+Bob Philipp: that is the correct statement
+Bob Philipp: we do use option 2
+sag3112: ok
+sag3112: how do we connect by dmdbtest
+Bob Philipp: you were right
+Bob Philipp: dmdbtest -D<Oracle sid> -S<Server Connect> -U<User Name> -P<password> 
+sag3112: k
+sag3112: what is S<Server Connect> 
+sag3112: what we have to fill the value
+Bob Philipp: that is a database server
+sag3112: i tried
+Bob Philipp: let me test it
+Bob Philipp: one sec
+sag3112: k
+sag3112: thnks
+Bob Philipp: ok
+Bob Philipp: the option the server uses is 3
+Bob Philipp: on the installer
+Bob Philipp: dmdbtest -D<Oracle sid> -S<Server Connect> -U<User Name> -P<password>
+Bob Philipp: but in yours:
+Bob Philipp: -D is the SID
+Bob Philipp: -S is is from tnsnames = but is also the SID
+Bob Philipp: hello?
+sag3112: bob..
+sag3112: meeting with Praveen
+Bob Philipp: np
+sag3112: ping u in 10 mnts
+Bob Philipp: let me know when you are back
+sag3112: sorry for not responding
+Bob Philipp: np
+sag3112: hey bob..
+sag3112: I am back
+sag3112: so -S is some thing like Host = the value in tnsnames.ora file
+sag3112: right
+Bob Philipp: yes
+Bob Philipp: but in my case it was the SID
+Bob Philipp: in my setup
+Bob Philipp: server = dedicated
+sag3112: ok i tried the same but it throughs me error
+Bob Philipp: host name did not work
+sag3112: C:\>dmdbtest -Dorcl -Ssystem-7 -Udmadmin -Pr1ng3r
+Failed to make a database connection using the following data:
+   Database Server: indiacoe
+   Database Name  : orcl
+   User Name      : dmadmin
+   User Password  : Check either the -P flag on command line or
+                    the password file specified in your server.ini
+  Error from database system is: ORA-12514: TNS:listener does not currently know
+of service requested in connect descriptor
+  (system code: 12514)
+sag3112: ya
+Bob Philipp: so I used the sid for both
+sag3112: ok
+sag3112: i will try now
+Bob Philipp: use orcl
+sag3112: ok
+Bob Philipp: for both
+sag3112: k
+sag3112: uid and pwd
+sag3112: dmadmin
+sag3112: r1ng3r
+Bob Philipp: is that you oracle user and password
+sag3112: no dctm installtion owner
+sag3112: 
+C:\>dmdbtest -Dorcl -Sorcl -Udmadmin -Pr1ng3r
+Failed to make a database connection using the following data:
+   Database Server: orcl
+   Database Name  : orcl
+   User Name      : dmadmin
+   User Password  : Check either the -P flag on command line or
+                    the password file specified in your server.ini
+  Error from database system is: ORA-01017: invalid username/password; logon den
+ied
+  (system code: 1017)
+
+Bob Philipp: in the case of a database
+sag3112: ok
+Bob Philipp: my install owner is tsadmin password tsadmin1
+Bob Philipp: but I installed with a DBO account
+sag3112: ok
+Bob Philipp: brh53sp5
+Bob Philipp: password tsadmin1
+sag3112: from cserver we have to try with database user id 
+Bob Philipp: so I used that
+sag3112: right !!
+Bob Philipp: but
+Bob Philipp: in the case of a new install
+Bob Philipp: that account would not work , since it does not exist
+Bob Philipp: so I used system/manager
+sag3112: got it
+sag3112: bob thanks lot
+Bob Philipp: np
+
+ 

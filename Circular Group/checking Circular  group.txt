@@ -1,0 +1,30 @@
+esg16988
+
+Cyclic groups issue during upgrade of docbase.
+
+
+Background :- Extract of BUG 35999 
+
+
+The server allows the creation of groups that are groups contained within the member group. For example, there is nothing to stop Group A becoming a member of Group B even though Group B is already a member of Group A. This type of circular relationship can be created with 2 or more groups. 
+
+
+This type of modeling is flawed, because from a data point of view, nothing can be resolved from a circular relationship. 
+
+
+Unfortunately the only method you can do this is by getting the dumps of all the groups and then finding the circular reference manually. 
+
+
+I have added some DQL which help in locating these problem groups. 
+
+
+
+1) Select user_name,user_group_name from dm_user order by user_group_name 
+
+2)Select g.group_name,u.user_name from dm_group g,dm_user u where u.user_group_name=g.group_name order by g.group_name 
+
+3) Select groups_names, group_name from dm_group 
+
+4) Select group_name as GRP1, groups_names as GRP2 from dm_group where group_name in (select groups_names from dm_group) 
+
+

@@ -1,0 +1,8 @@
+<pea version="1.0.0">
+<defaultkey name="us5profile3">
+<credential id="csp1.secret" enc="base64">dXM1cHJvZmlsZTM=</credential>
+</defaultkey>
+<key type="cluster" id="16e6a2a0-1dd2-11b2-8497-87df1f82d00f" name="us5profile3">
+<credential id="csp1.secret" enc="base64">dXM1cHJvZmlsZTM=</credential>
+</key>
+</pea>

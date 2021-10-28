@@ -1,0 +1,24 @@
+To enable Centera on a docbase:
+
+
+
+
+To enable Centera on a docbase, you first need to run the server configuration program to upgrade a docbase. One option is to enable Centera and you will need a license key to enable this.
+
+Once this is complete, within DA, you can create a new storage object and point it to the address of your Centera. The address is defined in the storage parameters (a_storage_params and should be a comma separated list)
+
+For example, if my Centera was on IPs 156.82.253.57 and 156.82.253.67, the value for the storage params would be:
+
+156.82.253.57,156.82.253.67
+
+If including a pea file, the format would be as follows:
+
+ 
+
+156.82.253.57,156.82.253.67?/appl/dctm/dba/config/assap/assap_ecc_sbxs21_ca_store01.pea
+
+ 
+
+Store the profile file in DOCUMENTUM/dba/config/repository_name/storage_object_name_centera_profile.pea,
+
+Alternatively, use the CENTERA_PEA_LOCATION environment variable to enforce the use of access profiles. When the PEA file is created and copied to the application server, set the environment variable CENTERA_PEA_LOCATION to point to the PEA file.

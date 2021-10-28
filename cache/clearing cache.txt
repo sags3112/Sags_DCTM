@@ -1,0 +1,11 @@
+
+API>
+
+flush,c,persistentcache
+flush,c,persistentobjcache
+flush,c,ddcache,<your_custom_type>
+flush,c,registrycache,<your_custom_type>
+publish_dd,c
+ OR 
+publish_dd,c,,<type name>,,T
+reinit,c

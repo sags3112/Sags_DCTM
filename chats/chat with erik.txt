@@ -1,0 +1,35 @@
+sag3112: hey u there
+sag3112: o beast
+sag3112: i have case here saying that..
+sag3112: “I am having problems setting up a set of users with the correct permissions for promoting documents to all of the lifecycle states.  At each state the document receives a new ACL as part of the promotion.  When I look at the Document information on a document in the expired state it shows that the user has Write, Run procedure, Change location, Change state, Change permission on the document but durring the promotion process the error [DM_SYSOBJECT_E_NO_VERSION_ACCESS]error. What is wrong and how can I tell?”
+
+sag3112: case no :22543140 
+sag3112: can you please provide me ur valuable inputs
+sag3112: hey erik leaving for the day..
+sag3112: in the mean time can u pls let me know the wrk around
+dmi_total_package: they need to have permissions
+dmi_total_package: that's what the error says
+dmi_total_package: also get a dump of the docbaseconfig object
+dmi_total_package: also, I don't think you can promote a document from the expired state
+dmi_total_package: they'd have to tell you how their lifecycle is setup
+sag3112: hey
+sag3112: yes sir
+dmi_total_package: yes?
+sag3112: jst let me know what to ask the ct
+dmi_total_package: ask them for a dump of their docbaseconfig objet
+dmi_total_package: ask them to tell you more about their workflow
+dmi_total_package: lifecycle I mean
+dmi_total_package: you'll need to get a screenshot of it or their docapp
+dmi_total_package: also we need a dump of the acl on the document
+dmi_total_package: who is the user doing the promote?
+sag3112: k
+dmi_total_package: but the most important thing is getting a dump of the docbaseconfig
+dmi_total_package: when you get it, check out the value of the a_bpaction_run_as attribute
+dmi_total_package: let me know what the value is
+sag3112: ok
+sag3112: thnks man..
+dmi_total_package: np
+sag3112: leaving for the day..
+sag3112: will update u tomorow
+sag3112: get back to u 2morrow
+dmi_total_package: ok

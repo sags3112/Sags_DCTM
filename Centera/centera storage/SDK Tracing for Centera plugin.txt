@@ -1,0 +1,39 @@
+To turn on the Centera SDK tracing, set the following environment variable in the shell: 
+
+setenv FPLIBRARY_LOG_FILE_DEBUG <full_path_of_output_file> 
+
+or - Alternatively they can set the value in thier profile and then re-source that profile.
+
+
+FPLIBRARY_LOG_FILE_DEBUG=<full_path_of_output_file> 
+export FPLIBRARY_LOG_FILE_DEBUG 
+
+Once the environment variable is set, restart the Content Server. 
+
+This will not require a reboot.
+
+-------------
+To have the file append to itself:
+
+Enable and append bug, error and debug level logging to the file test.log located in the c:\ folder on the windows platform.
+
+C:\> set FPLIBRARY_LOG_FILE_DEBUG="c:\test.log;a"
+
+ 
+
+Enable and append bug, error and debug level logging to the file test.log located in the /tmp directory on any UNIX platform using sh (bourne shell) or its derivatives(ksh, bash, etc)..
+
+$ FPLIBRARY_LOG_FILE_DEBUG="/tmp/test.log;a"
+
+ 
+
+------------
+
+ The Centera SDK runtime libraries in $DM_HOME/bin are:
+
+libFPLibrary.so[.a]
+libPAIModule32.so[.a]
+libFPParser32.so[.a]
+
+---------
+

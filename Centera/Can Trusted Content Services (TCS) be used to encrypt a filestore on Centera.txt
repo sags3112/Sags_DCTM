@@ -1,0 +1,24 @@
+esg82459:
+
+
+Can Trusted Content Services (TCS) be used to encrypt a filestore on Centera?
+
+Symptoms
+
+You can not encrypt a filestore on a Centera filestore.
+
+
+
+Cause
+
+TCS must have direct access to filestore location.
+
+Centera uses a plugin to access the filestore.
+
+
+
+
+
+Resolution
+
+Do not attempt to use TCS on a Centera filestore

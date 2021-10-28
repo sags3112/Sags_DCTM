@@ -1,0 +1,5 @@
+128.221.200.120?C:\Guide\centera storage\pea\us5profile1_rdqeDcw.pea 
+128.221.200.120?C:\Guide\centera storage\pea\us5profile2_rdqew.pea
+128.221.200.120?C:\Guide\centera storage\pea\us5profile3_rdqecw.pea
+
+128.221.200.120?/export/dctm/documentum/centera/us5profile3_rdqecw.pea

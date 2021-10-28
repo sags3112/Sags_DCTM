@@ -1,0 +1,134 @@
+sag3112: hey harry
+hdedrickson: yes
+hdedrickson: did you need something ?
+sag3112: its jst reg the case
+sag3112: Issue: 
+
+Currently, our Documentum Content Server and Oracle database are each on SUN Solaris 10 servers. We are being required to change the names on both of  these servers. What are the concerns and impact on Documentum regarding a server name change? How imbedded are the server names throughout Documentum? What  must be done to have Documentum work with the name changes??
+
+ 
+
+sag3112: I jst replied ct 
+sag3112: Hi Mark, 
+
+If you want to change the name of Content Server box, there is no known issues in version 5.3 SPx. But Oracle database in general will have issues if you change host name after installation. Please get in touch with your DBA in changing the Database machine name.
+
+Let me know if you need any thing more. 
+
+ 
+
+sag3112: now ct have changed the both server names ie CS and DB
+sag3112: he says that documentum is not wrking
+sag3112: mail from ct
+sag3112: From: Patterson, I. Mark (NDIC) [mailto:Mark.Patterson3@usdoj.gov] 
+Sent: Thursday, February 28, 2008 11:37 PM
+To: Golajana, Sagar
+Subject: RE: Emc Service Request : 22331772
+
+Sagar,
+
+ 
+
+We have completed testing of the server name change in our lab environment. The necessary modifications to effect the server name change were made to the operating system and Oracle. All looked good at this point. It was not until I attempted to bring the Documentum Content Server online that problems occurred. After starting the Docbroker and repositories, I attempted to log into Documentum. At this point, the login failed with errors related to the Docbroker not seeing the repositories. Looking further into the problem revealed that the content server was looking for the old server name.
+
+ 
+
+
+sag3112: Apparently the server name is embedded in files on the content server. A search for files containing the old server name was done on the content server. The search revealed that files such as dmcl.ini, dm_launch_Docbroker, dm_stop_Docbroker, uninstall.ini, webcache.ini, server.ini, etc. contain the old server name. Does Documentum have any documentation covering this issue? Is there a document that lists the files where the server name is embedded? Can you provide some help in this matter?
+hdedrickson: werent you working with Hitoshi on this ?
+sag3112: yaa
+hdedrickson: please continue with that
+hdedrickson: i have already discussed that with him
+sag3112: jst asking you on that
+sag3112: ok
+hdedrickson: It not helpful if 3 people ask me the same question
+sag3112: ok
+hdedrickson: i dont mean to be abrupt
+hdedrickson: but we have a process here
+sag3112: np sir
+sag3112: got it
+hdedrickson: if you need help go to your buddy
+hdedrickson: if you buddy needs help he comes to me
+sag3112: i thought u will give me still clear pict
+sag3112: k
+hdedrickson: yes but I have already explained this to hitoshi
+sag3112: ok
+sag3112: i will ask him now
+hdedrickson: now there should be a sn on this
+hdedrickson: trust me if he needs help he will contact me again
+hdedrickson: i will be glad to help
+hdedrickson: it may result in all three of us get on the phone and discuss this
+hdedrickson: ok ?
+sag3112: yaaaaaaaaa
+sag3112: very clear
+sag3112: sorry if i have done mistake
+hdedrickson: no your find
+hdedrickson: fine
+hdedrickson: I want to follow the proces more
+hdedrickson: anyway this kind of change makes one think about the server
+hdedrickson: hostname change
+hdedrickson: solving it requires one to really get to know the server better
+hdedrickson: What OS is the ct on
+sag3112: need to ask him
+sag3112: not sure
+hdedrickson: ok thats important
+sag3112: k
+hdedrickson: why ?
+hdedrickson: cause one uses a registry
+hdedrickson: one does not
+sag3112: SUN Solaris 10 
+hdedrickson: ok this change is easier
+sag3112: k
+hdedrickson: ok lets just do this
+hdedrickson: what files can you think record hostname identification
+hdedrickson: for dctm and the OS
+hdedrickson: forget aboutt he docbase for now
+hdedrickson: this if for the content server.
+sag3112: k
+hdedrickson: server.ini
+hdedrickson: dmc.ini
+hdedrickson: webcache.ini .. maybe
+hdedrickson: /etc/hosts
+hdedrickson: hostname output ?
+hdedrickson: is dns updated.. ?
+hdedrickson: are they using NIS ?
+hdedrickson: are you with me /
+sag3112: yaa
+hdedrickson: ok
+hdedrickson: so then the server config needs to be examined
+sag3112: k
+hdedrickson: r_host_name
+hdedrickson: then the target_server attributes for all the jobs needs to be examined
+sag3112: k
+hdedrickson: when one update ther server.ini file and dmcl.ini file from $DOCUMENTUM
+hdedrickson: and then restarts the docbase
+hdedrickson: they need to see if the docbase is binding to its new hostname
+hdedrickson: this means looking at docbase log
+sag3112: k
+sag3112: yaa
+hdedrickson: once the docbase is up and running the metadata needs to be examined
+hdedrickson: now you have FAST
+hdedrickson: is FAST installed ?
+sag3112: no
+hdedrickson: thats better
+sag3112: he didn't telll any thing reg that
+hdedrickson: ok you need to ask just to make sure
+sag3112: k
+hdedrickson: The OS and network needs to be validated that it has completley been migrated over to the hostname...
+hdedrickson: ie nslookup myshostname
+sag3112: ok
+hdedrickson: that another computer can reach this new system
+hdedrickson: telnet newhostname
+sag3112: k
+hdedrickson: nslookup on this client can resolve the new hostname
+hdedrickson: start from there.. 
+sag3112: k
+hdedrickson: then get back to me
+sag3112: will try it out
+sag3112: k
+hdedrickson: sounds good
+sag3112: yaaaaaaaaaaaa
+sag3112: harry..
+sag3112: I have jst dropped mail to ct tht 
+sag3112: please have look ay the bleow forums
+sag3112: //forums.emc.com/forums/thread.jspa?tstart=0&threadID=57850 and forums.emc.com/forums/thread.jspa?tstart=0&threadID=66196
