@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Users\simca002\Documentum\XML%20Applications\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="autoGenProxy" label="Auto-Proxy Generation Profile" description="Profile for generating a proxy" related_objects_only="false" notify_result="false" operation="transform" taskImpl="com.documentum.cts.impl.services.task.CTSTask" dctm:obj_status="Default" dctm:obj_id="0801d637800c34fb" dctm:version_label="CURRENT">
+    <Formats>
+		<Format source="bmp" target="jpeg_lres"/>
+		<Format source="rle" target="jpeg_lres"/>
+		<Format source="eps" target="jpeg_lres"/>
+	    <Format source="gif" target="jpeg_lres"/>
+	    <Format source="jpeg" target="jpeg_lres"/>
+	    <Format source="png" target="jpeg_lres"/>
+	    <Format source="photoshop3" target="jpeg_lres"/>
+	    <Format source="photoshop5" target="jpeg_lres"/>
+	    <Format source="photoshop6" target="jpeg_lres"/>
+	    <Format source="photoshop7" target="jpeg_lres"/>
+ 	    <Format source="photoshop8" target="jpeg_lres"/>
+	    <Format source="svg" target="jpeg_lres"/>
+	    <Format source="tiff" target="jpeg_lres"/>
+	    <Format source="ppt8_template" target="jpeg_lres"/>
+	    <Format source="ppt12template" target="jpeg_lres"/>
+	    <Format source="illustrator9" target="jpeg_lres"/>
+	    <Format source="illustrator10" target="jpeg_lres"/>
+	    <Format source="illustrator11" target="jpeg_lres"/>
+	    <Format source="fpx" target="jpeg_lres"/>
+	    <Format source="pnm" target="jpeg_lres"/>
+	    <Format source="ppm" target="jpeg_lres"/>
+	    <Format source="pgm" target="jpeg_lres"/>
+	    <Format source="pbm" target="jpeg_lres"/>
+	    <Format source="wbmp" target="jpeg_lres"/>
+	    <Format source="macp" target="jpeg_lres"/>
+	    <Format source="pcd" target="jpeg_lres"/>
+	    <Format source="pcx" target="jpeg_lres"/>
+	    <Format source="pict" target="jpeg_lres"/>
+          <Format source="sct" target="jpeg_lres"/>
+	    <Format source="sgi" target="jpeg_lres"/>
+	    <Format source="tga" target="jpeg_lres"/>
+	    <Format source="jpeg2000" target="jpeg_lres"/>
+	    <Format source="dng" target="jpeg_lres"/>
+	    <Format source="cr2" target="jpeg_lres"/>
+	    <Format source="crw" target="jpeg_lres"/>
+	    <Format source="wmf" target="jpeg_lres"/>
+
+    </Formats>
+    <Filters>
+        <Filter name="CTSProduct" value="MTS"/>
+        <Filter name="Visibility" value="System"/>
+    </Filters>
+    <Transcodings>
+        <Transcode name="imageSize" label="Resize image">
+        </Transcode>
+    </Transcodings>    
+    <CommandFilePath mptype="IMAGE3">
+                /System/Media Server/Command Line Files/autoGenProxy_imw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="IMAGE1">
+        	/System/Media Server/Command Line Files/autoGenProxy_irw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="AVI">
+        	/System/Media Server/Command Line Files/autoGenProxy_avi.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="POWERPOINT">
+        	/System/Media Server/Command Line Files/autoGenProxy_ppt.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="IMAGE2">
+                /System/Media Server/Command Line Files/autoGenProxy_img.xml
+    </CommandFilePath>
+</Profile>

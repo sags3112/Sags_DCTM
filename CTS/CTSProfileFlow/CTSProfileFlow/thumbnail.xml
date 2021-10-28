@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Users\simca002\Documentum\XML%20Applications\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="thumbnail" label="Thumbnail Generation Profile" description="Profile for generating a thumbnail" related_objects_only="false" notify_result="false" operation="transform" taskImpl="com.documentum.cts.impl.services.task.CTSTask" dctm:obj_status="Default" dctm:obj_id="0801d637800c3a6f" dctm:version_label="CURRENT">
+    <Formats>
+      <Format source="bmp" target="jpeg_th"/>
+      <Format source="rle" target="jpeg_th"/>
+      <Format source="eps" target="jpeg_th"/>
+       <Format source="gif" target="jpeg_th"/>
+       <Format source="jpeg" target="jpeg_th"/>
+       <Format source="png" target="jpeg_th"/>
+       <Format source="photoshop3" target="jpeg_th"/>
+       <Format source="photoshop5" target="jpeg_th"/>
+       <Format source="photoshop6" target="jpeg_th"/>
+       <Format source="photoshop7" target="jpeg_th"/>
+	 <Format source="photoshop8" target="jpeg_th"/>
+       <Format source="svg" target="jpeg_th"/>
+       <Format source="tiff" target="jpeg_th"/> 
+       <Format source="ppt8_template" target="jpeg_th"/>
+       <Format source="ppt12template" target="jpeg_th"/>
+      <Format source="illustrator9" target="jpeg_th"/>
+       <Format source="illustrator10" target="jpeg_th"/>
+ 	 <Format source="illustrator11" target="jpeg_th"/>
+       <Format source="fpx" target="jpeg_th"/>
+       <Format source="wbmp" target="jpeg_th"/>
+       <Format source="pnm" target="jpeg_th"/>
+       <Format source="ppm" target="jpeg_th"/>
+       <Format source="pgm" target="jpeg_th"/>
+       <Format source="pbm" target="jpeg_th"/>
+       <Format source="jpeg2000" target="jpeg_th"/>
+      <Format source="dng" target="jpeg_th"/>
+	<Format source="cr2" target="jpeg_th"/>
+	<Format source="crw" target="jpeg_th"/>
+	<Format source="wmf" target="jpeg_th"/>
+
+
+    </Formats>
+    <Filters>
+        <Filter name="CTSProduct" value="MTS"/>
+        <Filter name="Visibility" value="System"/>
+    </Filters>
+    <Transcodings>
+        <Transcode name="thumbnail" label="Thumbnail Generation Profile">
+        </Transcode>
+    </Transcodings>   
+    <CommandFilePath mptype="IMAGE3">
+                /System/Media Server/Command Line Files/thumbnail_imw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="IMAGE1">
+         /System/Media Server/Command Line Files/thumbnail_irw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="AVI">
+         /System/Media Server/Command Line Files/thumbnail_avi.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="POWERPOINT">
+         /System/Media Server/Command Line Files/thumbnail_ppt.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="IMAGE2">
+                /System/Media Server/Command Line Files/thumbnail_img.xml
+    </CommandFilePath>   
+</Profile>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Documents%20and%20Settings\kavar001\Documentum\Viewed\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="register" label="Register Profile" description="Automatically process imported files" related_objects_only="false" notify_result="false" operation="transform" taskImpl="com.documentum.cts.impl.services.task.CTSTask" dctm:obj_status="Read-Only" dctm:obj_id="0801d637800ca95c" dctm:version_label="CURRENT">
+   <Formats>  
+<Format target="bmp" source="bmp"/>
+<Format target="fpx" source="fpx"/>
+<Format target="gif" source="gif"/>
+<Format target="illustrator11" source="illustrator11"/>
+<Format target="jpeg" source="jpeg"/>
+<Format target="jpeg_lres" source="jpeg_lres"/>
+<Format target="pdf" source="pdf"/>
+<Format target="photoshop3" source="photoshop3"/>
+   </Formats>
+   <Filters>
+      <Filter name="Visibility" value="System"/>
+      <Filter value="MTS" name="CTSProduct"/>
+      <Filter name="ObjectType" value="dm_document"/>
+      <Filter name="ObjectType" value="dcp_collection_file"/>
+      <Filter name="ObjectType" value="dcp_asset"/>
+   </Filters>
+   <Transcodings>
+      <Transcode name="register" label="Register Profile"/>
+   </Transcodings>
+   <ProfileSequence>
+
+
+<!-- standard renditions -->
+<InnerProfile path="/System/Media Server/System Profiles/autoGenPreviewProxy" waitOnCompletion="false" useTargetFormat="true"> 
+<InnerTokenMapping LocalProfileToken="jpeg_preview" InnerProfileToken="doc_token_targetFormat" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="true" InnerProfileToken="overwrite_rendition" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="1280" InnerProfileToken="doc_token_width_proxy" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="1024" InnerProfileToken="doc_token_height_proxy" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="JPEG Preview Proxy" InnerProfileToken="rendition_description" Literal="true"/>
+</InnerProfile>
+
+
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/thumbnail" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_th"/>
+<InnerTokenMapping LocalProfileToken="dmc_print" InnerProfileToken="source_format" Literal="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn" LocalProfileToken="90"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn" LocalProfileToken="90"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="target_page_modifier" LocalProfileToken="medium_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Medium Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile>
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/thumbnail" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_th"/>
+<InnerTokenMapping LocalProfileToken="dmc_print" InnerProfileToken="source_format" Literal="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn" LocalProfileToken="40"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn" LocalProfileToken="40"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="target_page_modifier" LocalProfileToken="small_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Small Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile>
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/thumbnail" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_th"/>
+<InnerTokenMapping LocalProfileToken="dmc_print" InnerProfileToken="source_format" Literal="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="target_page_modifier" LocalProfileToken="large_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Large Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile> 
+
+
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/autoGenProxy" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_lres"/>
+<InnerTokenMapping LocalProfileToken="dmc_print" InnerProfileToken="source_format" Literal="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="default_proxy_format" LocalProfileToken="jpeg_lres"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_proxy" LocalProfileToken="300"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_proxy" LocalProfileToken="300"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Low Resolution Proxy"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile>
+
+<!-- extract document properties -->
+<InnerProfile waitOnCompletion="true" path="/System/Media Server/System Profiles/importExtractProperties" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+</InnerProfile>
+
+<!-- powerpoint processing -->
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/powerpointRegistration" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn_small" LocalProfileToken="40"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn_small" LocalProfileToken="40"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_tn_small_target_page_modifier" LocalProfileToken="small_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_tn_small_rendition_description" LocalProfileToken="Small Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn_medium" LocalProfileToken="90"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn_medium" LocalProfileToken="90"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_tn_medium_target_page_modifier" LocalProfileToken="medium_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_tn_medium_rendition_description" LocalProfileToken="Medium Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn_large" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn_large" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_tn_large_target_page_modifier" LocalProfileToken="large_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_tn_large_rendition_description" LocalProfileToken="Large Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_proxy" LocalProfileToken="300"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_proxy" LocalProfileToken="300"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_sb" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_sb" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_lressb" LocalProfileToken="600"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_lressb" LocalProfileToken="600"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="enable_activepreview" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="slide_document_type" LocalProfileToken="dm_document"/>
+</InnerProfile>
+
+<!-- PDF processing -->
+<InnerProfile useTargetFormat="true" waitOnCompletion="true" path="/System/Media Server/System Profiles/pdf_processing">
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+</InnerProfile>
+
+<!-- extract document XMP properties -->
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/extractXMP" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="xml"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+</InnerProfile>
+
+<!-- extract document properties to object attributes -->
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/Profiles/extractMetadataToObject_mts" useTargetFormat="true"/>
+
+
+<!-- disable all ADTS processing -->
+<!-- Creating a PDF rendition on import
+<InnerProfile path="/System/Media Server/System Profiles/document_to_pdf" waitOnCompletion="true" useTargetFormat="true">
+<InnerTokenMapping LocalProfileToken="pdf" InnerProfileToken="doc_token_targetFormat" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="PDFVersion15" InnerProfileToken="doc_token_pdfVersion" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Automatic" InnerProfileToken="doc_token_usePrinterMetrics" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="600" InnerProfileToken="doc_token_resolution" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Yes" InnerProfileToken="doc_token_optimize" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Yes" InnerProfileToken="doc_token_enableBookMarks" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="DocumentContent" InnerProfileToken="doc_token_printType" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="false" InnerProfileToken="overwrite_rendition" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="legacy" InnerProfileToken="transformation_type" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="No" InnerProfileToken="doc_token_enableSecurity" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="40bit" InnerProfileToken="doc_token_encryptionMode" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Disabled" InnerProfileToken="doc_token_changesAllowed" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Disabled" InnerProfileToken="doc_token_enableAccess" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Disabled" InnerProfileToken="doc_token_docAssembly" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Disabled" InnerProfileToken="doc_token_formFieldFilling" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Disabled" InnerProfileToken="doc_token_printing" Literal="true"/>
+<InnerTokenMapping LocalProfileToken="Disabled" InnerProfileToken="doc_token_allowCopy" Literal="true"/>
+<InnerTokenMapping LocalProfileToken=" " InnerProfileToken="doc_token_secOpass" Literal="true"/>
+<InnerTokenMapping LocalProfileToken=" " InnerProfileToken="doc_token_secCpass" Literal="true"/>
+</InnerProfile>
+-->
+<!--This extract properties for office formats
+<InnerProfile path="/System/Media Server/System Profiles/document_extract_props" waitOnCompletion="true" useTargetFormat="true">
+</InnerProfile>
+-->
+<!--This will generate thumbnail, proxy and storyboards for all document formats
+<InnerProfile path="/System/Media Server/System Profiles/document_registration" waitOnCompletion="true" useTargetFormat="true">
+<InnerTokenMapping LocalProfileToken="pdf" InnerProfileToken="doc_token_targetFormat" Literal="true"/>
+</InnerProfile>
+-->
+<!--This will generate thumbnail, proxy and storyboards for pdf formats
+<InnerProfile path="/System/Media Server/System Profiles/pdf_processing" waitOnCompletion="true" useTargetFormat="true">
+</InnerProfile>
+-->
+
+
+</ProfileSequence>
+</Profile>

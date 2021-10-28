@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IMW_MP_PROPERTIES>
+	<OutputFormat>JPEG</OutputFormat>
+	<PROP name="Width" type="unsigned long" token="doc_token_width">200</PROP>
+	<PROP name="Height" type="unsigned long" token="doc_token_height">200</PROP>
+<Options>-limit memory doc_token_limit_memory -limit map doc_token_limit_map -limit area doc_token_limit_area -density 300x300 doc_token_sourcefile -quality 80 -strip -filter Lanczos +profile icc -profile "doc_token_rgb_profile" -colorspace doc_token_colorSpace</Options> 
+</IMW_MP_PROPERTIES>

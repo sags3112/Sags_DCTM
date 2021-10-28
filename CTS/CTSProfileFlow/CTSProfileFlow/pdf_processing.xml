@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Users\simca002\Documentum\XML%20Applications\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="pdf_processing" label="PDF Processing" description="PDF Processing" related_objects_only="false" notify_result="false" operation="transform" taskImpl="com.documentum.cts.impl.services.task.CTSTask" dctm:obj_status="Default" dctm:obj_id="0801d637800dc973" dctm:version_label="CURRENT"> 
+   <Formats> 
+         <Format source="pdf" target="pdf"/>
+   </Formats>
+   <Filters>
+        <Filter name="CTSProduct" value="MTS"/>
+        <Filter name="CTSProduct" value="ADTS"/>
+        <Filter name="Visibility" value="System"/>
+   </Filters>
+   <Transcodings>
+      <Transcode name="pdf_processing" label="pdf_processing"> 
+      </Transcode>
+   </Transcodings> 
+   <ProfileSequence>
+   <!-- default thumbnails for PDF Storyboards -->
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/thumbnail_pdfstoryboard" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn" LocalProfileToken="90"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn" LocalProfileToken="90"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="target_page_modifier" LocalProfileToken="medium_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Medium Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile>
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/thumbnail_pdfstoryboard" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn" LocalProfileToken="40"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn" LocalProfileToken="40"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="target_page_modifier" LocalProfileToken="small_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Small Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile>
+<InnerProfile waitOnCompletion="false" path="/System/Media Server/System Profiles/thumbnail_pdfstoryboard" useTargetFormat="true">
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="overwrite_rendition" LocalProfileToken="true"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_width_tn" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_height_tn" LocalProfileToken="200"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="target_page_modifier" LocalProfileToken="large_jpeg_th"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="rendition_description" LocalProfileToken="Large Thumbnail"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>
+</InnerProfile>
+
+      <InnerProfile path="/System/Media Server/System Profiles/autoGenProxy_pdfstoryboard" waitOnCompletion="false" useTargetFormat="true">
+         <InnerTokenMapping LocalProfileToken="jpeg_lres" InnerProfileToken="doc_token_targetFormat" Literal="true"/>
+		<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+		<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>        
+      </InnerProfile> 
+      <InnerProfile path="/System/Media Server/System Profiles/storyboard_pdfstoryboard" waitOnCompletion="false" useTargetFormat="true">
+         <InnerTokenMapping LocalProfileToken="jpeg_story" InnerProfileToken="doc_token_targetFormat" Literal="true"/>
+         <InnerTokenMapping LocalProfileToken="200" InnerProfileToken="doc_token_width" Literal="true"/>
+         <InnerTokenMapping LocalProfileToken="200" InnerProfileToken="doc_token_height" Literal="true"/>
+         <InnerTokenMapping LocalProfileToken="-1" InnerProfileToken="doc_token_pageNumber" Literal="true"/>
+		<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorSpace" LocalProfileToken="RGB"/>
+		<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_colorProfile" LocalProfileToken="_use_default"/>        
+      </InnerProfile>
+
+      
+
+   </ProfileSequence>  
+</Profile>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE PDFSTORYBOARD_MP_PROPERTIES
+[<!ELEMENT PDFSTORYBOARD_MP_PROPERTIES (FORMAT)*><!ELEMENT FORMAT (PROP)*><!ATTLIST FORMAT name CDATA #REQUIRED><!ELEMENT PROP (#PCDATA)><!ATTLIST PROP name CDATA #REQUIRED><!ATTLIST PROP type CDATA #REQUIRED><!ATTLIST PROP token CDATA #IMPLIED>]>
+<PDFSTORYBOARD_MP_PROPERTIES>
+  <FORMAT name="JPEG">
+    <PROP name="Format" type="string">JPEG</PROP>
+    <PROP name="Width" type="unsigned long" token="doc_token_width_proxy">300</PROP>
+    <PROP name="Height" type="unsigned long" token="doc_token_height_proxy">300</PROP>
+    <PROP name="Jpeg Quality" type="unsigned long">80</PROP>
+    <PROP name="KeepRatio" type="boolean">true</PROP>
+    <PROP name="Page" type="long">1</PROP>
+	<!-- special values: -1: last page, 0: middle page(last / 2) -->
+    <PROP name="Password" type="string">your_password_be_here</PROP>
+  </FORMAT>
+</PDFSTORYBOARD_MP_PROPERTIES>

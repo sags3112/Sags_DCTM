@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Users\simca002\Documentum\XML%20Applications\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="thumbnail_pdfstoryboard" label="Thumbnail Generation Profile" description="Profile for generating a thumbnail" related_objects_only="false" notify_result="false" operation="transform" taskImpl="com.documentum.cts.impl.services.task.CTSTask" dctm:obj_status="Default" dctm:obj_id="0801d637800054f0" dctm:version_label="CURRENT">
+     <Formats>  
+	        <Format source="pdf" target="jpeg_th"/>   
+     </Formats>  
+    <Filters>
+        <Filter name="CTSProduct" value="MTS"/>
+        <Filter name="CTSProduct" value="ADTS"/>
+        <Filter name="Visibility" value="System"/>
+    </Filters>
+    <Transcodings>
+        <Transcode name="imageSize" label="Resize image">
+        </Transcode>
+    </Transcodings>
+    <!-- reorder plugins to IMAGE3, PDFStoryboard -->
+    <CommandFilePath mptype="IMAGE3">
+        	/System/Media Server/Command Line Files/thumbnail_pdf_imw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="PDFStoryboard">
+        	/System/Media Server/Command Line Files/thumbnail_pdfstoryboard.xml
+    </CommandFilePath>     
+</Profile>

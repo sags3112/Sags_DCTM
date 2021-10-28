@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Users\simca002\Documentum\XML%20Applications\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="storyboard_pdfstoryboard" label="Storyboard Generation for PDF using PDFStoryboard" description="Profile for generating storyboard of PDF" taskImpl="com.documentum.cts.impl.services.task.StoryboardProcessor" related_objects_only="false" notify_result="false" operation="transform" dctm:obj_status="Default" dctm:obj_id="0801d637800054eb" dctm:version_label="CURRENT">
+    <Formats>
+	        <Format source="pdf" target="jpeg_story"/> 
+	        <Format source="pdf" target="jpeg_lres"/> 
+    </Formats>
+    <Filters>
+        <Filter name="CTSProduct" value="MTS"/>
+        <Filter name="CTSProduct" value="ADTS"/>
+        <Filter name="Visibility" value="System"/>
+    </Filters>
+    <Transcodings>
+        <Transcode name="storyboard_pdfstoryboard" label="Storyboard">
+        </Transcode>
+    </Transcodings>  
+    <!-- reorder plugins to IMAGE3, PDFStoryboard -->
+    <CommandFilePath mptype="IMAGE3">
+        	/System/Media Server/Command Line Files/storyboard_pdf_imw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="PDFStoryboard">
+        	/System/Media Server/Command Line Files/storyboard_pdfstoryboard.xml
+    </CommandFilePath>  
+</Profile>

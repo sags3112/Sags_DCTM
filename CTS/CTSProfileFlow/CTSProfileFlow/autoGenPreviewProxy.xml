@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Profile SYSTEM "file:C:\Users\simca002\Documentum\XML%20Applications\dmcqa\MediaProfile\ProfileSchema.dtd">
+<Profile xmlns:dctm="http://www.documentum.com" name="autoGenPreviewProxy" label="Auto-preview_Proxy Generation Profile" description="Profile for generating a preview proxy" related_objects_only="false" notify_result="false" operation="transform" taskImpl="com.documentum.cts.impl.services.task.CTSTask" dctm:obj_status="Default" dctm:obj_id="0801d637800054be" dctm:version_label="CURRENT">
+    <Formats>
+      <Format source="bmp" target="jpeg_preview"/>
+      <Format source="rle" target="jpeg_preview"/>
+      <Format source="eps" target="jpeg_preview"/>
+       <Format source="gif" target="jpeg_preview"/>
+       <Format source="jpeg" target="jpeg_preview"/>
+       <Format source="png" target="jpeg_preview"/>
+       <Format source="photoshop3" target="jpeg_preview"/>
+       <Format source="photoshop5" target="jpeg_preview"/>
+       <Format source="photoshop6" target="jpeg_preview"/>
+       <Format source="photoshop7" target="jpeg_preview"/>
+ 	 <Format source="photoshop8" target="jpeg_preview"/>
+      </Formats>
+    <Filters>
+        <Filter name="CTSProduct" value="MTS"/>
+        <Filter name="Visibility" value="System"/>
+    </Filters>
+    <Transcodings>
+        <Transcode name="autoGenPreviewProxy" label="Auto-preview_Proxy Generation Profile">
+        </Transcode>
+    </Transcodings>
+    <!-- Disney: change plugin order to IMAGE3, IMAGE1 -->
+    <CommandFilePath mptype="IMAGE3">
+                /System/Media Server/Command Line Files/autoGenProxy_imw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="IMAGE1">
+         /System/Media Server/Command Line Files/autoGenProxy_irw.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="AVI">
+         /System/Media Server/Command Line Files/autoGenProxy_avi.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="POWERPOINT">
+         /System/Media Server/Command Line Files/autoGenProxy_ppt.xml
+    </CommandFilePath>
+    <CommandFilePath mptype="IMAGE2">
+                /System/Media Server/Command Line Files/autoGenProxy_img.xml
+    </CommandFilePath>   
+</Profile>
