@@ -1,0 +1,830 @@
+Subject:  Tuning I/O-related waits 
+  Doc ID:  Note:223117.1 Type:  TROUBLESHOOTING 
+  Last Revision Date:  05-APR-2007 Status:  PUBLISHED 
+
+
+-------
+PURPOSE
+-------
+
+This article provides guidelines for tuning an Oracle database
+when the main source of contention is I/O-related.
+
+
+ 
+-------------------
+SCOPE & APPLICATION
+-------------------
+
+The techniques described here can be followed when:
+
+o Statspack or AWR reports show I/O wait events in the "Top 5 Wait/Timed Events" section.
+
+o SQL Tracing with wait events of a database session shows it is limited
+  mainly by I/O wait events.
+
+o Operating System tools show very high utilization or saturation of disks
+  used for storage of database files.
+
+The article should be of use to Database Administrators, Support Engineers,
+Consultants and Database Performance Analysts.
+
+
+  
+-------------------------
+TUNING WITH RESPONSE TIME
+-------------------------
+
+A critical activity in Database Performance Tuning is
+Response Time Analysis: this consists of finding out where time is being
+spent in a database.
+
+TIME is the most important property in Performance Tuning.
+Users perceive the performance of a system through the response time
+they experience for their transactions or batch jobs.
+
+Response Time Analysis for an Oracle Database is done
+using the following equation:
+
+   Response Time = Service Time + Wait Time
+
+'Service Time' is measured using the statistic 'CPU used by this session' 
+
+'Wait Time' is measured by summing up time spent on Wait Events
+
+Note: although similar in appearance, this equation is not the fundamental
+      equation of Queueing Theory. 
+
+Performance Tuning methods using tools such as Statspack work by evaluating
+the relative impact of the various components of overall Response Time and
+direct the tuning effort to those components having the most impact in terms
+of time consumed.
+
+For a detailed discussion of this subject please refer to
+Note 190124.1 THE COE PERFORMANCE METHOD
+
+Starting with Oracle10g the above process is carried out automatically
+by the Automatic Database Diagnostic Monitor (ADDM.) Please read
+Note 260655.1 How to use the Automatic Database Diagnostic Monitor
+
+----------------------------------------------------
+DETERMINING THE REAL SIGNIFICANCE OF I/O WAIT EVENTS
+----------------------------------------------------
+
+Many tools including Statspack produce listings of the most significant Wait
+Events. Statspack reports in versions previous to Oracle9i Release 2 contain
+this information in a section called "Top 5 Wait Events".
+
+When presented with such a list of top Wait Events it sometimes becomes easy
+to simply start dealing with the listed Wait Events and to forget evaluating
+their impact on overall Response Time first.
+
+In situations where 'Service Time' i.e. CPU usage is much more significant
+than 'Wait Time', it is very likely that investigating Wait Events will not
+produce significant savings in 'Response Time'.
+
+Therefore, one should always compare the time taken by the top wait events
+to the 'CPU used by this session' and direct the tuning effort to the biggest
+consumers.
+
+Note:
+To address this possible source of confusion, starting with Oracle9i Release 2
+the "Top 5 Wait Events" section has been renamed to "Top 5 Timed Events".
+Here, 'Service Time' as measured by the statistic 'CPU used by this session'
+is listed as 'CPU time'. This means that it is now easier to accurately measure
+the impact of Wait Events in overall 'Response Time' and to correctly target
+the subsequent tuning effort.
+
+
+
+-----------------------------------------------------
+MISINTERPRETING THE IMPACT OF WAIT EVENTS: AN EXAMPLE
+-----------------------------------------------------
+
+Here is a real life example of why it is important to look at both 'Wait Time'
+and 'Service Time' when investigating database performance.
+
+The following is the "Top 5 Wait Events" section of a Statspack report
+generated from two snapshots 46 minutes apart:
+
+Top 5 Wait Events                                                             
+~~~~~~~~~~~~~~~~~                                             Wait     % Total
+Event                                               Waits  Time (cs)   Wt Time
+-------------------------------------------- ------------ ------------ -------
+direct path read                                    4,232       10,827   52.01
+db file scattered read                              6,105        6,264   30.09
+direct path write                                   1,992        3,268   15.70
+control file parallel write                           893          198     .95
+db file parallel write                                 40          131     .63
+         -------------------------------------------------------------        
+
+Based on this listing we may be tempted to immediately start looking at the
+causes between the 'direct path read' and 'db file scattered read' waits and
+to try to tune them. This approach would not take into account 'Service Time'.
+
+Here is the statistic that measures 'Service Time' from the same report:
+
+Statistic                                    Total   per Second    per Trans  
+--------------------------------- ---------------- ------------ ------------  
+CPU used by this session                   358,806        130.5     12,372.6  
+
+Let's do some simple math from these figures:
+'Wait Time' = 10,827 x 100% / 52,01% = 20,817 cs
+'Service Time' = 358,806 cs
+'Response Time' = 358,806 + 20,817 = 379,623 cs
+
+If we now calculate percentages for all the 'Response Time' components:
+
+CPU time                    = 94.52%
+direct path read            =  2.85%
+db file scattered read      =  1.65%
+direct path write           =  0.86%
+control file parallel write =  0.05%
+db file parallel write      =  0.03%
+
+It is now obvious that the I/O-related Wait Events are not really a significant
+component of the overall Response Time and that subsequent tuning should be
+directed to the Service Time component i.e. CPU consumption.
+
+Incidentally, the improved "Top 5 Timed Events" section in Statspack starting
+with Oracle9i Release 2 would show output similar to our calculated listing.
+
+
+
+-----------------------
+I/O-RELATED WAIT EVENTS
+-----------------------
+
+In this section we list the I/O-related Wait Events that occur most often
+in Oracle databases together with reference notes describing each wait.
+
+In subsequent sections we explore some of the most important of these in detail.
+
+Datafile I/O-Related Wait Events:
+'db file sequential read'                     Note 34559.1
+'db file scattered read'                      Note 34558.1
+'db file parallel read'
+'direct path read'                            Note 50415.1
+'direct path write'                           Note 50416.1
+'direct path read (lob)'
+'direct path write (lob)'
+Controlfile I/O-Related Wait Events:
+'control file parallel write'
+'control file sequential read'
+'control file single write'
+Redo Logging I/O-Related Wait Events:
+'log file parallel write'                     Note 34583.1
+'log file sync'                               Note 34592.1
+'log file sequential read'
+'log file single write'
+'switch logfile command'
+'log file switch completion'
+'log file switch (clearing log file)'
+'log file switch (checkpoint incomplete)'
+'log switch/archive'
+'log file switch (archiving needed)'
+Buffer Cache I/O-Related Wait Events:
+'db file parallel write'                      Note 34416.1
+'db file single write'
+'write complete waits'
+'free buffer waits'
+-------------------------------------------
+GENERAL APPROACHES FOR HANDLING I/O PROBLEMS
+-------------------------------------------
+
+After an analysis of the database's Response Time using e.g. Statspack
+has shown that performance is limited by I/O-related Wait Events, a number
+of possible approaches can be followed.
+
+Refer to the next section for the approaches to follow for each Wait Event.
+
+Some of the approaches can be used regardless of the particular Wait Event.
+In this section we present and explain the concepts and rationale behind
+each approach.
+
+o Reduce the I/O requirements of the database by tuning SQL:
+
+A database with no user SQL being run generates little or no I/O.
+Ultimately all I/O generated by a database is directly or indirectly
+due to the nature and amount of user SQL being submitted for execution.
+
+This means that it is possible to limit the I/O requirements of a database
+by controlling the amount of I/O generated by individual SQL statements.
+This is accomplished by tuning SQL statements so that their execution plans
+result in a minimum number of I/O operations.
+Typically in a problematic situation there will only be a few SQL statements
+with suboptimal execution plans generating a lot more physical I/O than
+necessary and degrading the overall performance for the database.
+
+Starting with Oracle10g, ADDM aids the SQL tuning process by automatically
+identifying the SQL statements with most impact. The SQL Tuning Advisor can
+then be used to automatically tune these statements and reduce their I/O
+resource consumption. For more information please see
+Note 262687.1 How to use the Sql Tuning Advisor
+
+o Reduce the I/O requirements of the database by tuning instance parameters:
+
+This works in two ways:
+
+a) Using memory caching to limit I/O:
+
+The amount of I/O required by the database is limited by the use of a number
+of memory caches e.g. the Buffer Cache, the Log Buffer, various Sort Areas etc.
+
+Increasing the Buffer Cache, up to a point, results in more buffer accesses
+by database processes (logical I/Os) being satisfied from memory instead of
+having to go to disk (physical I/Os).
+
+With larger Sort Areas in memory, the likelihood of them being exhausted
+during a sorting operation and having to use a temporary tablespace on disk
+is reduced.  
+
+The other caches also work according to similar concepts.
+
+b) Tuning the size of multiblock I/O:
+
+The size of individual multiblock I/O operations can be controlled by instance
+parameters.
+
+Up to a limit, multiblock I/Os are executed faster when there are fewer larger
+I/Os than when there are more smaller I/Os.
+For example, transferring 100Mb of data will complete faster if it is done in
+100 requests of size 1Mb each than if it is done in 1,000 requests of size
+100Kb each or 10,000 requests of 10Kb each.
+After this limit is reached, the difference is no longer important: transferring
+1Gb of data in 100 requests of size 10Mb each (if allowed by limits on maximum
+I/O transfer size of Operating Systems) would be almost as efficient as a
+single transfer of size 1Gb.
+
+This is because the time taken to service an I/O involves two main components:
+I/O Setup Time and I/O Transfer Time.
+
+I/O Setup Time tends to be fairly constant across different I/O sizes
+and for small I/O sizes tends to dominate the total service time.
+
+I/O Transfer Time tends to increase in proportion to the size of the I/O
+and for small I/O sizes is usually less than the I/O Setup Time.
+
+The consequence of the above is that it is usually better to configure instance
+parameters so that the database issues larger and fewer multiblock I/Os.
+The typical parameter used for this is called DB_FILE_MULTIBLOCK_READ_COUNT.
+
+o Optimizing I/O at the Operating System level
+
+This involves making use of I/O capabilities such as Asynchronous I/O or 
+using Filesystems with advanced capabilities such as Direct I/O (bypassing the
+Operating System's File Caches). Another possible action is to raise the limit
+of maximum I/O size per transfer (referred to as max_io_size in this article).
+
+o Balancing the database I/O by usage of Oracle ASM (Automatic Storage Manager)
+
+ASM is introduced with Oracle10g. It is a file system and volume manager built
+into the database kernel. It automatically does load balancing in parallel 
+across all available disk drives to prevent hot spots and maximize performance, 
+even with rapidly changing data usage patterns. It prevents fragmentation so 
+that there is never a need to relocate data to reclaim space. Data is well 
+balanced and striped over all disks. 
+
+For details please see
+Note 249992.1 New Feature on ASM (Automatic Storage Manager)
+
+o Balancing the database I/O by usage of Striping, RAID, SAN or NAS
+
+This approach relies on storage technologies such as Striping, RAID, Storage
+Area Networks (SAN) and Network Attached Storage (NAS) to automatically load
+balance database I/O across multiple available physical disks in order to avoid disk
+contention and I/O bottlenecks when there is still available unused disk 
+throughput in the storage hardware.
+
+For more detailed discussions on these technologies please refer to
+"Optimal Storage Configuration Made Easy" by J. Loaiza
+Note 30286.1 I/O Tuning with Different RAID Configurations
+
+o Redistribute database I/O by manual placement of database files across
+  different filesystems, controllers and physical devices
+
+This is an approach used in the absence of advanced modern storage technologies.
+Again the aim is to distribute the database I/O so that no single set of disks
+or controller becomes saturated from I/O requests when there is still unused
+disk throughput. It is harder to get right than the previous approach and most
+often less successful.
+
+Finally, it is important to remember that some I/O will always exist in most
+databases. After all the guidelines above have been considered, if performance
+is still not satisfactory on the existing system, you can consider:
+
+o Reducing the data volumes of the current database by moving older data out.
+
+o Investing in more & faster hardware.
+
+
+
+--------------------------------
+DATAFILE I/O-RELATED WAIT EVENTS
+--------------------------------
+
+These Wait Events occur on I/O operations to datafiles.
+
+
+'db file sequential read'                     Note 34559.1
+------------------------------------------------------------
+
+This is one of the most common I/O-related waits.
+It is in most cases a single block read e.g. for index data blocks or for
+table data blocks accessed through an index but can also be seen for reads
+on datafile header blocks.
+In earlier versions it could be a multiblock read from Sort segments on disk
+to contiguous ('sequential') buffers in the Buffer Cache.
+
+If this Wait Event is a significant portion of Wait Time then a number of
+approaches are possible:
+
+o Find the Top SQL statements in Physical Reads (from a Statspack or AWR report 
+  in the section titled "SQL ordered by Reads" or from the view V$SQL)
+  and tune them in order to reduce their I/O requirements:
+
+  - If Index Range scans are involved, more blocks than necessary could be
+    being visited if the index is unselective: by forcing or enabling the
+    use of a more selective index, we can access the same table data by
+    visiting fewer index blocks (and doing fewer physical I/Os).
+
+  - If indexes are fragmented, again we have to visit more blocks because
+    there is less index data per block. In this case, rebuilding the index
+    will compact its contents into fewer blocks.
+
+  - If the index being used has a large Clustering Factor, then more table
+    data blocks have to be visited in order to get the rows in each Index
+    block: by rebuilding the table with its rows sorted by the particular
+    index columns we can reduce the Clustering Factor and hence the number
+    of table data blocks that we have to visit for each index block.
+    For example, if the table has columns A, B, C & D and the index is on B, D
+    then we can rebuild the table as 
+         CREATE TABLE new AS SELECT * FROM old ORDER BY b,d;
+    
+    Note 39836.1 Clustering Factor
+
+  - Use Partitioning to reduce the number of index and table data blocks to be
+    visited for each SQL statement by usage of Partition Pruning.
+
+o If there are no particular SQL statements with bad execution plans doing more
+  Physical I/Os than necessary, then one of the following may be happening:
+
+  - I/Os on particular datafiles may be being serviced slower due to excessive
+    activity on their disks. In this case, looking at the Statspack "File I/O
+    Statistics" section (or V$FILESTAT) will help us find such hot disks and
+    spread out the I/O by manually moving datafiles to other storage or by
+    making use of Striping, RAID and other technologies to automatically
+    perform I/O load balancing for us.
+
+  - Starting with Oracle 9.2, we can also find which segments (tables or
+    indexes) have the most Physical Reads being performed against them by
+    using the new Segment Statistics data from view V$SEGMENT_STATISTICS.
+    We can then look in detail at such segments and see if e.g. indexes
+    should be rebuilt or Partitioning could be used to reduce I/O on them.
+    Statspack also generates a "Segment Statistics" report starting at level 7.
+
+o If there is no SQL with suboptimal execution plans and I/O is evenly spread
+  out with similar response times from all disks then a larger Buffer Cache
+  may help:
+
+  - In Oracle8i experiment with gradual increments of DB_BLOCK_BUFFERS followed
+    by measurements of the Buffer Cache Hit Ratio from Statspack until there is
+    no further improvement to it.
+
+  - In Oracle9i and above use the Buffer Cache Advisory facility (also available
+    in the Statspack report) to tune the size of the Buffer Cache.
+    For details please refer to the manual
+    Oracle9i Database Performance Guide and Reference,
+    Ch. 14 Memory Configuration and Use, Configuring and Using the Buffer Cache
+
+  - In Oracle10g and above Automatic Shared Memory Management (ASMM) can be
+    used to enable the database to automatically determine the optimal size
+    for the Buffer Cache according to recent workload. For more information see
+    Note 257643.1 Oracle Database 10g Automated SGA Memory Tuning
+
+  - For hot segments, usage of Multiple Buffer Pools can be explored: place 
+    such hot indexes and tables in the KEEP Buffer Pool. For details refer to
+    Note 76374.1 Multiple Buffer Pools
+
+o Finally, you can consider reducing the data held in the most frequently 
+  accessed segments (by moving older unneeded data out of the database) or
+  moving these segments to new faster disks to reduce the response time on
+  their I/Os.
+
+
+'db file scattered read'                      Note 34558.1
+------------------------------------------------------------
+
+This is another very common Wait Event.
+It occurs when Oracle performs multiblock reads from disk into non-contiguous
+('scattered') buffers in the Buffer Cache. Such reads are issued for up to
+DB_FILE_MULTIBLOCK_READ_COUNT blocks at a time.
+These typically happen for Full Table Scans and for Fast Full Index scans.
+
+If this Wait Event is a significant portion of Wait Time then a number of
+approaches are possible:
+
+o Find which SQL statements perform Full Table or Fast Full Index scans and
+  tune them to make sure these scans are necessary and not the result of a
+   suboptimal plan.
+
+  - Starting with Oracle9i the new view V$SQL_PLAN view can help:
+    (ignore data dictionary SQL in the output of these queries)
+    For Full Table scans:
+         select sql_text from v$sqltext t, v$sql_plan p
+         where t.hash_value=p.hash_value and p.operation='TABLE ACCESS'
+           and p.options='FULL'
+         order by p.hash_value, t.piece;
+    For Fast Full Index scans:
+         select sql_text from v$sqltext t, v$sql_plan p
+         where t.hash_value=p.hash_value and p.operation='INDEX'
+           and p.options='FULL SCAN'
+         order by p.hash_value, t.piece;
+
+  - In Oracle8i a possible approach is to find sessions performing multiblock
+    reads by querying V$SESSION_EVENT for this Wait Event and then SQL Tracing
+    them. Alternatively, the Top SQL statements for Physical Reads can be 
+    investigated to see if their execution plans contain Full Table or Fast
+    Full Index scans.
+
+o In cases where such multiblock scans occur from optimal execution plans
+  it is possible to tune the size of multiblock I/Os issued by Oracle by
+  setting the instance parameter DB_FILE_MULTIBLOCK_READ_COUNT so that 
+
+  DB_BLOCK_SIZE x DB_FILE_MULTIBLOCK_READ_COUNT = max_io_size of system
+
+  For more information refer to
+  Note 30712.1 Init.ora Parameter "DB_FILE_MULTIBLOCK_READ_COUNT" Reference
+  Note 1037322.6 WHAT IS THE DB_FILE_MULTIBLOCK_READ_COUNT PARAMETER?
+
+Starting with Oracle10g Release 2 the DB_FILE_MULTIBLOCK_READ_COUNT 
+initialization parameter is now automatically tuned to use a default value 
+when this parameter is not set explicitly. This default value corresponds 
+to the maximum I/O size that can be performed efficiently. 
+This value is platform-dependent and is 1MB for most platforms.
+Because the parameter is expressed in blocks, it will be set to a value that
+is equal to the maximum I/O size that can be performed efficiently divided by
+the standard block size.
+
+o As blocks read using Full Table and Fast Full Index scans are placed on the
+  least recently used end of the Buffer Cache replacement lists, sometimes
+  it may help to use Multiple Buffer Pools and place such segments in the KEEP
+  pool. For more information please refer to
+  Note 76374.1 Multiple Buffer Pools
+
+o Partitioning can also be used to reduce the amount of data to be scanned
+  as Partition Pruning can restrict the scan to a subset of the segment's
+  partitions.
+
+o Finally, you can consider reducing the data held in the most frequently 
+  accessed segments (by moving older unneeded data out of the database) or
+  moving these segments to new faster disks to reduce the response time on
+  their I/Os.
+
+
+'db file parallel read'
+------------------------------------------------------------
+
+This Wait Event is used when Oracle performs in parallel reads from multiple
+datafiles to non-contiguous buffers in memory (PGA or Buffer Cache).
+This is done during recovery operations or when buffer prefetching is being
+used as an optimization i.e. instead of performing multiple single-block reads.
+
+If this wait is an important component of Wait Time, follow the same guidelines
+as 'db file sequential read'.
+
+
+'direct path read'                            Note 50415.1
+'direct path write'                           Note 50416.1
+'direct path read (lob)'
+'direct path write (lob)'
+------------------------------------------------------------
+
+These occur when database processes perform special types of multiblock I/Os
+between the disk and process PGA memory, thus bypassing the Buffer Cache.
+Such I/Os may be performed both synchronously and asynchronously.
+
+Examples where they may be used are:
+o Sort I/Os when memory Sort areas are exhausted and temporary tablespaces
+  are used to perform the sort
+o Parallel Execution (Query and DML)
+o Readahead operations (buffer prefetching)
+o Direct Load operations
+o I/O to LOB segments (which are not cached in the Buffer Cache)
+
+Due to the way in which time for these waits is recorded (it does not measure
+the time taken to perform the I/O), their relative position in listings such
+as Statspack's "Top 5 Wait/Timed Events" cannot be used to evaluate their
+true impact.
+
+Guidelines for tuning:
+o Usage of Asynchronous I/O is recommended where available.
+
+o In Oracle8i, minimize the number of I/O requests by setting the
+  DB_FILE_DIRECT_IO_COUNT instance parameter so that
+
+  DB_BLOCK_SIZE x DB_FILE_DIRECT_IO_COUNT = max_io_size of system
+
+  In Oracle8i the default for this is 64 blocks.
+
+  (In Oracle9i, it is replaced by _DB_FILE_DIRECT_IO_COUNT which governs
+   the size of direct I/Os in BYTES (not blocks). The default is 1Mb but
+   will be sized down if the max_io_size of the system is smaller.)
+
+  Note 47324.1 Init.ora Parameter "DB_FILE_DIRECT_IO_COUNT" Reference Note
+
+o Tune memory Sort areas so that disk I/O for Sorting is minimized:
+  In 9i and above use Automated SQL Execution Memory Management.
+  In 8i tune the various Sort areas manually.
+
+Note 147806.1 Oracle9i New Feature: Automated SQL Execution Memory Management
+Note 109907.1 How to Determine an Optimal SORT_AREA_SIZE 
+
+o For LOB segments, store them on filesystems where an Operating System File
+  Buffer Cache can provide some memory caching.
+
+o Identify sessions performing direct I/Os by querying V$SESSION_EVENT
+  for these Wait Events or V$SESSTAT for statistics
+  'physical reads direct', 'physical reads direct (lob)',
+  'physical writes direct' & 'physical writes direct (lob)'
+  and tune their SQL statements.
+
+o Identify datafiles on bottlenecked disk storage and move elsewhere
+  using V$FILESTAT or Statspack's "File IO Statistics" section.
+
+
+
+-----------------------------------
+CONTROLFILE I/O-RELATED WAIT EVENTS
+-----------------------------------
+
+These Wait Events occur during I/O to one or all copies of the controlfile.
+
+Frequency of Controlfile access is governed by activities such as Redo Logfile
+switching and Checkpointing. Therefore it can only be influenced indirectly
+by tuning these activities.
+
+
+'control file parallel write'
+------------------------------------------------------------
+
+This occurs when a server process is updating all copies of the controlfile.
+If it is significant, check for bottlenecks on the I/O paths (controllers,
+physical disks) of all of the copies of the controlfile.
+
+Possible solutions:
+
+o Reduce the number of controlfile copies to the minimum that ensures
+  that not all copies can be lost at the same time.
+
+o Use Asynchronous I/O if available on your platform.
+
+o Move the controlfile copies to less saturated storage locations.
+
+
+'control file sequential read'
+'control file single write'
+------------------------------------------------------------
+
+These occur on I/O to a single copy of the controlfile.
+If they are significant find out whether the waits are on particular copy
+of the controlfile and if so whether its I/O path is saturated.
+
+The following query can be used to find which controlfile is being accessed.
+It has to be run when the problem is occuring:
+
+select P1 from V$SESSION_WAIT
+where EVENT like 'control file%' and STATUS='WAITING';
+
+Possible solutions:
+
+o Move the problematic controlfile copy to a less saturated storage location.
+
+o Use Asynchronous I/O if available on your platform.
+
+
+
+------------------------------------
+REDO LOGGING I/O-RELATED WAIT EVENTS
+------------------------------------
+
+There are a number of Wait Events that happen during Redo Logging activities
+and most of them are I/O-related.
+
+The two most important ones are 'log file parallel write' and 'log file sync'.
+Oracle foreground processes wait for 'log file sync' whereas the LGWR process
+waits for 'log file parallel write'.
+
+Although we usually find 'log file sync' in the "Top 5 Wait/Timed Events"
+section of the Statspack report, in order to understand it we will first look
+at 'log file parallel write':
+
+
+'log file parallel write'                     Note 34583.1
+------------------------------------------------------------
+
+The LGWR background process waits for this event while it is copying redo
+records from the memory Log Buffer cache to the current redo group's member
+logfiles on disk.
+
+Asynchronous I/O will be used if available to make the write parallel, otherwise
+these writes will be done sequentially one member after the other.
+However, LGWR has to wait until the I/Os to all member logfiles are complete
+before the wait is completed.
+Hence, the factor that determines the length of this wait is the speed with 
+which the I/O subsystem can perform the writes to the logfile members.
+
+To reduce the time waited for this event, one approach is to reduce the amount
+of redo generated by the database:
+
+o Make use of UNRECOVERABLE/NOLOGGING options.
+
+o Reduce the number of redo group members to the minimum necessary to ensure
+  not all members can be lost at the same time.
+
+o Do not leave tablespaces in BACKUP mode for longer than necessary.
+
+o Only use the minimal level of Supplemental Logging required to achieve
+  the required functionality e.g. in LogMiner, Logical Standby or Streams.
+
+Another approach is to tune the I/O itself:
+
+o Place redo group members on storage locations so that parallel
+  writes do not contend with each other.
+
+o Do not use RAID-5 for redo logfiles.
+
+o Use Raw Devices for redo logfiles.
+
+o Use faster disks for redo logfiles.
+
+o If archiving is being used setup redo storage so that writes for the current
+  redo group members do not contend with reads for the group(s) currently being
+  archived.
+
+
+'log file sync'                               Note 34592.1
+------------------------------------------------------------
+
+This Wait Event occurs in Oracle foreground processes when they have issued
+a COMMIT or ROLLBACK operation and are waiting for it to complete.
+Part (but not all) of this wait includes waiting for LGWR to copy the redo
+records for the session's transaction from Log Buffer memory to disk.
+
+So, in the time that a foreground process is waiting for 'log file sync',
+LGWR will also wait for a portion of this time on 'log file parallel write'.
+
+The key to understanding what is delaying 'log file sync' is to compare
+average times waited for 'log file sync' and 'log file parallel write':
+
+o If they are almost similar, then redo logfile I/O is causing the delay
+  and the guidelines for tuning it should be followed.
+
+o If 'log file parallel write' is significantly different i.e smaller,
+  then the delay is caused by the other parts of the Redo Logging mechanism
+  that occur during a COMMIT/ROLLBACK (and are not I/O-related).
+  Sometimes there will be latch contention on redo latches, evidenced by
+  'latch free' or 'LGWR wait for redo copy' wait events. 
+
+
+'log file sequential read'
+'log file single write'
+------------------------------------------------------------
+
+Both these Wait Events are I/O-related so they are likely to appear together
+with 'log file parallel write' if there is I/O contention on the redo logs.
+Follow the same guidelines for tuning them.
+
+
+'switch logfile command'
+'log file switch completion'
+'log file switch (clearing log file)'
+------------------------------------------------------------
+
+More LGWR I/O-related Wait Events, tune as before.
+
+
+'log file switch (checkpoint incomplete)'
+------------------------------------------------------------
+
+This Wait Event occurs when Checkpointing activities are not occuring
+quickly enough. 
+
+For guidelines on tuning Checkpoint operations please refer to:
+
+Note 147468.1 Checkpoint Tuning and Troubleshooting Guide
+Note 76713.1 8i Parameters that Influence Checkpoints
+
+
+'log switch/archive'
+'log file switch (archiving needed)'
+------------------------------------------------------------
+
+These Wait Events occur when archiving is enabled and indicate that archiving
+is not performing fast enough.
+
+For guidelines on tuning archiving operations please refer to:
+
+Note 45042.1 Archiver Best Practices
+
+
+
+------------------------------------
+BUFFER CACHE I/O-RELATED WAIT EVENTS
+------------------------------------
+
+These Wait Events occur because of Buffer Cache operations involving the
+DBWR process(es) and I/O Slaves. 
+
+
+'db file parallel write'                      Note 34416.1
+'db file single write'
+'write complete waits'
+'free buffer waits'
+------------------------------------------------------------
+
+For guidelines on tuning these waits please refer to the following articles:
+
+Note 62172.1 Understanding and Tuning Buffer Cache and DBWR
+Note 147468.1 Checkpoint Tuning and Troubleshooting Guide
+Note 76713.1 8i Parameters that Influence Checkpoints
+
+
+
+---------------------------------
+FINAL NOTE: CORRECT I/O OPERATION
+---------------------------------
+
+As a final note in this article, whenever I/O performance and response times
+are low it is worth checking for related errors in Operating System logs.
+
+There is little point in investigating I/O performance at the Oracle database
+level if the I/O subsystem is malfunctioning. If this is the case your Hardware,
+Operating System or Filesystem vendor should be contacted for assistance.
+
+Please ensure that all steps described in Oracle Installation manuals and
+Administrator's Reference guides involving Operating System patches, Kernel
+parameters & related configuration tasks have been performed on systems
+hosting Oracle databases.
+
+
+
+----------------------------
+REFERENCES & FURTHER READING
+----------------------------
+
+Note 190124.1 THE COE PERFORMANCE METHOD
+Note 30286.1 I/O Tuning with Different RAID Configurations
+Note 30712.1 Init.ora Parameter "DB_FILE_MULTIBLOCK_READ_COUNT" Reference Note
+Note 1037322.6 WHAT IS THE DB_FILE_MULTIBLOCK_READ_COUNT PARAMETER?
+Note 39836.1 Clustering Factor
+Note 47324.1 Init.ora Parameter "DB_FILE_DIRECT_IO_COUNT" Reference Note
+Note 45042.1 Archiver Best Practices
+Note 62172.1 Understanding and Tuning Buffer Cache and DBWR
+Note 147468.1 Checkpoint Tuning and Troubleshooting Guide
+Note 76713.1 8i Parameters that Influence Checkpoints
+Note 76374.1 Multiple Buffer Pools
+Note 147806.1 Oracle9i New Feature: Automated SQL Execution Memory Management
+Note 109907.1 How to Determine an Optimal SORT_AREA_SIZE 
+
+"Optimal Storage Configuration Made Easy" by J. Loaiza
+http://otn.oracle.com/deploy/performance/pdf/opt_storage_conf.pdf
+
+"Diagnosing Performance Using Statspack" by C. Dialeris & G. Wood
+http://otn.oracle.com/deploy/performance/pdf/statspack.pdf
+
+"Performance Tuning with Statspack, Part I" by C. Dialeris & G. Wood
+http://otn.oracle.com/deploy/performance/pdf/20TUNING_dialeris.pdf
+
+"Performance Tuning with Statspack, Part II" by C. Dialeris & G. Wood
+http://otn.oracle.com/deploy/performance/pdf/statspack_tuning_otn_new.pdf
+
+Oracle® Database Performance Tuning Guide 10g Release 2 (10.2)
+Part Number B14211-01
+http://www.oracle.com/pls/db102/to_toc?pathname=server.102%2Fb14211%2Ftoc.htm&remark=portal+%28Getting+Started%29
+
+Oracle® Database Performance Tuning Guide 10g Release 1 (10.1)
+Part Number B10752-01
+http://www.oracle.com/pls/db10g/db10g.to_toc?pathname=server.101%2Fb10752%2Ftoc.htm&remark=portal+%28Getting+Started%29
+
+Oracle9i Database Performance Planning Release 2 (9.2)
+Part Number A96532-01
+http://www.oracle.com/pls/db92/db92.to_toc?pathname=server.920%2Fa96532%2Ftoc.htm&remark=docindex
+
+Oracle9i Database Performance Tuning Guide and Reference Release 2 (9.2)
+Part Number A96533-01
+http://www.oracle.com/pls/db92/db92.to_toc?pathname=server.920%2Fa96533%2Ftoc.htm&remark=docindex
+
+Oracle9i Database Performance Methods Release 1 (9.0.1)
+Part Number A87504-02
+http://www.oracle.com/pls/db901/db901.to_toc?pathname=server.901/a87504/toc.htm&remark=docindex
+
+Oracle9i Database Performance Guide and Reference Release 1 (9.0.1)
+Part Number A87503-02
+http://www.oracle.com/pls/db901/db901.to_toc?pathname=server.901/a87503/toc.htm&remark=docindex
+
+Oracle8i Designing and Tuning for Performance Release 2 (8.1.6)
+Part Number A76992-01
+http://download-uk.oracle.com/docs/cd/A87860_01/doc/server.817/a76992/toc.htm
+
+

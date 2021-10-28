@@ -1,0 +1,1 @@
+http://PETHOU-DMS01:8489/dms-ws/DmsContentMessageReceiverService?WSDL

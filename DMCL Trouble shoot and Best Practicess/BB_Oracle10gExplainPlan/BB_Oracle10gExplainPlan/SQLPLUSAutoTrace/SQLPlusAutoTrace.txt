@@ -1,0 +1,66 @@
+***********************
+* SQL*Plus Auto Trace *
+***********************
+
+1) Create the PLUSTRACE role. 
+
+   a. Login to Oracle using the SYS account.
+   
+	SQL> connect sys/change_on_install as sysdba
+	
+   b. Create the PLUSTRACE role by running the 
+      $ORACLE_HOME\sqlplus\admin\plustrce.sql script.
+      
+	SQL> @C:\oracle\product\10.1.0\db_1\sqlplus\admin\plustrce.sql
+     
+2) Grant the PLUSTRACE role to an Oracle user.
+
+	SQL> grant plustrace to DCTM user;
+
+3) Login as the Oracle user using SQL*Plus.
+
+	SQL> connect user/password
+
+4) Create the PLAN_TABLE by running the $ORACLE_HOME\rdbms\admin\utlxplan.sql 
+   script.
+   
+	SQL> @D:\Database\Oracle\ora81\rdbms\admin\utlxplan.sql
+   
+5) Enable Auto Trace. Set timing on for SQL time.
+
+	SQL> set autotrace traceonly explain statistics;
+	SQL> set timing on
+
+6) Execute a SQL statement to get the Execution Plan.
+	
+	For instance:
+	SQL> select * from <table_name>;select /* test_emc43 */ r_object_id, object_name from acs53sp4.dm_sysobject_s where r_object_type= 'dm_cabinet';
+
+Execution Plan
+----------------------------------------------------------                                                              
+   0      SELECT STATEMENT Optimizer=ALL_ROWS (Cost=441 Card=19 Bytes=                                                  
+          1178)                                                                                                         
+                                                                                                                        
+   1    0   TABLE ACCESS (FULL) OF 'DM_SYSOBJECT_S' (TABLE) (Cost=441                                                   
+          Card=19 Bytes=1178)                                                                                           
+
+Statistics
+----------------------------------------------------------                                                              
+          0  recursive calls                                                                                            
+          0  db block gets                                                                                              
+       2012  consistent gets                                                                                            
+       2004  physical reads                                                                                             
+          0  redo size                                                                                                  
+       1177  bytes sent via SQL*Net to client                                                                           
+        523  bytes received via SQL*Net from client                                                                     
+          3  SQL*Net roundtrips to/from client                                                                          
+          0  sorts (memory)                                                                                             
+          0  sorts (disk)                                                                                               
+         19  rows processed                                                                                             
+
+
+19 rows selected.
+
+Elapsed: 00:00:00.61
+
+                                                                                         

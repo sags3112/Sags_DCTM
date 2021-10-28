@@ -1,0 +1,66 @@
+***********************
+*  QUERYING THE AWR   *
+***********************
+
+
+1. Execute the SQL Statement
+
+select /* test40 */ r_object_id, object_name 
+from acs53sp4.dm_sysobject_s 
+where r_object_type= 'dm_cabinet';
+
+
+2. Query V$SQL_TEXT to obtain the SQL_ID
+
+select sql_id, sql_text 
+from v$sql 
+where sql_text like '%test40%';
+
+=============================================================
+SQL_ID               SQL_TEXT                                                                                           
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test40 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh                                                           
+                     ere r_object_type= 'dm_cabinet'                                                                                              
+                                    
+=============================================================                               
+                                    
+
+3. Using the SQL_ID, verify that this statement has been captured in the DBA_HIST_SQLTEXT dictionary view. If the query does not return rows, then it indicates that the statement has not yet been loaded in the AWR.
+
+SELECT SQL_ID, SQL_TEXT 
+FROM dba_hist_sqltext 
+WHERE SQL_ID='04b0jf7gydp0g';
+
+=============================================================
+SQL_ID               SQL_TEXT                                                                                           
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test40 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh                                                           
+=============================================================                                                                                                                      
+
+4. You can take a manual AWR snapshot rather than wait for the next snapshot (which occurs every hour). Then check to see if has been captured in DBA_HIST_SQLTEXT:
+   
+exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT;
+
+
+5. Use the DBMS_XPLAN.DISPLAY_AWR() function to retrieve the execution plan:
+
+SELECT * FROM TABLE (DBMS_XPLAN.DISPLAY_AWR('cstgya8t79a43'));
+
+
+OR, you can skip the steps 2-3 and execute the following SQL statent:
+
+REM SELECT tf.* FROM DBA_HIST_SQLTEXT ht, 
+table (DBMS_XPLAN.DISPLAY_AWR(ht.sql_id,null, null, 'ALL' )) tf 
+WHERE ht.sql_text like '%r_object_id%';
+
+
+
+
+=============================================================
+
+
+
+=============================================================
+

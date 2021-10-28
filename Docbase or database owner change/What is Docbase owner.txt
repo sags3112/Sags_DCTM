@@ -1,0 +1,26 @@
+1) 
+
+Definition:
+
+The DocBase owner is the user within the RDBMS (i.e. Oracle or MS SQLServer) that owns all of the database tables and resources. This user does not necessarily have to be a Operating System user. That is Documentum Software does not impose this requirement - it is only required that this user be able to connect to the Database and have sufficient priviledges to create tables and manipulate data.
+
+
+The docbase owner is identified in the server.ini file as the database_owner attribute. This user is created, during Server startup, as a Super User in the Docbase. Therefore, this user always exists. 
+
+
+2)Do I need a different docbase owner for every Docbase" 
+
+
+Yes. If you have two docbases then you need two corresponding RDBMS accounts. Since the RDBMS manages all the tables for a given user in a single name space it is required that for each Docbase there be a seperate RDBMS accounts. 
+
+
+3) Do I need an Operating System account for the Docbase Owner" 
+
+
+Not necessarily. The only requirement is to be able to connect to the RDBMS as the Docbase Owner. Some RDBMS systems, such as Oracle, manage their users internally and do not require a corresponding Operating System account. 
+
+
+4) How does the Docbase Owner get created in the RDBMS" 
+
+
+During the running of Configure Docbase a SQL (i.e. Database) script is generated that, when run sucessfully, creates the database user. 

@@ -1,0 +1,32 @@
+
+SQL_ID               SQL_TEXT                                                                                           
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test_emc43 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh                                                           
+                     ere r_object_type= 'dm_cabinet'                                                                    
+                                                                                                                        
+3wyx025sadrf3        select sql_id, sql_text from v$sql where                                                           
+                      sql_text like '%test_emc43%'                                                                      
+                                                                                                                        
+3vymkhfraz8sp        SELECT tf.* FROM DBA_HIST_SQLTEXT ht, ta                                                           
+                     ble (DBMS_XPLAN.DISPLAY_AWR(ht.sql_id,nu                                                           
+                     ll, null, 'ALL' )) tf WHERE ht.sql_text                                                            
+                     like '%test_emc43%'                                                                                
+                                                                                                                        
+
+
+SQL_ID               SQL_TEXT                                                                                           
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test_emc43 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh                                                           
+                     ere r_object_type= 'dm_cabinet'                                                                    
+                                                                                                                        
+3wyx025sadrf3        select sql_id, sql_text from v$sql where                                                           
+                      sql_text like '%test_emc43%'                                                                      
+                                                                                                                        
+3vymkhfraz8sp        SELECT tf.* FROM DBA_HIST_SQLTEXT ht, ta                                                           
+                     ble (DBMS_XPLAN.DISPLAY_AWR(ht.sql_id,nu                                                           
+                     ll, null, 'ALL' )) tf WHERE ht.sql_text                                                            
+                     like '%test_emc43%'                                                                                
+                                                                                                                        
+

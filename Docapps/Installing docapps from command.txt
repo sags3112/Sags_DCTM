@@ -1,0 +1,7 @@
+
+If customer runs from the content server machine they can deploy the DocApp from the command line.
+ 
+The steps to do this are:
+1. Source $DM_HOME/bin/dm_set_server_env.sh
+2. Add $DM_HOME/lib/DDS.jar and $DM_HOME/lib/Dart.jar to the CLASSPATH
+3. Run java com.documentum.ApplicationInstall.DfAppInstaller -d <docbaseName> -n <userName> -p <userPassword> -a <docAppArchivePath>

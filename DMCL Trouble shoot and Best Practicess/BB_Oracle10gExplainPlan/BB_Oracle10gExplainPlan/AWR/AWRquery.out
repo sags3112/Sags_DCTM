@@ -1,0 +1,106 @@
+
+R_OBJECT_I OBJECT_NAME                                                                                                  
+---------- --------------------                                                                                         
+0c3ea47c80 acs53sp4                                                                                                     
+000104                                                                                                                  
+                                                                                                                        
+0c3ea47c80 tsadmin                                                                                                      
+000105                                                                                                                  
+                                                                                                                        
+0c3ea47c80 System                                                                                                       
+000106                                                                                                                  
+                                                                                                                        
+0c3ea47c80 Temp                                                                                                         
+000107                                                                                                                  
+                                                                                                                        
+0c3ea47c80 Templates                                                                                                    
+000117                                                                                                                  
+                                                                                                                        
+0c3ea47c80 Resources                                                                                                    
+000118                                                                                                                  
+                                                                                                                        
+0c3ea47c80 Integration                                                                                                  
+000158                                                                                                                  
+                                                                                                                        
+0c3ea47c80 dm_bof_registry                                                                                              
+000502                                                                                                                  
+                                                                                                                        
+0c3ea47c80 Test                                                                                                         
+000d03                                                                                                                  
+                                                                                                                        
+0c3ea47c80 super                                                                                                        
+00291d                                                                                                                  
+                                                                                                                        
+0c3ea47c80 admin                                                                                                        
+00291e                                                                                                                  
+                                                                                                                        
+0c3ea47c80 Case                                                                                                         
+00310d                                                                                                                  
+                                                                                                                        
+0c3ea47c80 c0                                                                                                           
+00711c                                                                                                                  
+                                                                                                                        
+0c3ea47c80 dd0                                                                                                          
+00811d                                                                                                                  
+                                                                                                                        
+0c3ea47c80 dd0cab                                                                                                       
+00811e                                                                                                                  
+                                                                                                                        
+0c3ea47c80 ttt                                                                                                          
+00c93e                                                                                                                  
+                                                                                                                        
+0c3ea47c80 mouse                                                                                                        
+00c942                                                                                                                  
+                                                                                                                        
+0c3ea47c80 mouse, mickey                                                                                                
+00c944                                                                                                                  
+                                                                                                                        
+0c3ea47c80 hehe                                                                                                         
+0137a4                                                                                                                  
+                                                                                                                        
+
+19 rows selected.
+
+
+PL/SQL procedure successfully completed.
+
+
+PLAN_TABLE_OUTPUT                                                                                                       
+------------------------------------------------------------------------------------------------------------------------
+SQL_ID cstgya8t79a43                                                                                                    
+--------------------                                                                                                    
+select /* test_emc43 */ r_object_id, object_name from                                                                   
+acs53sp4.dm_sysobject_s where r_object_type= 'dm_cabinet'                                                               
+                                                                                                                        
+Plan hash value: 1997436443                                                                                             
+                                                                                                                        
+------------------------------------------------------------------------------------                                    
+| Id  | Operation         | Name           | Rows  | Bytes | Cost (%CPU)| Time     |                                    
+------------------------------------------------------------------------------------                                    
+|   0 | SELECT STATEMENT  |                |       |       |   441 (100)|          |                                    
+|   1 |  TABLE ACCESS FULL| DM_SYSOBJECT_S |    19 |  1178 |   440   (1)| 00:00:06 |                                    
+------------------------------------------------------------------------------------                                    
+                                                                                                                        
+
+14 rows selected.
+
+
+PLAN_TABLE_OUTPUT                                                                                                       
+------------------------------------------------------------------------------------------------------------------------
+SQL_ID cstgya8t79a43                                                                                                    
+--------------------                                                                                                    
+select /* test_emc43 */ r_object_id, object_name from                                                                   
+acs53sp4.dm_sysobject_s where r_object_type= 'dm_cabinet'                                                               
+                                                                                                                        
+Plan hash value: 1997436443                                                                                             
+                                                                                                                        
+------------------------------------------------------------------------------------                                    
+| Id  | Operation         | Name           | Rows  | Bytes | Cost (%CPU)| Time     |                                    
+------------------------------------------------------------------------------------                                    
+|   0 | SELECT STATEMENT  |                |       |       |   441 (100)|          |                                    
+|   1 |  TABLE ACCESS FULL| DM_SYSOBJECT_S |    19 |  1178 |   440   (1)| 00:00:06 |                                    
+------------------------------------------------------------------------------------                                    
+                                                                                                                        
+
+14 rows selected.
+

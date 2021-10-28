@@ -1,0 +1,45 @@
+for unix nothing to change in the database level or server_config level
+
+
+
+
+
+
+Unix - stop the docbase and docbroker
+change the password and restart services
+
+Windows -
+stop the docbase,docbroker and JMS
+Select My Computer
+Right click on manage
+select Services and Apllications
+double click on service
+Hightlight docbase service
+rightclick select properties
+go to - log on tab
+enter the new password
+Then start it up
+start the service for docbase and docbroker
+
+Sagar Golajana: bob..suppose the installation owner account is doamin account..so we need to chnahge the password in users tab ie. Right click on manage > users and groups -> users -- > select thge user and we need to chnage right
+Bob Philipp: there is a SN on this
+Sagar Golajana: then we need to chnage for  docbase and JMS..etc
+Bob Philipp: also it is documentum in the docs
+Bob Philipp: changing install owner
+Sagar Golajana: yaa
+Sagar Golajana: but its only changing installtion owner
+Sagar Golajana: but not password
+Bob Philipp: you just asked me if they change the domain
+Sagar Golajana: k
+Sagar Golajana: ok
+Bob Philipp: that is a new user
+Sagar Golajana: got it
+Bob Philipp: different sid
+Sagar Golajana: cool
+Sagar Golajana: got it
+Bob Philipp: that is documented
+Bob Philipp is typing a message.
+Bob Philipp: I answered your first question
+Sagar Golajana: ya its thre in ca installtion guide
+
+

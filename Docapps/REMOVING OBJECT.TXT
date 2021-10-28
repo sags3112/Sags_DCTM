@@ -1,0 +1,12 @@
+tO Remove select Object from DocApp/Type 
+
+
+“Remove select Object from DocApp/Type” removes object from the docapp not from docbase, if you want to remove objects from docbase the in DAB, checkout docapp 
+
+Select the object, Go to Menu item Edit ? Delete object(s) from Docbase.
+
+Or
+
+TBO objects reside in the docbase in the location "/System/Modules/TBO" with the object type "dmc_module". You can uninstall the TBO’s by destroying your custom TBO objects from docbase.
+
+select r_object_id, r_object_type from dm_sysobject where folder('/System/Modules/TBO'); 

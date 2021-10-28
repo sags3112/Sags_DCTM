@@ -1,0 +1,173 @@
+Subject:  How To Use Tkprof and Trace With Applications 
+  Doc ID:  Note:142898.1 Type:  HOWTO 
+  Last Revision Date:  29-SEP-2003 Status:  PUBLISHED 
+
+
+
+goal: How To Generate a SQL Trace File and TKPROF the Results
+fact: Oracle Application Object Library
+fact: SQL TRACE
+fact: TKPROF
+
+
+
+fix:
+
+
+SQL*Trace is a database tool analysts or customers can use to debug certain 
+problems in Oracle Applications. SQL*Trace creates a file containing all SQL 
+statements, and statistics for each statement, executed during a user's session.
+ This file can later be reviewed to determine:  
+   ?  What SQL statements were executed.  
+   ?  How long and how much CPU time did each script take  
+   ?  How the database was accessed by each statement (Explain option)  
+  
+SQL*Trace is especially useful for performance issues. Oracle developers will 
+usually ask for 'trace output' for performance problems in order to find out 
+exactly what the process is doing at the database level.   
+   
+SQL*Trace can also be helpful for other situations by identifying the SQL 
+script that is causing the problem. Situations such as:  
+   o A process suddenly terminates with an ORA error.   
+   o Quickpick is not returning an expected value.  
+   o Query in a form is not returning an expected value.
+
+
+SQL*Trace can be turned on in the MENU for form level problems, but must be 
+turned on at the DATABASE level for processes run by the concurrent manager, 
+such as executables and Oracle Reports. 
+ 
+
+To run SQL*Trace on an Oracle Report without shutting down the database see How to Generate a Level 4 trace for an Oracle 
+Applications Report.   However, this requires a minor modification of the 
+report.   
+
+
+To run SQL*Trace at the DATABASE level and produce a useful output, complete 
+the following steps.   
+ 
+(NOTE: The database administrator should perform this process)   
+ 
+   
+1. Edit the INIT.ORA or CONFIG.ORA (Server Administration Guide, Appendix A) 
+  
+     - This file resides under $ORACLE_HOME/dbs   
+     - The INIT.ORA is read when the database is started.   
+     - The following INIT.ORA parameters must be set:   
+          SQL_TRACE = TRUE   
+          USER_DUMP_DEST = <preferred directory for the trace output>   
+          TIMED_STATISTICS = TRUE   
+          MAX_DUMP_FILE_SIZE = <optional, determines trace output file size&
+gt;   
+   
+2. Shutdown Concurrent Manager and Database.   
+     - Shutdown the concurrent manager first. Then shut down the database.   
+     - Make sure that no user is on the system.   
+   
+3. Restart the Database and the Concurrent Manager.  
+   
+4. Run the process.    
+     SUGGESTION: Do not have other users on the system while trace is on, and 
+only run the process in question. This will make finding the problem much 
+easier.   
+  
+5. Check the USER_DUMP_DEST directory for the trace output.   
+   NOTE: An easy way of determining the directory a trace file is written  
+         to, is to run the following SQL:  
+           Select value from v$parameter where name = 'user_dump_dest';  
+  
+6. Find the trace file for your process.  
+    - If there are multiple trace files use the creation date to help determine 
+which file is yours. In UNIX, use 'ls -lrt'.  
+    - If there are multiple files for the same session, they may all be 
+relevant.  
+    - The file's names will be *.trc.  
+          
+7. Shutdown and restart the database with the original INIT.ORA.
+
+
+
+To run SQL*Trace at the FORM level and produce a useful output, complete the 
+following steps:  
+
+It is not necessary to shut down the database when running SQL*Trace from a 
+form.
+   
+
+1. Get to the point in the form where you want to turn trace on. For example,  
+   if the problem occurs on the commit, wait till you are ready to commit THEN  
+   turn trace on.  
+2. The Navigation Path is: Help > Tools > Trace (This will set the flag)
+  
+3. Execute the steps you want to trace.  
+
+4. Help > Tools > Trace (This will unset the flag)    
+
+5. The trace file will be written to the file specified in the 'user_dump_dest' 
+   parameter in the INIT.ORA file.   
+
+
+If trace function is NOT enabled from the form you wish to trace then the menu 
+will need to be customized to include this menu function.
+
+
+USING TKPROF TO FORMAT THE TRACE FILE  
+.
+-------------------------------------
+The trace file that is created contains statistics on how long each SQL script 
+takes, but this information is not possible to read without using  tkprof. 
+Using tkprof on the trace file will format the file making it easy to read the 
+performance statistics. It also formats the SQL scripts making them a little 
+bit easier to read.  
+  
+Before running tkprof on the trace file:  
+    - Make sure the table plan_table exists.   
+    - If not, please find the command to create the table from the Server 
+Application Developer's Guide, page B-11.   
+  
+TKPROF Format:  
+    tkprof tracefile outputfile [explain=  ] [table=  ] [print=  ] [insert=  ]  
+     [sys=  ] [sort= ]  
+  
+      Examples:  
+      1. tkprof  ora_11598.trc  myfilename     
+      2. tkprof  ora_11598.trc  /tmp/myfilename    
+      3. tkprof  ora_11598.trc  /tmp/myfilename explain=ap/ap  
+      4. tkprof  ora_23532.trc  myfilename  explain=po/po  sort=execpu  
+  
+NOTES:  
+- In order to create the tkprof file you must have write access in the 
+directory     that you are creating the file. If you do not have write access 
+in the trace     directory, then specify a directory where you do have write 
+access. The /tmp     directory is a possible directory to use where users 
+should have write access.   
+
+Example #2 shows how to do this.  
+
+- The values listed in [ ] are optional. However, explain should always be used 
+if the issue is a performance problem. Explain should be followed by the 
+userid/passwd of the product that SQL*Trace was executed from. 
+
+See Example #3.  
+
+- For more information, type <tkprof> and hit return at the operating 
+system prompt and it will return an explanation on the usage of tkprof, further 
+explaining the other optional parameters.   
+
+- Example #4 shows how to sort the SQL scripts in order of the CPU time spent 
+executing. This will list the SQL scripts that use the most CPU time at the top 
+of the file. This is useful for identifying the performance problem in a very 
+large trace file.  
+
+
+
+MORE INFORMATION ON SQL*TRACE   
+For more detailed information regarding how to use SQL Trace and how to   
+interpret the output, please consult the Server Application Developer's Guide, 
+Appendix B.
+
+Reference Available: Oracle8i Designing and Tuning for Performance
+                     Release 2 (8.1.6)
+                     Part Number A76992-01
+URL:http://st-doc.us.oracle.com/8.0/817/server.817/a76992/ch14_str.htm#1216.
+

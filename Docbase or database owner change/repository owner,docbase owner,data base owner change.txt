@@ -1,0 +1,20 @@
+
+
+Not for Customers ..its INTERNAl..
+
+Documentum doesnot Support changing the Repository Owner/Docbase Owner/DataBase Owner
+
+
+Changing the Repository Owner Password in Documentum...
+
+Follow thse steps to change the Repository owner password in Documentum Content Server by encrpting:
+
+1Stop the Repository
+2Go to $DM_HOME/dba/config/<repository name>/ 
+3Create a copy of the file with name dbpasswd.txt 
+4In the DB change the password of Repository Owner 
+5Edit the dbpasswd.txt( The file backed up in Step 3) and replace the new password as plain text 
+6Save dbpasswd.txt 
+7Go to $DM_HOME/bin run the following 
+8dm_encrypt_password -docbase <docbase name> -rdbms -encrypt <database password> 
+9 Restart the Repository 

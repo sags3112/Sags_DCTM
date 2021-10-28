@@ -1,0 +1,17 @@
+ESG no : 12874
+
+Hi Shelley,
+
+This is in Ref. to ticket no 21750058
+
+Issue:
+
+Question:  Is it feasible to change the data base owner name (oracle) or  not or just leave it alone..
+
+Solution:
+
+It is NOT advisable to change the docbase owner, the only way to do it is to do a full dump and load. 
+(For instructions to do a Full Dump & Load please refer to the e-Content Server Administrator's Guide. Please note that the Docbase owner is also known as the Database Owner.)
+If you want, you can check some of the customer forums for "change docbase owner" to see if anyone else was able to do it successfully.
+
+Let me know if you have any concerns.

@@ -1,0 +1,79 @@
+This is the list, the order of installation is from top down. The below list is from a file called "DocApps.xml"
+located in DOCUMENTUM\product\6.0\install.
+
+
+
+<?xml version="1.0"?>
+<!--
+    The docapps and DARs listed in the file will be bundled with the server and installed whenever
+    a docbase is created or updated.  -->
+
+
+<actions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DocAppActions.xsd">
+
+    <dar name="SmartContainer">
+        <description>Smart Container</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Smart Container.dar</darFile>
+    </dar>
+
+    <dar name="Webtop">
+        <description>Webtop</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Webtop.dar</darFile>
+    </dar>
+
+    <dar name="Workflow">
+        <description>Workflow</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Workflow.dar</darFile>
+    </dar>
+
+    <dar name="Presets">
+        <description>Presets</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Presets.dar</darFile>
+    </dar>
+
+    <dar name="WebtopExpress">
+        <description>Webtop Express</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Webtop Express.dar</darFile>
+    </dar>
+
+    <dar name="AdminAccess" globalRegistryOnly="true">
+        <description>Admin Access</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/AdminAccess.dar</darFile>
+    </dar>
+ 
+    <dar name="ResourceAgentsRegistry" globalRegistryOnly="true">
+        <description>JMX Resource Agents Registry</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/ResourceAgentsRegistry.dar</darFile>
+    </dar>
+
+    <dar name="LDAP">
+        <description>LDAP</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/LDAP.dar</darFile>
+    </dar>
+
+    <dar name="DCS Attachments">
+        <description>DCS Attachments</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/DCS Attachments.dar</darFile>
+    </dar>
+
+    <dar name="Collaboration Services">
+        <description>Collaboration Services</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Collaboration Services.dar</darFile>
+    </dar>
+
+    <dar name="MessagingApp">
+        <description>Messaging Application</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/MessagingApp.dar</darFile>
+    </dar>
+    
+    <dar name="DmsClient" globalRegistryOnly="true">
+        <description>DMS Client</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/DmsClient.dar</darFile>
+    </dar>
+
+    <dar name="Lifecycle">
+        <description>Java Lifecycle</description>
+        <darFile>$C(SERVER, DOCUMENTUM_HOME)/install/DARsInternal/Lifecycle.dar</darFile>
+    </dar>
+    
+</actions>

@@ -1,0 +1,53 @@
+***********************
+*    EXPLAIN PLAN     *
+***********************
+
+1. SQL Statement
+
+EXPLAIN PLAN
+SET STATEMENT_ID='test40' FOR
+select /* test40 */ r_object_id, object_name 
+from acs53sp4.dm_sysobject_s 
+where r_object_type= 'dm_cabinet';
+
+2. Query V$SQL_PLAN  (optional)
+
+- Obtain the SQL_ID
+
+SELECT SQL_ID, SQL_TEXT 
+FROM V$SQL
+WHERE SQL_TEXT LIKE '%test40%';
+
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test40 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh   
+                                  
+                     
+- Run DBMS_XPLAN.DISPLAY
+
+SELECT plan_table_output 
+FROM TABLE(dbms_xplan.display('cstgya8t79a43'));
+
+
+3. Run DBMS_XPLAN.DISPLAY
+
+SELECT plan_table_output 
+FROM TABLE(dbms_xplan.display('plan_table','test40','serial'));
+
+
+PLAN_TABLE_OUTPUT                                                                                                       
+------------------------------------------------------------------------------------------------------------------------
+                                                                                                                        
+------------------------------------------------------------------------------------                                    
+| Id  | Operation         | Name           | Rows  | Bytes | Cost (%CPU)| Time     |                                    
+------------------------------------------------------------------------------------                                    
+|   0 | SELECT STATEMENT  |                |    19 |  1178 |   441   (1)| 00:00:06 |                                    
+|*  1 |  TABLE ACCESS FULL| DM_SYSOBJECT_S |    19 |  1178 |   441   (1)| 00:00:06 |                                    
+------------------------------------------------------------------------------------                                    
+                                                                                                                        
+Predicate Information (identified by operation id):                                                                     
+---------------------------------------------------                                                                     
+                                                                                                                        
+   1 - filter("R_OBJECT_TYPE"='dm_cabinet')                                                                             
+
+12 rows selected.

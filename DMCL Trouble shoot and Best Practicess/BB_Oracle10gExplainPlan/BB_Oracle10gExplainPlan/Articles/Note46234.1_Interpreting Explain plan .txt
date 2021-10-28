@@ -1,0 +1,1346 @@
+Subject:  Interpreting Explain plan 
+  Doc ID:  Note:46234.1 Type:  FAQ 
+  Last Revision Date:  16-FEB-2007 Status:  PUBLISHED 
+
+
+Interpreting Explain Plan
+=========================
+
+What's an explain plan?
+~~~~~~~~~~~~~~~~~~~~~~~
+
+An explain plan is a representation of the access path that is taken when 
+a query is executed within Oracle.
+
+Query processing can be divided into 7 phases:
+
+     [1] Syntactic                - checks the syntax of the query
+     [2] Semantic                 - checks that all objects exist and are accessible
+     [3] View Merging             - rewrites query as join on base tables as 
+                                    opposed to using views
+     [4] Statement Transformation - rewrites query transforming some complex
+                                    constructs into simpler ones where 
+                                    appropriate (e.g. subquery unnesting, in/or
+                                    transformation)
+     [5] Optimization             - determines the optimal access path for the 
+                                    query to take. With the Rule Based 
+                                    Optimizer (RBO) it uses a set of heuristics
+                                    to determine access path. With the Cost 
+                                    Based Optimizer (CBO) we use statistics
+			            to analyze the relative costs of accessing 
+                                    objects.
+     [6] QEP Generation         
+     [7] QEP Execution
+
+(QEP = Query Evaluation Plan)
+
+Steps [1]-[6] are sometimes grouped under the term 'Parsing'
+Step  [7] is the execution of the statement.
+
+The explain plan a reprsentation of the access path produced in step 6.
+
+Once the access path has been decided upon it is stored in the library cache 
+together with the statement itself. Queries are stored in the library cache 
+based upon a hashed representation of the query. When looking for a statement 
+in the library cache, we first apply a hashing algorithm to the current 
+statement and then look for this hash value in the library cache.
+This access path will be used until the query is reparsed.
+
+Terminology
+~~~~~~~~~~~
+
+Row Source    - A row source is a software function that implements specific 
+                operations (such as a table scan or a hash join)
+                and returns a set of rows.
+
+Predicate     - where clause of a query
+
+Tuples        - rows
+
+Driving Table - This is the row source that we use to seed the query. 
+                If this returns a lot of rows then this can have a negative 
+                affect on all subsequent operations
+
+Probed Table  - This is the object we lookup data in after we have retrieved
+                relevant key data from the driving table.
+
+How does Oracle access data?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+At the physical level Oracle reads blocks of data.
+The smallest amount of data read is a single Oracle block, the largest is 
+constrained by operating system limits (and multiblock i/o).
+Logically Oracle finds the data to read by using the following methods:
+
+Full Table Scan (FTS)
+Index Lookup (unique & non-unique)
+Rowid
+
+Explain plan Hierarchy
+~~~~~~~~~~~~~~~~~~~~~~
+
+Simple explain plan:
+
+Query Plan
+-----------------------------------------
+SELECT STATEMENT     [CHOOSE] Cost=1234
+  TABLE ACCESS FULL LARGE [:Q65001] [ANALYZED]
+
+When looking at a plan, the rightmost (ie most inndented) uppermost operation 
+is the first thing that is executed. 
+A more detailed explanation of this much simplified desctiption can be found below.
+
+In this case TABLE ACCESS FULL LARGE is the first operation.
+This statement means we are doing a full table scan of table LARGE.
+When this operation completes then the resultant row source is passed up to the 
+next level of the query for processing. In this case it is the SELECT STATEMENT
+which is the top of the query.
+
+[CHOOSE] is an indication of the optimizer_goal for the query. This DOES NOT 
+necessarily indicate that plan has actually used this goal. The only way to 
+confirm this is to check the cost= part of the explain plan as well. 
+For example the following query indicates that the CBO has
+been used because there is a cost in the cost field:
+
+SELECT STATEMENT     [CHOOSE] Cost=1234
+
+However the explain plan below indicates the use of the RBO because the cost
+field is blank:
+
+SELECT STATEMENT     [CHOOSE] Cost=
+
+The cost field is a comparative cost that is used internally to determine the 
+best cost for particular plans. The costs of different statements are not
+really directly comparable.
+
+[:Q65001] indicates that this particular part of the query is being executed
+in parallel. This number indicates that the operation will be processed by a 
+parallel query slave as opposed to being executed serially.
+
+[ANALYZED] indicates that the object in question has been analyzed and there 
+are currently statistics available for the CBO to use. There is no indication
+of the 'level' of analysis done.
+
+More about Plans and the order of execution
+===========================================
+
+To understand plans and the order of execution, it is necessary to 
+understand the PARENT -- CHILD relationships involved:
+
+ PARENT
+   FIRST  CHILD
+   SECOND CHILD
+
+In this example, the FIRST CHILD is executed first followed by the
+SECOND CHILD, then the PARENT collates the output in some way.
+
+A more complex case is:
+
+ PARENT1
+   FIRST  CHILD
+     FIRST  GRANDCHILD
+   SECOND CHILD
+
+Here the same principles apply, the FIRST GRANDCHILD is the initial operation
+then the FIRST CHILD followed by the SECOND CHILD and finally the PARENT 
+collates the output.
+
+These priniples can be applied to real operations as in the examples below.
+Consider the following query:
+
+EXAMPLE 1
+=========
+
+set autotrace traceonly explain
+
+select ename,dname 
+  from emp, dept 
+ where emp.deptno=dept.deptno 
+   and dept.dname in ('ACCOUNTING','RESEARCH','SALES','OPERATIONS');
+
+15 rows selected.
+
+This produces the following explain plan:
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=3 Card=8 Bytes=248)
+   1    0   HASH JOIN (Cost=3 Card=8 Bytes=248)
+   2    1     TABLE ACCESS (FULL) OF 'DEPT' (Cost=1 Card=3 Bytes=36)
+   3    1     TABLE ACCESS (FULL) OF 'EMP' (Cost=1 Card=16 Bytes=304)
+
+In the Execution Plan above, there are 2 columns of numbers that precede
+the plan text of each line. The first number is the Statement ID 
+(usually known simply as "ID"), the second number is the Parent ID 
+of the line (The first line of the plan shows no parent because, 
+as the first line, it has no parent). The ID and PARETN ID are what
+the plan generator uses to construct the explain plan.
+
+The steps in the explain plan are indented to indicate the hierarchy of 
+operations and which steps are dependant on which other steps.
+
+What follows is a walkthrough of the plan above:
+
+Execution starts with: ID=0: 
+
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=3 Card=8 Bytes=248)
+
+ID=0 has no parent but it has 1 child. 
+ID=0 is the parent of ID=1 and is dependant upon it for rows.
+So ID=1 must be executed prior to ID=0
+
+Moving on to ID=1:
+
+   1    0   HASH JOIN (Cost=3 Card=8 Bytes=248)
+
+ID=1 is the child of ID=0
+ID=1 is the parent of ID=2 and ID=3 and is dependant upon them for rows.
+So ID=2 and ID=3 must be executed prior to ID=1
+
+Moving on to ID=2:
+
+   2    1     TABLE ACCESS (FULL) OF 'DEPT' (Cost=1 Card=3 Bytes=36)
+
+ID=2 is the first child of ID=1
+ID=2 is not the parent of any other step.
+This is the first step that is executed by the query.
+Rows are provided to ID=1 from this step
+
+ID=1 is also dependent on ID=3:
+
+   3    1     TABLE ACCESS (FULL) OF 'EMP' (Cost=1 Card=16 Bytes=304)
+
+ID=3 is the second child of ID=1
+ID=3 is not the parent of any other step.
+This is the second step that is executed by the query.
+Rows are provided to ID=1 from this step
+
+ID=1 processes the rows it receives from its dependent steps (ID=2 & ID=3)
+and returns them to its parent ID=0. 
+ID=0 returns the rows to the user.
+
+A shortened summary of this is:
+
+Execution starts with                 ID=0: SELECT STATEMENT but this is dependand on it's child objects
+So it executes its first child step:  ID=1 PID=0 HASH JOIN but this is dependand on it's child objects
+So it executes its first child step:  ID=2 PID=1   TABLE ACCESS (FULL) OF 'DEPT'
+Then the second child step:           ID=3 PID=2   TABLE ACCESS (FULL) OF 'EMP'
+Rows are returned to the parent step(s) until finished
+
+
+EXAMPLE 2
+=========
+
+select /*+ RULE */ ename,dname 
+  from dept , emp
+ where emp.deptno=dept.deptno 
+   and dept.dname in ('ACCOUNTING','RESEARCH','SALES','OPERATIONS');
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=HINT: RULE
+   1    0   NESTED LOOPS
+   2    1     TABLE ACCESS (FULL) OF 'EMP'
+   3    1     TABLE ACCESS (BY INDEX ROWID) OF 'DEPT'
+   4    3       INDEX (UNIQUE SCAN) OF 'PK_DEPT' (UNIQUE)
+
+
+Execution starts with                 ID=0: SELECT STATEMENT but this is dependand on it's child objects
+So it executes it's first child step: ID=1 PID=0 NESTED LOOPS but this is dependand on it's child objects
+So it executes it's first child step: ID=2 PID=1   TABLE ACCESS (FULL) OF 'EMP'
+Rows are fetched in ID=2 These rows are returned to the parent
+to drive the join in the parent:      ID=1 PID=0 NESTED LOOPS
+ID=1 uses the rows to execute ID=3:   ID=3 PID=1   TABLE ACCESS (BY INDEX ROWID) OF 'DEPT' but this is dependand on it's child objects
+So it executes it's first child step: ID=4 PID=3     INDEX (UNIQUE SCAN) OF 'PK_DEPT' 
+Rows are returned to the parent ID=1
+ID=1 returns rows to it's parent ID=0
+Once the rows fetched from ID=2 are exhausted another fetch is done to
+get the next set of rows.
+This process repeats until all the rows retched from ID=2 are exhausted
+
+When starting to looks at explain plans, it is useful to use the ID/PARENT ID
+but with practice the indentation, ordering and operations alone will become
+enough to determine the access path used.
+
+There are many ways of describing how to determine the operation in a plan,
+once familiar with a particular method it becomes second nature. One such
+description was to say that the rightmost-uppermost operation of an explain 
+plan is executed first, but although this proved an intuitive description 
+after some practice it is confusing confusing to some readers. If in doubt 
+consult the id and parent id hierarchy.
+
+
+Access Methods in detail
+========================
+
+Full Table Scan (FTS)
+~~~~~~~~~~~~~~~~~~~~~
+In a FTS operation, the whole table is read up to the high water mark (HWM).
+The HWM marks the last block in the table that has ever had data written to it.
+If you have deleted all the rows then you will still read up to the HWM.
+Truncate resets the HWM back to the start of the table.
+FTS uses multiblock i/o to read the blocks from disk.
+
+Multiblock i/o is controlled by the parameter <PARAM:db_block_multiblock_read_count>. 
+
+This defaults to:
+
+db_block_buffers / ( (PROCESSES+3) / 4 )
+
+The Maximum values are OS dependant
+
+Buffers from FTS operations are placed on the Least Recently Used (LRU) end of 
+the buffer cache so will be quickly aged out.
+FTS is not recommended for large tables unless you are reading >5-10% of it 
+(or so) or you intend to run in parallel.
+
+Example FTS explain plan:
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+SQL> explain plan for select * from dual;
+
+Query Plan
+-----------------------------------------
+SELECT STATEMENT     [CHOOSE] Cost=
+  TABLE ACCESS FULL DUAL
+
+
+Index lookup
+~~~~~~~~~~~~
+Data is accessed by looking up key values in an index and returning rowids.
+A rowid uniquely identifies an individual row in a particular data block.
+This block is read via single block i/o.
+
+In this example an index is used to find the relevant row(s) and then the
+table is accessed to lookup the ename column (which is not included in the 
+index):
+
+SQL> explain plan for select empno,ename from emp where empno=10;
+
+Query Plan
+------------------------------------
+SELECT STATEMENT [CHOOSE] Cost=1
+TABLE ACCESS BY ROWID EMP [ANALYZED] 
+    INDEX UNIQUE SCAN EMP_I1
+
+Notice the 'TABLE ACCESS BY ROWID' section. This indicates that the table data
+is not being accessed via a FTS operation but rather by a rowid lookup. In this 
+case the rowid has been produced by looking up values in the index first.
+
+The index is being accessed by an 'INDEX UNIQUE SCAN' operation. This is 
+explained below. The index name in this case is EMP_I1.
+
+If all the required data resides in the index then a table lookup may be 
+unnecessary and all you will see is an index access with no table access.
+
+In the following example all the columns (empno) are in the index. Notice that
+no table access takes place:
+
+SQL> explain plan for select empno from emp where empno=10;
+
+Query Plan
+------------------------------------
+SELECT STATEMENT [CHOOSE] Cost=1
+  INDEX UNIQUE SCAN EMP_I1
+
+Indexes are presorted so sorting may be unecessary if the sort order required 
+is the same as the index.
+
+e.g.
+
+SQL> explain plan for 
+select empno,ename 
+from emp 
+where empno > 7876 order by empno;
+
+Query Plan
+--------------------------------------------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=1
+TABLE ACCESS BY ROWID EMP [ANALYZED] 
+  INDEX RANGE SCAN EMP_I1 [ANALYZED]  
+
+In this case the index is sorted so ther rows will be returned in the order of
+the index hence a sort is unecessary.
+ 
+explain plan for
+select /*+ Full(emp) */ empno,ename 
+from emp
+where empno> 7876 order by empno;
+
+Query Plan
+--------------------------------------------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=9
+  SORT ORDER BY
+    TABLE ACCESS FULL EMP [ANALYZED]  Cost=1 Card=2 Bytes=66
+
+Because we have forced a FTS the data is unsorted and so we must sort the data 
+after it has been retrieved.
+
+There are 5 methods of index lookup:
+
+index unique scan
+index range scan
+index full scan
+index fast full scan
+index skip scan
+
+Index unique scan
+~~~~~~~~~~~~~~~~~
+Method for looking up a single key value via a unique index.
+always returns a single value
+You must supply AT LEAST the leading column of the index to access data via
+the index, However this may return > 1 row as the uniqueness will not be
+guaranteed.
+
+example explain plan:
+
+SQL> explain plan for
+select empno,ename from emp where empno=10;
+
+Query Plan
+------------------------------------
+SELECT STATEMENT [CHOOSE] Cost=1
+  TABLE ACCESS BY ROWID EMP [ANALYZED] 
+    INDEX UNIQUE SCAN EMP_I1
+
+
+Index range scan
+~~~~~~~~~~~~~~~~
+
+Index range scan is a method for accessing a range values of a particular
+column. AT LEAST the leading column of the index  must be supplied to 
+access data via the index.
+Can be used for range operations (e.g. > < <> >= <= between)
+e.g.
+
+SQL> explain plan for 
+select empno,ename from emp
+where empno > 7876 order by empno;
+
+Query Plan
+--------------------------------------------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=1
+TABLE ACCESS BY ROWID EMP [ANALYZED] 
+  INDEX RANGE SCAN EMP_I1 [ANALYZED]  
+
+A non-unique index may return multiple values for the predicate
+col1 = 5 and will use an index range scan
+
+SQL> explain plan for select mgr from emp where mgr = 5
+
+Query plan
+--------------------
+SELECT STATEMENT [CHOOSE] Cost=1
+  INDEX RANGE SCAN EMP_I2 [ANALYZED]
+
+Index Full Scan
+~~~~~~~~~~~~~~~
+
+In certain circumstances it is possible for the whole index to be scanned as
+opposed to a range scan (i.e. where no constraining predicates are provided for 
+a table). 
+Full index scans are  only available in the CBO as otherwise we are
+unable to determine whether a full scan would be a good idea or not. 
+We choose an index Full Scan when we have statistics that indicate that it is 
+going to be more efficient than a Full table scan and a sort.
+
+For example we may do a Full index scan when we do an unbounded scan of an 
+index and want the data to be ordered in the index order. 
+The optimizer may decide that selecting all the information from the index 
+and not sorting is more efficient than doing a FTS or a Fast Full Index Scan 
+and then sorting.
+
+An Index full scan will perform single block i/o's and so it may prove to be 
+inefficient. 
+
+e.g.
+Index BE_IX is a concatenated index on big_emp (empno,ename)
+
+SQL> explain plan for 
+select empno,ename from big_emp order by empno,ename;
+
+Query Plan
+--------------------------------------------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=26
+  INDEX FULL SCAN BE_IX [ANALYZED]
+
+
+Index Fast Full Scan
+~~~~~~~~~~~~~~~~~~~~
+
+Scans all the block in the index
+Rows are not returned in sorted order
+Introduced in 7.3 and requires V733_PLANS_ENABLED=TRUE and CBO
+may be hinted using INDEX_FFS hint
+uses multiblock i/o
+can be executed in parallel
+can be used to access second column of concatenated indexes. This is because 
+we are selecting all of the index.
+
+Note that INDEX FAST FULL SCAN is the mechinism behind fast index create 
+and recreate.
+
+e.g.
+Index BE_IX is a concatenated index on big_emp (empno,ename)
+
+SQL> explain plan for select empno,ename from big_emp;
+
+Query Plan
+------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=1
+  INDEX FAST FULL SCAN BE_IX [ANALYZED]
+
+Selecting the 2nd column of concatenated index:
+
+SQL> explain plan for select ename from big_emp;
+
+Query Plan
+------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=1
+  INDEX FAST FULL SCAN BE_IX [ANALYZED]
+
+Index skip scan
+---------------
+
+Index skip scan finds rows even if the column is not the leading column of a 
+concatenated index. It skips the first column(s) during the search.
+The next example checks ename='SMITH' for each index key
+even though ename is not the leading column of the index. The leading column 
+(empno) is skipped.
+
+create index i_emp on emp(empno, ename);
+select /*+ index_ss(emp i_emp)*/ job from emp where ename='SMITH';
+
+PLAN_TABLE_OUTPUT
+---------------------------------------------------------------------------
+| Id  | Operation                   |  Name       | Rows  | Bytes | Cost  |
+---------------------------------------------------------------------------
+|   0 | SELECT STATEMENT            |             |     1 |    12 |    61 |
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMP         |     1 |    12 |    61 |
+|*  2 |   INDEX SKIP SCAN           | I_EMP       |     1 |       |    11 |
+---------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   2 - access("EMP"."ENAME"='SMITH')
+       filter("EMP"."ENAME"='SMITH')
+
+
+Rowid
+~~~~~
+This is the quickest access method available.
+Oracle retrieves the specified block and extracts the rows it is 
+interested in.
+Most frequently seen in explain plans as Table access by Rowid
+
+Access by rowid :
+
+SQL> explain plan for select * from dept where rowid = ':x';
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=1 Card=1 Bytes=18)
+   1    0   TABLE ACCESS (BY USER ROWID) OF 'DEPT' (Cost=1 Card=1 Bytes=18)
+
+(BY USER ROWID) shows that the user provided the rowid. 
+
+Table is accessed by rowid following index lookup:
+
+SQL> explain plan for
+select empno,ename from emp where empno=10;
+
+Execution Plan
+----------------------------------------------------------
+   0      SELECT STATEMENT Optimizer=CHOOSE (Cost=1 Card=1 Bytes=19)
+   1    0   TABLE ACCESS (BY INDEX ROWID) OF 'EMP' (Cost=1 Card=1 Bytes=19)
+   2    1     INDEX (RANGE SCAN) OF 'EMP_PK' (UNIQUE) (Cost=1 Card=1)
+
+(BY INDEX ROWID) shows that the rowid comes from the index access in the 
+step with ID = 2.
+
+Joins
+=====
+A Join is a predicate that attempts to combine 2 row sources
+
+We only ever join 2 row sources together:
+At a given time only one Join Step is performed even though underlying 
+row sources may have been accessed in parallel. Once 2 row sources have been 
+the resultant row source can start to be joined it to other row sources. 
+Note that some join methods (such as nested loops) allow a batch of 
+fetched rows to be returned to the higher levels before fetching the next batch.
+
+Join order - order in which joins are performed
+
+The join order makes a significant difference to the way in which the 
+query is executed. By accessing particular row sources first, certain 
+predicates may be satisfied that are not satisfied by with other join orders.
+This may prevent certain access paths from being taken.
+
+e.g. Suppose there is a concatenated index on A(a.col1,a.col2) 
+     Note that a.col1 is the leading column.
+
+Consider the following query:
+
+select A.col4 
+from   A,B,C 
+where  B.col3 = 10
+and    A.col1 = B.col1
+and    A.col2 = C.col2
+and    C.col3 = 5
+
+We could represent the joins present in the query using the following scehmatic:
+
+   B     <---> A <--->    C
+ col3=10                col3=5
+
+There are really only 2 ways we can drive the query: via B.col3 or C.col3. 
+We would have to do a Full scan of A to be able to drive off it. This is
+unlikely to be efficient with large tables;
+
+If we drive off table B, using predicate B.col3=10 (as a filter or lookup key)
+then we will retrieve the value for B.col1 and join to A.col1. Because we have 
+now filled the leading column of the concatenated index on table A we can use
+this index to give us values for A.col2 and join to A.
+
+However if we drive of table c, then we only get a value for a.col2 and since
+this is a trailing column of a concatenated index and the leading column has
+not been supplied at this point, we cannot use the index on a to lookup the 
+data.
+
+So it is likely that the best join order will be B A C.
+The CBO will obviously use costs to establish whether the individual access
+paths are a good idea or not.
+
+If the CBO does not choose this join order then we can hint it by changing the 
+from clause to read:
+
+from B,A,C
+
+and using the /*+ ordered */ hint. The resultant query would be:
+
+select /*+ ordered */ A.col4 
+from   B,A,C 
+where  B.col3 = 10
+and    A.col1 = B.col1
+and    A.col2 = C.col2
+and    C.col3 = 5
+
+Join Types
+~~~~~~~~~~
+Sort Merge Join (SMJ)
+Nested Loops (NL)
+Hash Join
+
+
+Sort Merge Join
+~~~~~~~~~~~~~~~
+Rows are produced by Row Source 1 and are then sorted
+Rows from Row Source 2 are then produced and sorted by the same sort key as Row 
+Source 1.
+Row Source 1 and 2 are NOT accessed concurrently
+Sorted rows from both sides are then merged together (joined)
+
+		   MERGE
+		 /	\
+	    SORT	SORT
+	     |		   |
+	Row Source 1  Row Source 2
+
+If the row sources are already (known to be) sorted then the sort operation is 
+unecessary as long as both 'sides' are sorted using the same key.
+Presorted row sources include indexed columns and row sources that have already
+been sorted in earlier steps.
+Although the merge of the 2 row sources is handled serially, the row sources 
+could be accessed in parallel.
+
+SQL> explain plan for
+select /*+ ordered */ e.deptno,d.deptno
+from emp e,dept d
+where e.deptno = d.deptno
+order by e.deptno,d.deptno;
+
+Query Plan
+-------------------------------------
+SELECT STATEMENT [CHOOSE] Cost=17
+  MERGE JOIN
+    SORT JOIN
+      TABLE ACCESS FULL EMP [ANALYZED]
+    SORT JOIN
+      TABLE ACCESS FULL DEPT [ANALYZED]
+
+Sorting is an expensive operation, especially with large tables. Because of
+this, SMJ is often not a particularly efficient join method.
+
+Nested Loops
+~~~~~~~~~~~~
+Fetches the first batch of rows from row source 1
+Then we probe row source 2 once for each row returned from row source 1
+
+Row source 1
+~~~~~~~~~~~~
+Row 1 --------------       -- Probe ->       Row source 2
+Row 2 --------------       -- Probe ->       Row source 2 
+Row 3 --------------       -- Probe ->       Row source 2
+
+Row source 1 is known as the outer table
+Row source 2 is known as the inner table
+Accessing row source 2 is known a probing the inner table
+For nested loops to be efficient it is important that the first row source 
+returns as few rows as possible as this directly controls the number of probes 
+of the second row source. Also it helps if the access method for row source 2 
+is efficient as this operation is being repeated once for every row returned
+by row source 1.
+
+SQL> explain plan for
+select a.dname,b.sql
+from dept a,emp b
+where a.deptno = b.deptno;
+
+Query Plan
+-------------------------
+SELECT STATEMENT [CHOOSE] Cost=5
+  NESTED LOOPS
+    TABLE ACCESS FULL DEPT [ANALYZED]
+    TABLE ACCESS FULL EMP [ANALYZED]
+
+Hash Join
+~~~~~~~~~
+New join type introduced in 7.3
+More efficient in theory than NL & SMJ
+Only accessible via the CBO
+Smallest row source is chosen and used to build a hash table and a bitmap
+The second row source is hashed and checked against the hash table looking for 
+joins. The bitmap is used as a quick lookup to check if rows are in the hash 
+table and are especially useful when the hash table is too large to fit in 
+memory.
+
+SQL> explain plan for
+select /*+ use_hash(emp) */ empno 
+from emp,dept
+where emp.deptno = dept.deptno;
+
+Query Plan
+----------------------------
+SELECT STATEMENT  [CHOOSE] Cost=3
+  HASH JOIN
+    TABLE ACCESS FULL DEPT
+    TABLE ACCESS FULL EMP
+
+Hash joins are enabled by the parameter HASH_JOIN_ENABLED=TRUE in the init.ora 
+or session. TRUE is the default in 7.3
+
+Cartesian Product
+~~~~~~~~~~~~~~~~~
+A Cartesian Product is done where they are no join conditions between 2 row 
+sources and there is no alternative method of accessing the data
+Not really a join as such as there is no join!
+Typically this is caused by a coding mistake where a join has been left out.
+It can be useful in some circumstances - Star joins uses cartesian products.
+
+
+Notice that there is no join between the 2 tables:
+
+SQL> explain plan for
+select emp.deptno,dept,deptno 
+from emp,dept
+
+Query Plan
+------------------------------
+SLECT STATEMENT [CHOOSE] Cost=5
+  MERGE JOIN CARTESIAN
+    TABLE ACCESS FULL DEPT
+    SORT JOIN
+      TABLE ACCESS FULL EMP
+
+The CARTESIAN keyword indicate that we are doing a cartesian product.
+
+Operations
+==========
+Operations that show up in explain plans
+
+sort
+filter
+view
+
+Sorts
+~~~~~~
+There are a number of different operations that promote sorts
+
+order by clauses
+group by
+sort merge join
+
+Note that if the row source is already appropriately sorted then no sorting is 
+required. This is now indicated in 7.3:
+
+SORT GROUP BY NOSORT
+	    INDEX FULL SCAN .....
+
+In this case the group by operation simply groups the rows it does not do the 
+sort operation as this has already been completed.
+
+Sorts are expensive operations especially on large tables where the rows do
+not fit in memory and spill to disk. By default sort blocks are placed into the 
+buffer cache. This may result in aging out of other blocks that may be reread 
+by other processes. To avoid this you can use the parameter 
+<Parameter:SORT_DIRECT_WRITES> which does not place sort blocks into the buffer 
+cache.
+
+Filter
+~~~~~~
+Has a number of different meanings
+used to indicate partition elimination
+may also indicate an actual filter step where one row source is filtering 
+another
+functions such as min may introduce filter steps into query plans
+
+In this example there are 2 filter steps. The first is effectively like a NL 
+except that it stops when it gets something that it doesn't like 
+(i.e. a bounded NL). This is there because of the not in. 
+The second is filtering out the min value:
+
+SQL> explain plan for 
+select * 
+from emp
+where empno not in (select min(empno) from big_emp group by empno);
+
+Query Plan
+------------------
+SELECT STATEMENT [CHOOSE]  Cost=1
+  FILTER     **** This is like a bounded nested loops
+    TABLE ACCESS FULL EMP [ANALYZED]
+     FILTER   **** This filter is introduced by the min
+        SORT GROUP BY NOSORT
+          INDEX FULL SCAN BE_IX
+
+This example is also interesting in that it has a NOSORT function. The group 
+by does not need to sort because the index row source is already pre sorted.
+
+Views
+=====
+When a view cannot be merged into the main query you will often see a 
+projection view operation. This indicates that the 'view' will be selected 
+from directly as opposed to being broken down into joins on the base tables.
+A number of constructs make a view non mergeable. Inline views are also
+non mergeable.
+
+In the following example the select contains an inline view which cannot be 
+merged:
+
+SQL> explain plan for
+select ename,tot
+from emp,
+    (select empno,sum(empno) tot from big_emp group by empno) tmp
+where emp.empno = tmp.empno;
+
+Query Plan
+------------------------
+SELECT STATEMENT [CHOOSE]
+  HASH JOIN
+    TABLE ACCESS FULL EMP [ANALYZED]
+    VIEW
+      SORT GROUP BY
+        INDEX FULL SCAN BE_IX
+
+In this case the inline view tmp which contains an aggregate function cannot be
+merged into the main query. The explain plan shows this as a view step.
+
+Sometimes genreated VIEWs can be seeen in the execution plan:
+
+VIEW in the FROM clause (INLINE VIEW)
+-------------------------------------
+
+If a view cannot be merged into the main query then a VIEW keyword will
+be shown in the plan to represent this. 
+
+explain plan for
+select ename,tot
+from emp,
+    (select empno x, sum(empno) tot from big_emp group by empno)
+where emp.empno = x;
+
+----------------------------------------------------------------------------
+| Id  | Operation            |  Name       | Rows  | Bytes |TempSpc| Cost  |
+----------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |             |    16 |   720 |       |    46 |
+|*  1 |  HASH JOIN           |             |    16 |   720 |       |    46 |
+|   2 |   TABLE ACCESS FULL  | EMP         |    16 |   304 |       |     1 |
+|   3 |   VIEW               |             | 10000 |   253K|       |    44 |
+|   4 |    SORT GROUP BY     |             | 10000 | 30000 |   248K|    44 |
+|   5 |     TABLE ACCESS FULL| BIG_EMP     | 10000 | 30000 |       |    24 |
+----------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   1 - access("EMP"."EMPNO"="from$_subquery$_002"."X")
+
+"from$_subquery$_002" is the generated name of the inline view that is 
+produced in id=3 line. If the inline view was aliased in the from clause then
+the system generated name ("from$_subquery$_002") would be replaced by this 
+alias.
+
+Subquery isunnested but resultant view is not merged:
+-----------------------------------------------------
+
+In preoptimization there is a stage where subqueries can be unnested (combined 
+with base query). There are numerous and complex ruled governing this activity
+which are beyond the scope of this article. However, if successful, a subquery
+may be unnested to produce an inline view which represents the subquery. This 
+view is subject to view merging. If the view is non-mergeable then a VIEW keyword 
+will appear in the plan.
+
+explain plan for
+select ename
+from emp
+where emp.empno in (select empno x from big_emp group by empno);
+
+----------------------------------------------------------------------------
+| Id  | Operation            |  Name       | Rows  | Bytes |TempSpc| Cost  |
+----------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |             |    16 |   512 |       |    46 |
+|*  1 |  HASH JOIN SEMI      |             |    16 |   512 |       |    46 |
+|   2 |   TABLE ACCESS FULL  | EMP         |    16 |   304 |       |     1 |
+|   3 |   VIEW               | VW_NSO_1    | 10000 |   126K|       |    44 |
+|   4 |    SORT GROUP BY     |             | 10000 | 30000 |   248K|    44 |
+|   5 |     TABLE ACCESS FULL| BIG_EMP     | 10000 | 30000 |       |    24 |
+----------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   1 - access("EMP"."EMPNO"="VW_NSO_1"."X")
+
+In this example, the subquery is unnested but the resultant inline view
+cannot be merged due to the 'group by'. This unmergeable view is given the
+system geberated name of "VW_NSO_1".
+
+
+Partition Views
+===============
+
+Partition views are a legacy technology that were superceded by 
+the partitioning option. This section of the article is provided as 
+reference for such legacy systems.
+ 
+Allows a large table to be broken up into a number of smaller partitions 
+which can be queried much more quickly than the table as a whole
+a union all view is built over the top to provide the original functionality
+Check constraints or where clauses provide partition elimination capabilities
+
+SQL> explain plan for
+select /*+ use_nl(p1,kbwyv1) ordered */  sum(prc_pd)
+from parent1 p1,  kbwyv1
+where p1.class = 22
+and   kbwyv1.bitm_numb = p1.bitm_numb
+and   kbwyv1.year = 1997
+and   kbwyv1.week between 32 and 33 ;
+
+Query Plan
+-----------------------------------------
+SELECT STATEMENT   [FIRST_ROWS] Cost=1780
+  SORT AGGREGATE
+    NESTED LOOPS   [:Q65001] Ct=1780 Cd=40 Bt=3120
+      TABLE ACCESS FULL PARENT1 [:Q65000] [AN] Ct=20 Cd=40 Bt=1040
+      VIEW  KBWYV1 [:Q65001]
+        UNION-ALL PARTITION  [:Q65001]
+          FILTER   [:Q64000]
+            TABLE ACCESS FULL KBWYT1 [:Q64000] [AN] Ct=11 Cd=2000 Bt=104000
+          TABLE ACCESS FULL KBWYT2 [:Q63000] [AN] Ct=11 Cd=2000 Bt=104000
+          TABLE ACCESS FULL KBWYT3 [:Q62000] [AN] Ct=11 Cd=2000 Bt=104000
+          FILTER   [:Q61000]
+            TABLE ACCESS FULL KBWYT4 [:Q61000] [AN] Ct=11 Cd=2000 Bt=104000
+
+KBWYV1 is a view on 4 tables KBWYT1-4.
+KBWYT1-4 contain rows for week 31-34 respectively and are maintained by check 
+constraints.
+This query should only return rows from partions 2 & 3. The filter operation 
+indicates this. Partitions 1 & 4 are eliminated at execution time.
+The view line indicates that the view is not merged. The union-all partion 
+information indicates that we have recognised this as a partition view. 
+Note that the tables can be accessed in parallel.
+
+Partition handling
+==================
+
+The examples are based on a simple range partitioned table:
+
+create table range_part (col1 number(9))
+partition by range (col1)
+(partition p1 values less than (10) ,
+ partition p2 values less than (20) , 
+ partition p3 values less than(30) ,
+ partition p4 values less than (MAXVALUE)) ; 
+
+Eliminated partitions can be determined at parse time
+=====================================================
+
+As optimizer can check the partition ranges in the dictionary, in some 
+cases it knows which partitions should be used and the others are 
+"elliminated" when the select is optimized. 
+
+This activity is reflected in the following plan_table columns:
+
+  PARTITION_START
+  PARTITION_STOP
+
+Example: 
+
+explain plan for select * from range_part where col1=15;
+start $ORACLE_HOME/rdbms/admin/utlxpls.sql
+------------------------------------------------------------------------------------
+| Id  | Operation            |  Name       | Rows  | Bytes | Cost  | Pstart| Pstop |
+------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |             |     1 |    13 |     1 |       |       |
+|*  1 |  TABLE ACCESS FULL   | RANGE_PART  |     1 |    13 |     1 |     2 |     2 |
+------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   1 - filter("RANGE_PART"."COL1"=15)
+
+The Pstart and Pstop columns show that the optimizer believes that
+only partition 2 is required to satisfy this query.
+
+Eliminated partitions can only be determined at run time
+========================================================
+
+In this example, since the partition key references a bind variable,
+the actual partition numbers cannot be determined during optimization.
+The optimizer can only determine that there is a possibility that 
+partitions can be eliminated at runtime. The 
+PARTITION_START and PARTITION_START columns in the plan table will contain 
+either KEY or ROW LOCATION depending on the nature of the query and the partition 
+itself.
+
+Example: 
+
+explain plan for select * from range_part where col1= :x;
+start $ORACLE_HOME/rdbms/admin/utlxpls.sql
+
+--------------------------------------------------------------------------------------
+| Id  | Operation              |  Name       | Rows  | Bytes | Cost  | Pstart| Pstop |
+--------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT       |             |     1 |    13 |     1 |       |       |
+|   1 |  PARTITION RANGE SINGLE|             |       |       |       |   KEY |   KEY |
+|*  2 |   TABLE ACCESS FULL    | RANGE_PART  |     1 |    13 |     1 |   KEY |   KEY |
+--------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   2 - filter("RANGE_PART"."COL1"=TO_NUMBER(:Z))
+
+You can see more examples in
+Note 179518.1 Partition Pruning and Joins
+
+
+Remote Queries
+==============
+
+Only shows remote in the OPERATION column
+OTHER column shows query executed on remote node
+OTHER_NODE shows where it is executed
+Different operational characteristics for RBO & CBO
+
+RBO - Drags everything across the link and joins locally
+CBO - Uses cost estimates to determine whether to execute remotely or locally
+
+SQL>  explain plan for 
+select * 
+from dept@loop_link;
+
+Query Plan
+-------------------------------------------------------
+SELECT STATEMENT REMOTE  [CHOOSE] Cost=1
+  TABLE ACCESS FULL DEPT [SJD.WORLD] [ANALYZED]
+
+In this case the whole query has been sent to the remote site. The other column
+shows nothing.
+
+SQL> explain plan for
+select a.dname,avg(b.sal),max(b.sal)
+from dept@loop_link a, emp b
+where a.deptno=b.deptno
+group by a.dname
+order by max(b.sal),avg(b.sal) desc;
+
+Query Plan
+-----------------------------------------------------
+SELECT STATEMENT   [CHOOSE] Cost=20
+  SORT ORDER BY  [:Q137003] [PARALLEL_TO_SERIAL]
+    SORT GROUP BY  [:Q137002] [PARALLEL_TO_PARALLEL]
+      NESTED LOOPS   [:Q137001] [PARALLEL_TO_PARALLEL]
+        REMOTE   [:Q137000] [PARALLEL_FROM_SERIAL]
+        TABLE ACCESS FULL EMP [:Q137001] [ANALYZED] 
+                                    [PARALLEL_COMBINED_WITH_PARENT]
+
+OTHER (for REMOTE)
+----------------------------------------------------------------
+SELECT "DEPTNO","DNAME" FROM "DEPT" A
+
+For more details on remote queries see Note 33838.1
+
+Bind Variables
+==============
+Bind variables are recommended in most cases because they promote sharing of 
+sql code
+During optimization, the optimizer has NO IDEA what the bind variable contains. 
+With RBO this makes no difference but with CBO, which relies on accurate 
+statistics to produce plans, this can be a problem.
+
+To check the execution plan of a query using bind variables in sqlplus, the 
+following can be used:
+
+variable x varchar2(18);
+
+begin     :x := 'hello';
+end;
+/
+
+SQL> explain plan for 
+select * from dept where rowid = ':x';
+
+Query Plan
+------------------------------------
+SELECT STATEMENT [CHOOSE] Cost=1
+  TABLE ACCESS BY ROWID DEPT [ANALYZED]
+
+
+Parallel Query
+==============
+Main indicators that a query is using PQO:
+
+o [:Q1000004] entries in the explain plan
+o Checkout the other column for details of what the slaves are executing
+o v$pq_slave will show any parallel activity
+
+Columns to look in for information
+
+other - contains the query passed to the slaves
+other_tag - describes the contents of other
+object_node - indicates order of pqo slaves
+
+Parallel Query operates on a producer/consumer basis.
+When you specify parallel degree 4 oracle tries to allocate 4 producer slaves 
+and 4 consumer slaves. The producers can feed any of the consumers.
+If there are only 2 slaves available then we use these.
+If there is only 1 slave available then we go serial
+If there are none available then we use serial.
+If parallel_min_percent is set then we error ora 12827 instead of using a lower
+number of slaves or going serial
+
+Consumer processes typically perform a sorting function. If there is no 
+requirement for the data to be sorted then the consumer slaves are not produced
+and we end up with the number of slaves used matching the degree of parallelism
+as opposed to being 2x the degree.
+
+Parallel Terms
+~~~~~~~~~~~~~~
+PARALLEL_FROM_SERIAL 		This means that source of the data is serial 
+				but it is passed to a parallel consumer
+PARALLEL_TO_PARALLEL 		Both the consumer and the producer are 
+				parallel
+PARALLEL_COMBINED_WITH_PARENT 	This operation has been combined with the 
+                                parent operator. For example in a sort merge 
+                                join the sort operations would be shown 
+                                as PARALLEL_COMBINED_WITH_PARENT because the 
+                                sort and the merge are handled as 1 operation.
+PARALELL_TO_SERIAL		The source of the data is parallel but it is 
+				passed to a serial consumer. 
+				This typically will happen at the top of the 
+				explain plan but could occur anywhere.
+
+EXAMPLES OF PARALLEL QUERIES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Assumptions
+~~~~~~~~~~~
+	OPTIMIZER_MODE = CHOOSE
+	DEPT is small compared to EMP
+	DEPT has an index (DEPT_INDX) on deptno column 
+
+Three examples are presented
+
+	Query #1	Serial
+	Query #2	Parallel
+	Query #3	Parallel, with forced optimization to 
+			RULE and forced usage of DEPT_INDX	
+
+Sample Query #1 (Serial)
+========================
+select A.dname, avg(B.sal), max(B.sal)
+from  dept A, emp B
+where A.deptno = B.deptno
+group by A.dname
+order by max(B.sal), avg(B.sal) desc;
+
+Execution Plan #1  (Serial)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OBJECT_NAME                      OBJECT_NODE OTHER
+-------------------------------  ----------- -------
+SELECT STATEMENT
+ SORT ORDER BY
+   SORT GROUP BY
+     MERGE JOIN
+       SORT JOIN
+         TABLE ACCESS FULL emp
+       SORT JOIN
+         TABLE ACCESS FULL dept
+
+Notice that the object_node and other columns are empty
+
+Sample Query #2 (Query #1 with parallel hints)
+==============================================
+select /*+ parallel(B,4) parallel(A,4) */
+A.dname, avg(B.sal), max(B.sal)
+from  dept A, emp B
+where A.deptno = B.deptno
+group by A.dname
+order by max(B.sal), avg(B.sal) desc;
+
+Execution Plan #2  (Parallel)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OBJECT_NAME                      OBJECT_NODE OTHER
+-------------------------------  ----------- -------
+SELECT STATEMENT      Cost = ??
+ SORT ORDER BY                   :Q55004     **[7]**
+   SORT GROUP BY                 :Q55003     **[6]**
+     MERGE JOIN                  :Q55002     **[5]**
+       SORT JOIN                 :Q55002     **[4]**
+         TABLE ACCESS FULL emp   :Q55001     **[2]**
+       SORT JOIN                 :Q55002     **[3]**
+         TABLE ACCESS FULL dept  :Q55000     **[1]**
+
+Execution Plan #2  -- OTHER column
+
+**[1]**  (:Q55000) "PARALLEL_FROM_SERIAL"
+
+Serial execution of 
+	SELECT DEPTNO, DNAME FROM DEPT
+
+**[2]**  (:Q55001) "PARALLEL_TO_PARALLEL"
+
+	SELECT /*+ ROWID(A1)*/ 
+	A1."DEPTNO" C0, A1."SAL" C1
+	FROM "EMP" A1 
+	WHERE ROWID BETWEEN :1 AND :2 
+
+**[3]**  (:Q55002) "PARALLEL_COMBINED_WITH_PARENT"
+**[4]**  (:Q55002) "PARALLEL_COMBINED_WITH_PARENT"
+**[5]**  (:Q55002) "PARALLEL_TO_PARALLEL"
+
+	SELECT /*+ ORDERED USE_MERGE(A2)*/
+	A2.C1 C0, A1.C1 C1
+	FROM :Q55001 A1,:Q55000 A2
+	WHERE A1.C0=A2.C0
+
+**[6]**  (:Q55003) "PARALLEL_TO_PARALLEL"
+
+	SELECT MAX(A1.C1) C0, AVG(A1.C1) C1, A1.C0 C2
+	FROM :Q55002 A1
+	GROUP BY A1.C0
+
+**[7]**  (:Q55004) "PARALLEL_FROM_SERIAL"
+
+	SELECT A1.C0 C0, A1.C1 C1, A1.C2 C2
+	FROM :Q55003 A1
+	ORDER BY A1.CO, A1.C1 DESC
+
+Sample Query #3 (Query #2 with fudged hints)
+============================================
+select /*+ index(A dept_indx) parallel(B,4) parallel(A,4) */
+      A.dname, avg(B.sal), max(B.sal)
+from  dept A, emp B
+where A.deptno = B.deptno
+group by A.dname
+order by max(B.sal), avg(B.sal) desc;
+
+Execution Plan #3  (Parallel)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+OBJECT_NAME                         OBJECT_NODE OTHER
+----------------------------------- ----------- -------
+SELECT STATEMENT          Cost = ??
+ SORT ORDER BY                      :Q58002     **[6]**
+   SORT GROUP BY                    :Q58001     **[5]**
+     NESTED LOOPS JOIN              :Q58000     **[4]**
+       TABLE ACCESS FULL emp        :Q58000     **[3]**
+       TABLE ACCESS BY ROWID dept   :Q58000     **[2]**
+         INDEX RANGE SCAN dept_indx :Q58000     **[1]**
+
+Execution Plan #3  -- OTHER column
+
+**[1]**  (:Q58000) "PARALLEL_COMBINED_WITH_PARENT"
+**[2]**  (:Q58000) "PARALLEL_COMBINED_WITH_PARENT"
+**[3]**  (:Q58000) "PARALLEL_COMBINED_WITH_PARENT"
+**[4]**  (:Q58000) "PARALLEL_TO_PARALLEL"
+
+	SELECT /*+ ORDERED USE_NL(A2) INDEX(A2) */ 
+	A2."DNAME" C0, A1.C0 C1
+	FROM
+	  (SELECT /*+ ROWID(A3) */
+	   A3."SAL" CO, A3."DEPTNO" C1
+	   FROM "EMP" A3
+	   WHERE ROWID BETWEEN :1 AND :2) A1,
+	  "DEPT" A2
+	WHERE A2."DEPTNO" = A1.C1
+
+**[5]**  (:Q58001) "PARALLEL_TO_PARALLEL"
+
+	SELECT MAX(A1.C1) C0, AVG(A1.C1) C1, A1.C0 C2
+	FROM :Q58000 A1
+	GROUP BY A1.C0
+
+**[6]**  (:Q58002) "PARALLEL_TO_SERIAL"
+
+	SELECT A1.C0 C0, A1.C1 C1, A1.C2 C2
+	FROM :Q58001 A1
+	ORDER BY A1.C0, A1.C1 DESC
+
+
+How to obtain explain plans
+===========================
+
+Explain plan for
+~~~~~~~~~~~~~~~~
+
+Main advantage is that it does not actually run the query - just parses the 
+sql. This means that it executes quickly.
+In the early stages of tuning explain plan gives you an idea of 
+the potential performance of your query without actually running it. 
+You can then make a judgement as to any modifications you may choose to make.
+
+Autotrace
+~~~~~~~~~
+Autotrace can be configured to run the sql & gives a plan  and statistics 
+afterwards or just give you an explain plan without executing the query. 
+
+Tkprof
+~~~~~~
+analyzes trace files
+
+
+
+The exact methods are explained in:
+
+Note 235530.1 Recommended Method for Obtaining a Formatted Explain Plan
+Note 31101.1 SCRIPT: DIAG - Obtaining Formatted Explain Plan Output
+Note 41634.1 TKPROF and Problem Solving
+
+REFERENCES:
+==============
+Note 33838.1 Determining the execution plan for a distributed query
+Note 236026.1 Display Execution Plans with dbms_xplan.display
+Note 235530.1 Recommended Method for Obtaining a Formatted Explain Plan
+Note 31101.1 SCRIPT: DIAG - Obtaining Formatted Explain Plan Output
+Note 41634.1 TKPROF and Problem Solving
+Note 209197.1 Using Statspack to Record Explain Plan Details
+Note 237287.1 How To Verify Parallel Execution is running
+Note 179518.1 Partition Pruning and Joins
+
+
+.  
+      
+ 
+Bookmarks   Admin   Profile   Feedback   Sign Out   Help   
+ 
+Copyright © 2006, Oracle. All rights reserved.  Legal Notices  and Terms of Use | Privacy Statement  
+ 
+
+ 

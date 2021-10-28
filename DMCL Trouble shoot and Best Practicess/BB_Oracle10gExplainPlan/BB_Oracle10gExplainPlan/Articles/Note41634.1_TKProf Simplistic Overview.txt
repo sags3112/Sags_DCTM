@@ -1,0 +1,455 @@
+Subject:  TKProf Simplistic Overview 
+  Doc ID:  Note:41634.1 Type:  REFERENCE 
+  Last Revision Date:  17-JUL-2006 Status:  PUBLISHED 
+
+
+TKPROF and Problem Solving
+==========================
+
+Purpose
+-------
+This document discusses the use of the following:
+        *       SQL TRACE
+        *       EXPLAIN PLAN
+        *       TKPROF
+
+
+Scope & Application
+--------------------
+For users wanting to obtain a query plan and/or execution times for their 
+queries.
+
+
+Related Documents
+------------------
+The majority of the material covered in this document can be found in 
+the following manuals:  
+    *       Oracle7 Server SQL Reference                                                                    
+    *       Oracle7 Server Tuning   
+                                   
+
+Introduction
+------------
+Much information can be gathered about the performance of an Oracle
+database from the dynamic 'V$' views, as these are documented in the
+Oracle7 Server Manual.  Oracle also provides additional performance
+diagnostic tools to assist in monitoring and tuning the server.
+
+The reader should be familiar with the concepts of the Oracle Server
+initialization file and startup parameters.  Most of the suggestions
+described in this document should be conducted by an experienced DBA.
+
+
+Overview Of SQL TRACE
+---------------------
+The diagnostic tool 'sql trace' provides performance information about
+individual SQL statements and generates the following statistics for
+each statement:
+
+        *       parse, execute, and fetch counts 
+        *       CPU and elapsed times 
+        *       physical reads and logical reads 
+        *       number of rows processed 
+        *       misses on the library cache 
+
+This information is input to a trace (.trc) file and sql trace can be
+enabled/disabled for a session or an instance.
+
+
+Setting Initialization Parameters
+---------------------------------
+The following parameters need to be set up in the "init<sid>.ora" file
+for the particular instance (SID) that you wish to use SQL Trace:
+
+        *       SQL_TRACE
+                + Enable/Disable SQL Trace for the instance.
+
+                Values
+                ------
+                TRUE   Enable statistics to be collected
+                       for all sessions.
+                FALSE  Disable statistics to be collected
+                       for all sessions.
+
+        *       TIMED_STATISTICS
+                + Enable/Disable the collection of timed
+                  statistics, such as CPU and elapsed times.
+
+                Values
+                ------
+                TRUE   Enable timing (we usually recommend this)
+                FALSE  Default value.
+
+        *       MAX_DUMP_FILE_SIZE
+                + Specifies the maximum size of trace
+                  files operating system blocks.
+
+                Values
+                ------
+                The default value for this is 500 but if your
+                trace file is truncated then increase this value.
+
+        *       USER_DUMP_DEST
+                + Specifies the destination for the trace file.
+
+                Values
+                ------
+                The default value for this parameter is the default
+                destination for system dumps on your operating system. 
+
+
+Enabling SQL Trace
+------------------
+The SQL Trace facility can either be enabled/disabled for an individual
+session or the instance.
+
+        *       To enable the SQL trace facility for your session
+                issue the following SQL statement:
+
+                        ALTER SESSION
+                        SET SQL_TRACE = TRUE; 
+
+        *       To disable the SQL trace facility for your session
+                issue the following SQL statement:
+
+                        ALTER SESSION
+                        SET SQL_TRACE = FALSE;
+
+
+Enabling TIMED_STATISTICS
+-------------------------
+The parameter TIMED_STATISTICS can be enabled/disabled dynamically by using
+                    
+                         ALTER SYSTEM
+                         SET TIMED_STATISTICS = TRUE;
+
+               or
+                         ALTER SESSION 
+                         SET TIMED_STATISTICS = TRUE;
+
+To disable set TIMED_STATISTICS = FALSE:
+
+SQL Trace Facility for an Instance
+----------------------------------
+Note that if the initialization parameter SQL_TRACE=TRUE, then statistics
+will be gathered for ALL sessions.  If the facility has been enabled for
+the instance, it may be disabled for an individual session by issuing by
+the above SQL statement.
+
+
+Trace Files
+-----------
+Oracle will generate trace (.trc) files for every session where the value
+of SQL_TRACE = TRUE and write them to the USER_DUMP_DEST destination.
+If tracing has been enabled for the instance then individual trace files
+will be generated for each session, unless otherwise disabled (see above).
+Note, that the generated files may be owned by an operating system user
+other than your own so you may have to get this user to grant you access
+before you can use TKPROF to format them.
+
+
+Using TKPROF
+------------
+The TKPROF facility accepts as input an SQL trace file and produces a
+formatted output file.  Note that TKPROF can be run on individual or
+appended trace files to produce the formatted output file.
+
+        *       For the full syntax of TKPROF see
+                Oracle7 Server Tuning Manual.
+
+        *       Invoke TKPROF with no arguments
+                and online help is displayed.
+
+
+Syntax of TKPROF
+----------------
+
+TKPROF command ::=
+
+>>-- TKPROF filename1 filename2 ---------------------------------------------->
+                                 |                                          |
+                                 +- SORT = ---------------------------------+
+                                              |                    |
+                                              +--     OPTION     --+
+                                              |                    |
+                                              |    +---- , ----+   |
+                                              |    V           |   |
+                                              |__(    OPTION    )__|
+
+>----------------------------------------------------------------------------->
+   |                     |   |                       |   |                  |
+   +-- PRINT = integer --+   +-- INSERT = filname3 --+   +-- SYS = ---------+
+                                                                   |       |
+                                                                   +- YES -+
+                                                                   |       |
+                                                                   +- NO --+
+
+>----------------------------------------------------------------------------->
+   |                                                                        |
+   +----------------------------------------  EXPLAIN = user/password ------+
+     |                                |
+     +----  TABLE = schema.table  ----+
+
+>----------------------------------------------------------------------------><
+   |                            |
+   +----  RECORD = filname  ----+
+
+
+The Basics Of TKPROF
+--------------------
+
+For the purpose of this document we will only describe some of the
+fundamental arguments for TKPROF:
+
+        *       'filename1'
+                Specifies the input file, a trace file containing
+                statistics produced by the SQL trace facility.
+                This file can be either a trace file produced for a
+                single session or a file produced by appending together
+                together individual trace files from multiple sessions.
+
+        *       'filename2'
+                Specifies the file to which TKPROF writes its
+                formatted output.
+
+        *       'EXPLAIN'
+                Determines the execution plan for each SQL statement in
+                in the trace file and writes these execution plans to
+                the output file. TKPROF determines execution plans by
+                issuing the EXPLAIN PLAN command after connecting to
+                Oracle with the user and password specified in this
+                parameter. The specified user must have CREATE SESSION
+                privileges.
+
+        *       'TABLE'
+                Specifies the schema and name of the table into which
+                TKPROF temporarily places execution plans before writing
+                them to the output file. If the specified table already
+                exists, TKPROF deletes its rows then uses it for the
+                EXPLAIN PLAN command and then deletes its rows.  If this
+                table does not exist, TKPROF creates, uses, then drops it.
+                The specified user must be able to issue INSERT, SELECT,
+                and DELETE statements against the table. If the table does
+                not already exist, the user must also be able to issue
+                CREATE TABLE and DROP TABLE statements.  This option
+                allows multiple individuals to run TKPROF concurrently with
+                the same user in the EXPLAIN value. These individuals can
+                specify different TABLE values and avoid destructively
+                interfering with each  other's processing on the temporary
+                plan table.  If you use the EXPLAIN  parameter without the
+                TABLE parameter, TKPROF uses the table PROF$PLAN_TABLE in
+                the schema of the user specified by the EXPLAIN parameter.
+                If you use the TABLE parameter without the EXPLAIN parameter,
+                TKPROF ignores the TABLE parameter. 
+
+        *       'SYS'
+                Enables and disables the listing of SQL statements issued 
+                by the user SYS, or recursive SQL statements into the
+                output file. The default value of YES causes TKPROF to
+                list these statements. The value of NO causes TKPROF to
+                to omit them.
+
+
+Simple Example
+--------------
+
+This example shows TKPROF being run to format a trace file named
+"dsdb2_ora_18468.trc" and writing it to a formatted output file
+named "dsdb2_trace.out".
+
+  TKPROF dsdb2_ora_18468.trc dsdb2_trace.out SYS=NO EXPLAIN=SCOTT/TIGER
+
+Note that if the command is likely to be longer than a single line on your
+terminal screen you may have to use continuation characters.
+
+
+The Parameters In This Example: 
+-------------------------------
+
+The EXPLAIN value causes TKPROF to connect as the user SCOTT and use the 
+EXPLAIN PLAN command to generate the execution plan for each traced SQL 
+statement.  The SYS parameter with the value of NO causes TKPROF to omit
+recursive SQL statements from the output file.
+
+
+Interpretting TKPROF Output
+===========================
+
+The EXPLAIN PLAN Command
+------------------------
+
+The EXPLAIN PLAN command displays the execution plan chosen by the 
+Oracle optimizer for SELECT, UPDATE, INSERT, and DELETE statements.
+A statement's execution plan is the sequence of operations that Oracle 
+performs to execute the statement. By examining the execution plan, you 
+can see exactly how Oracle executes your SQL statement. This information 
+can help you determine whether the SQL statement you have written takes 
+advantage of the indexes available. For the syntax of the EXPLAIN PLAN 
+command, see the Oracle7 Server SQL Reference Manual. 
+
+
+Creating the Output Table
+-------------------------
+
+Before you can issue an EXPLAIN PLAN statement, there must exist a table 
+to hold its output, you do either of the following:
+
+        *       Run the SQL script "UTLXPLAN.SQL" to create a sample
+                output table called PLAN_TABLE in your schema.
+
+        *       Issue a CREATE TABLE statement to create an output
+                with any name you choose.  You can then issue an
+                EXPLAIN PLAN statement and direct its output to this
+                table.  Any table used to store the output of the
+                EXPLAIN PLAN command must have the same column names
+                and datatypes as the PLAN_TABLE.
+
+
+SQL Trace Facility Statistics
+-----------------------------
+
+TKPROF lists the statistics for a SQL statement returned by the SQL 
+trace facility in rows and columns.  Each row corresponds to one of
+three steps of SQL statement processing: 
+
+        *       PARSE
+                This step translates the SQL statement into an execution plan.
+                This includes checks for proper security authorization and
+                checks or the existence of tables, columns, and other
+                referenced objects.
+
+        *       EXECUTE
+                This step is the actual execution of the statement by Oracle.
+                For INSERT, UPDATE, and DELETE statements, this step modifies
+                the data.  For SELECT statements, the step identifies the
+                selected rows.
+
+        *       FETCH
+                This step retrieves rows returned by a query.
+                Fetches are only performed for SELECT statements.
+
+The step for which each row contains statistics is identified by the value of
+the call column.  The other columns of the SQL trace facility output are
+combined statistics for all parses, all executes, and all fetches of a
+statement: 
+
+        COUNT
+        Number of times a statement was parsed, executed, or fetched.
+
+        CPU
+        Total CPU time in seconds for all parse, execute, or fetch calls
+        for the statement.
+
+        ELAPSED
+        Total elapsed time in seconds for all parse, execute, or fetch calls
+        for the statement.
+
+        DISK
+        Total number of data blocks physically read from the datafiles on
+        disk for all parse, execute, or fetch calls.
+
+        QUERY
+        Total number of buffers retrieved in consistent mode for all parse, 
+        execute, or fetch calls. Buffers are usually retrieved in consistent
+        mode for queries.
+
+        CURRENT
+        Total number of buffers retrieved in current mode.  Buffers are often
+        retrieved in current mode for INSERT, UPDATE, and DELETE statements.
+
+        +  The sum of QUERY & CURRENT is he total number of buffers accessed.
+
+        ROWS
+        Total number of rows processed by the SQL statement.  This total does
+        not include rows processed by subqueries of the SQL statement.
+
+For SELECT statements, the number of rows returned appears for the fetch step.
+For UPDATE, DELETE, and INSERT statements, the number of rows processed 
+appears for the execute step.
+
+
+Example Output (Partial) File
+-----------------------------
+
+TKPROF: Release 7.2.2.3.0 - Production on Wed Aug  7 11:29:43 1996
+
+Copyright (c) Oracle Corporation 1979, 1994.  All rights reserved.
+
+Trace file: <filename>.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+
+DELETE FROM RM$HASH_ELMS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        2      0.00       0.00          0          0          0           0
+Execute     29     12.04      12.61       6786       6853        108          19
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       31     12.04      12.61       6786       6853        108          19
+
+Misses in library cache during parse: 0
+Optimizer hint: CHOOSE
+Parsing user id: 9  (DES12A)   (recursive depth: 3)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  DELETE STATEMENT   HINT: CHOOSE
+     16   TABLE ACCESS (FULL) OF 'RM$HASH_ELMS'
+
+*****************************END-OF-EXAMPLE-FILE********************************
+
+
+Resolution of Statistics
+------------------------
+
+Since timing statistics have a resolution of one hundredth of a second, 
+any operation on a cursor that takes a hundredth of a second or less may
+not be timed accurately. Keep this in mind when interpreting statistics.
+In particular, be careful when interpreting the results from simple queries
+that execute very quickly.
+
+
+Recursive Calls
+---------------
+
+Sometimes to execute a SQL statement issued by a user, Oracle must issue
+additional statements. Such statements are called 'recursive calls' or
+'recursive SQL statements'. For example, if you insert a row into a table 
+that does not have enough space to hold that row, Oracle makes recursive
+calls to allocate the space dynamically. Recursive calls are also generated
+when data dictionary information is not available in the data dictionary
+cache and must be retrieved from disk.
+
+If recursive calls occur while the SQL trace facility is enabled, TKPROF
+produces statistics for the recursive SQL statements and clearly marks them
+as recursive SQL statements in the output file.  Note that the statistics for
+a recursive SQL statement are included in the listing for that statement,
+not in the listing for the SQL statement that caused the recursive call.  So
+when you are calculating the total resources required to process a SQL
+statement, you should consider the statistics for that statement as well as
+those for recursive calls caused by that statement.
+
+        +  Note that setting the TKPROF command line parameter to NO
+           suppresses the listing of recursive calls in the output in
+           the output file.
+
+
+Execution Plan
+--------------
+
+If you specify the EXPLAIN parameter on the TKPROF command line, TKPROF
+uses the EXPLAIN PLAN command to generate the execution plan of each SQL 
+statement traced.  TKPROF also displays the number of rows processed by
+each step of the execution plan.
+

@@ -1,0 +1,133 @@
+Subject:  Oracle Database 10g Automated SGA Memory Tuning 
+  Doc ID:  Note:257643.1 Type:  BULLETIN 
+  Last Revision Date:  17-JUN-2004 Status:  PUBLISHED 
+
+PURPOSE
+This bulletin outlines Automatic Shared Memory Management feature introduced in Oracle Database 10g.
+
+SCOPE & APPLICATION
+These include:
+
+ 
+
+Overview 
+
+Benefits of Automatic Shared Memory Management 
+
+Configuring Automatic Shared Memory Management 
+
+Behavior of Auto-Tuned SGA Parameters 
+
+Behavior of Manual SGA Parameters 
+
+Resizing SGA_TARGET 
+
+Disable Automatic Shared Memory Tuning 
+
+Manually Resizing Auto-Tuned Parameters 
+
+SGA Background Process 
+
+Automatic Shared Memory Principles 
+
+Overview
+In Oracle Database 10g, Automatic Shared Memory Management (ASMM) feature is introduced to automatically determine the size of Database buffer cache (default pool), Shared pool,Large pool and Java pool by setting the parameter SGA_TARGET.
+
+This feature reduces the tasks like dynamically analyzing the database workload and redistribute memory across the SGA pools.
+
+Benefits of Automatic Shared Memory Management
+Automatic Shared Memory Management simplifies the configuration of the SGA. Before Oracle Database 10G, buffer cache, shared pool, java pool, and large pool need to be manually specified for the database. Under sizing can lead to poor performance and out-of-memory errors (ORA-4031), while over sizing can waste memory. This feature enables you to specify a total memory amount to be used for all SGA Components (buffer cache, shared pool, java pool, and large pool). The Oracle database periodically redistributes memory between these components according to workload requirements. Before Oracle Database 10G, the user did not have exact control over the total size of the SGA since memory was allocated by Oracle for the fixed SGA, and for other internal metadata allocations over and above the total size of the user specified SGA parameters. The new SGA size parameter SGA_TARGET now includes all the memory in the SGA, including all the automatically sized components, manually sized components, and any internal allocations during startup. 
+
+Configuring Automatic Shared Memory Management
+Automatic Shared Memory Management can be configured by using the SGA_TARGET initialization parameter. If you specify a non-zero value for SGA_TARGET, the following four memory pools are automatically sized:
+
+Database buffer cache (Default pool) 
+
+Shared pool 
+
+Large pool 
+
+Java pool 
+
+If you set SGA_TARGET to 0, Automatic Shared Memory Management is disabled. The default value of SGA_TARGET is 0.
+
+The individual parameters used before Oracle 10G releases to specify the sizes of the automatically sized components have not been made obsolete. The initialization parameters that size these pools (DB_CACHE_SIZE, SHARED_POOL_SIZE, LARGE_POOL_SIZE, and JAVA_POOL_SIZE) are now referred to as auto-tuned SGA parameters.
+
+The following buffers are now referred to as manually sized components:
+
+Log buffer 
+
+Other buffer caches (KEEP/RECYCLE, other block sizes) 
+
+Streams pool (new in Oracle Database 10g) 
+
+Fixed SGA and other internal allocations 
+
+Note: STATISTICS_LEVEL must be set to TYPICAL (default) or ALL to use Automatic Shared Memory Management.
+
+Behavior of Auto-Tuned SGA Parameters
+
+When SGA_TARGET is not set or is equal to zero, auto-tuned SGA parameters behave as in previous releases of the Oracle Database. However, SHARED_POOL_SIZE is an exception: Internal overhead allocations for metadata (such as for data structures for processes and sessions) are now included in the value of the SHARED_POOL_SIZE parameter. As a result, you may need to increase the value of your setting for SHARED_POOL_SIZE when upgrading from Oracle9i Database to Oracle Database 10g to account for these allocations.
+For example, suppose that in Oracle9i Database you were using 256M as the value of SHARED_POOL_SIZE, and suppose that the value of the internal allocations was 32M. To get the same effective shared pool size with Oracle Database 10g, you must set SHARED_POOL_SIZE to 288M. 
+The query in the illustration computes the total value of the shared pool, including this internal overhead. You should run this query prior to upgrading from Oracle9i Database to decide the new value for SHARED_POOL_SIZE in Oracle Database 10g.
+
+
+
+Behavior of Manual SGA Parameters
+Below are the manual SGA size parameters :
+
+DB_KEEP_CACHE_SIZE 
+
+DB_RECYCLE_CACHE_SIZE 
+
+DB_nK_CACHE_SIZE (n = 2, 4, 8, 16, 32) 
+
+LOG_BUFFER 
+
+STREAMS_POOL_SIZE 
+
+Manual SGA parameters are specified by the user, and the given sizes precisely control the sizes of their corresponding components.
+
+When SGA_TARGET is set, the total size of manual SGA size parameters is subtracted from the SGA_TARGET value, and balance is given to the auto-tuned SGA components.
+
+For example, if SGA_TARGET = 8G and DB_KEEP_CACHE_SIZE = 1G, this means that the total size of the four auto-tuned components (shared pool, java pool, default buffer cache, and large pool) is limited to 7GB. The 7GB includes the fixed SGA and log buffer, and only after those have been allocated the rest of the memory is divided between the components. The size of the keep cache is 1GB, as specified by the parameter.
+
+Resizing SGA_TARGET
+SGA_TARGET is a dynamic parameter and can be changed through Enterprise Manager or with the ALTER SYSTEM command. 
+
+SGA_TARGET can be increased up to the value of SGA_MAX_SIZE. It can be reduced until any one auto-tuned components reaches its minimum size (either a user-specified minimum or an internally determined minimum). If you increase the value of SGA_TARGET, the additional memory is distributed according to the auto-tuning policy across the auto-tuned components. If you reduce the value of SGA_TARGET the memory is taken away by the auto-tuning policy from one or more of the auto-tuned components. Therefore any change in the value of SGA_TARGET affects only the sizes of the auto-tuned components.
+
+For example, if SGA_TARGET = 8G and DB_KEEP_CACHE_SIZE = 1G and you increase SGA_TARGET to 9G, the additional 1GB is distributed only among the components controlled by SGA_TARGET. The value of DB_KEEP_CACHE_SIZE is not affected. Likewise, if SGA_TARGET is reduced to 7G, the 1GB is only taken from the components controlled by SGA_TARGET. This decrease does not affect the settings of the manually controlled parameters like DB_KEEP_CACHE_SIZE.
+
+
+Disable Automatic Shared Memory Tuning
+You can dynamically choose to disable automatic shared memory tuning by setting SGA_TARGET to zero. In this case the values of all the auto-tuned parameters are set to the current sizes of the components, even if the user had earlier specified a different non-zero value for an auto-tuned parameter. In the above example, the value of SGA_TARGET is 8GB, and the value of SHARED_POOL_SIZE is 1G. If the system has internally adjusted the size of the shared pool component to 2G, then setting SGA_TARGET to zero results in SHARED_POOL_SIZE being set to 2G, overriding the original user-specified value.
+
+Manually Resizing Auto-Tuned Parameters
+As you have read earlier, when SGA_TARGET is set, the default value for the auto-tuned parameters is zero, and a nonzero value serves as a lower bound for the size of the corresponding component.
+Therefore, when an auto-tuned parameter is resized (with SGA_TARGET set), the resize results in a change to the size of the component only if the new value is larger than the present size of the component.
+For example, if you set SGA_TARGET to 8G and set SHARED_POOL_SIZE to 2G, you ensure that the shared pool has at least 2G at all times to accommodate the necessary memory allocations.
+After this, if you adjust the value of SHARED_POOL_SIZE to 1G, there is no immediate effect on the size of the shared pool. It simply gives the automatic memory tuning algorithm the freedom to later reduce the shared pool size to 1G if it needs to.
+On the other hand, if the size of the shared pool is 1G to begin with, then adjusting the value of SHARED_POOL_SIZE to 2G results in the shared pool component growing to a size of 2G. The memory used in this grow operation is taken from one or more auto-tuned components, and the sizes of the manual components are not affected
+
+SGA Background Process
+The Automatic Shared Memory Management feature uses a new background process named Memory Manager (MMAN). MMAN serves as the SGA Memory Broker and coordinates the sizing of the memory components. The SGA Memory Broker keeps track of the sizes of the components and pending resize operations.
+
+Automatic Shared Memory Principles 
+The SGA Memory Broker observes the system and workload in order to determine the ideal distribution of memory. It is never complacent and performs this check every few minutes so that memory can always be present where needed. In the absence of automatic shared memory tuning, components had to be sized to anticipate their individual worst-case memory requirements.
+For example, consider a system that runs large OLTP jobs during the day that require large buffer caches, and runs parallel batch jobs at night that require large values for the large pool. The DBA would have to simultaneously configure both the buffer cache and the large pool to accommodate their peak requirements.
+With SGA auto-tuning, when the OLTP job runs, the buffer cache has most of the memory to allow for good I/O performance. When the DSS batch job starts later, the memory automatically migrates to the large pool so that it can be used by Parallel Query operations.
+Based on workload information, automatic shared memory tuning:
+
+Captures statistics periodically in the background 
+
+Uses the different memory advisories 
+
+Performs “what-if” analyses to determine best distribution of memory 
+
+Moves memory to where it is most needed 
+
+Has no need to configure parameters for the worst-case scenario 
+
+Resurrects component sizes from last shutdown if SPFILE is used 
+

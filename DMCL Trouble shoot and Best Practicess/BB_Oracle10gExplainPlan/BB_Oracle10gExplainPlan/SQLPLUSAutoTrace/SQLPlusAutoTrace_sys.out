@@ -1,0 +1,34 @@
+SQL> 
+SQL> drop role plustrace;
+
+Role dropped.
+
+SQL> create role plustrace;
+
+Role created.
+
+SQL> 
+SQL> grant select on v_$sesstat to plustrace;
+
+Grant succeeded.
+
+SQL> grant select on v_$statname to plustrace;
+
+Grant succeeded.
+
+SQL> grant select on v_$mystat to plustrace;
+
+Grant succeeded.
+
+SQL> grant plustrace to dba with admin option;
+
+Grant succeeded.
+
+SQL> 
+SQL> set echo off
+
+Grant succeeded.
+
+
+Grant succeeded.
+

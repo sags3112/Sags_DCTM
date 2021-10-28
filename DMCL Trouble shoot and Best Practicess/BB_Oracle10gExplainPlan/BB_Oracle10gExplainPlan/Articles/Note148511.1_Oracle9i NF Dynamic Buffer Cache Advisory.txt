@@ -1,0 +1,202 @@
+Subject:  Oracle9i NF: Dynamic Buffer Cache Advisory 
+  Doc ID:  Note:148511.1 Type:  BULLETIN 
+  Last Revision Date:  19-JUL-2005 Status:  PUBLISHED 
+
+
+PURPOSE
+-------
+
+This document briefly describes the Buffer Cache Advisory feature in Oracle9i.
+
+ 
+SCOPE & APPLICATION
+-------------------
+
+This can be used by DBA's and anybody who would like to know about this feature.
+
+
+Dynamic Buffer Cache Advisory
+-----------------------------
+
+Oracle9i New features for Dynamic SGA introduces multiple buffer pools in the
+memory. Hence the DBA may want to analyze the performance of each of these
+pools and set the appropriate sizes.
+
+To do the same, Oracle9i introduces the Dynamic Buffer Cache Advisory feature.
+This enables and disables statistic gathering for predicting the behaviour
+with different cache sizes.
+
+This feature can be enabled/disabled by using the following initialization parameter:
+
+DB_CACHE_ADVICE = OFF / ON / READY
+
+This could also be altered using the 'alter system' command. The feature is
+enabled by setting this parameter to 'ON'.
+
+Setting this parameter to 'OFF' (which is the default value), would turn off
+the advisory.
+
+Setting this parameter to 'READY' would turn off the advisory, but the memory 
+allocated to advisory is retained. 
+
+At times altering this parameter would report ora-4031. This would happen
+when the memory is not allocated before the advisory is actually turned on.
+The possiblities of this errors are during altering the db_cache_advice from
+OFF to ON and OFF to ready.
+
+
+Eg:-
+
+SQL> show parameter db_cache_advice
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_cache_advice                      string      OFF
+
+SQL> alter system set db_cache_advice=on;
+
+System altered.
+
+SQL> show parameter db_cache_advice
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- -----
+db_cache_advice                      string      ON                             
+
+SQL> alter system set db_cache_advice=READY;
+
+System altered.
+                                                                              
+Obtaining the Advisory Information
+----------------------------------
+
+The buffer cache advisory information is collected in a new view
+
+V$DB_CACHE_ADVICE
+
+Column                      Datatype      Description 
+
+ID                          NUMBER        Buffer pool identifier (ranges from 1 to 8.
+ 
+NAME                        VARCHAR2(20)  Buffer pool name.
+ 
+BLOCK_SIZE                  NUMBER        Block size in bytes for buffers in this pool.
+                                          Possible values: the standard block size, the power of 2
+                                          non-standard block sizes, 2048, 4096, 8192, 16384, 32768.
+ 
+ADVICE_STATUS               VARCHAR2(3)   Status of the advisory. ON indicates it is currently running;
+                                          OFF indicates it is disabled (in this case the estimates are 
+                                          historical and calculated when last enabled).
+ 
+SIZE_FOR_ESTIMATE           NUMBER        Cache size for prediction (in megabytes).
+ 
+BUFFERS_FOR_ESTIMATE        NUMBER        Cache size for prediction (in terms of buffers.
+
+ESTD_PHYSICAL_READ_FACTOR   NUMBER        Physical read factor for this cache size, which is the ratio 
+                                          of the number of estimated physical reads to the number of reads
+                                          in the real cache. If there are no physical reads in the real cache,
+                                          the value of this column is null.
+ 
+ESTD_PHYSICAL_READS         NUMBER        Estimated number of physical reads for this cache size.
+
+This view is populated when the DB_CACHE_ADVICE parameter is set to ON. This 
+view shows the estimated miss rates for twenty potential buffer cache sizes,
+ranging from 10% of the current size to 200% of the current size. Each of the 
+twenty potential cache sizes has its own row in this view, with the predicted
+physical I/O activity that would take place for that cache size. Since the 
+DB_CACHE_ADVICE parameter is dynamic, the advisory can be enabled and 
+disabled dynamically to allow you to collect advisory data for a specific 
+workload. 
+
+This view contains different rows that predict the estimated number of physical
+reads for different cache sizes. The row also compute a physical read factor, 
+which is the ratio of the number of reads actually performed during the 
+measurement interval by the real buffer cache. Interval is the time since the
+advisory is turned on for a workload and querying the v$db_cache_Advice view.
+
+There are two minor overheads associated with this advisory: 
+
+1. CPU: 
+
+When the advisory is enabled, there is a small increase in CPU usage,  because 
+additional book keeping is required. 
+
+2. Memory: 
+
+The advisory requires memory to be allocated from the shared pool (of the order
+of 100 bytes per buffer). This memory is preallocated on instance startup if 
+DB_CACHE_ADVICE is set to READY in anticipation of collecting advisory statistics, 
+or if the parameter  is set to ON. If the parameter is set to OFF at instance 
+startup, then the memory is dynamically allocated from the  shared pool at the 
+time the parameter value is modified to a value other than OFF. 
+
+The parameter DB_CACHE_ADVICE should be set to ON, and a representative 
+workload  should be running on the instance. Allow the workload to stabilize 
+before querying V$DB_CACHE_ADVICE view. 
+
+
+The following SQL statement returns the predicted I/O requirement for the 
+default buffer pool for various cache sizes: 
+
+column size_for_estimate         format 999,999,999,999 heading 'Cache Size (m)'
+column buffers_for_estimate      format 999,999,999 heading 'Buffers'
+column estd_physical_read_factor format 999.90 heading 'Estd Phys|Read Factor'
+column estd_physical_reads       format 999,999,999 heading 'Estd Phys| Reads'
+
+SELECT size_for_estimate, buffers_for_estimate
+     , estd_physical_read_factor, estd_physical_reads
+  FROM V$DB_CACHE_ADVICE
+ WHERE name          = 'DEFAULT'
+   AND block_size    = (SELECT value FROM V$PARAMETER 
+                         WHERE name = 'db_block_size')
+   AND advice_status = 'ON';
+
+Example Output:
+--------------
+
+The following output shows that if the cache was 212MB, rather than the current 
+size of 304MB, the estimated number of physical reads would be 
+17 million (17,850,847). Increasing the cache size beyond it's current size 
+would not provide a significant benefit. 
+
+                                Estd Phys    Estd Phys
+ Cache Size (MB)      Buffers Read Factor        Reads
+---------------- ------------ ----------- ------------
+              30        3,802       18.70  192,317,943      10% of Current Size
+              60        7,604       12.83  131,949,536
+              91       11,406        7.38   75,865,861
+             121       15,208        4.97   51,111,658
+             152       19,010        3.64   37,460,786
+             182       22,812        2.50   25,668,196
+             212       26,614        1.74   17,850,847
+             243       30,416        1.33   13,720,149
+             273       34,218        1.13   11,583,180
+             304       38,020        1.00   10,282,475      Current Size
+             334       41,822         .93    9,515,878
+             364       45,624         .87    8,909,026
+             395       49,426         .83    8,495,039
+             424       53,228         .79    8,116,496
+             456       57,030         .76    7,824,764
+             486       60,832         .74    7,563,180
+             517       64,634         .71    7,311,729
+             547       68,436         .69    7,104,280
+             577       72,238         .67    6,895,122
+             608       76,040         .66    6,739,731      200% of Current Size
+
+
+This component implements a simulator to predict the miss rates for caches of 
+different sizes.  The simulator models a separate cache, distinct from the real
+buffer cache using simulated buffer headers. Every time a block is referenced 
+in the real cache, the dba and operation is logged in a trace buffer. Foregrounds 
+periodically scan through the trace buffer and simulate the effects of the 
+references in the simulated cache. The latches “simulator lru latch” and 
+“simulator hash latch” protect the simulated cache. Setting db_cache_advice  will
+incur  some latch overhead, though it is usually very insignificant. If you find 
+any contention for the above latches,then turn off the parameter db_cache_advice. 
+
+
+RELATED DOCUMENTS
+-----------------
+Oracle9i Database Performance Guide and R
+
+

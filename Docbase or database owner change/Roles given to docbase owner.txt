@@ -1,0 +1,25 @@
+Here is default role and privilege for docbase owner, this case should be able to reslove after granting following permission to docbase owner. 
+
+
+SQL> select privilege from dba_sys_privs where grantee ='repository owner';
+ 
+ PRIVILEGE
+ ----------------------------------------
+ CREATE ANY VIEW
+ UNLIMITED TABLESPACE
+ 
+ SQL> select granted_role  from dba_role_privs where grantee='repository owner';
+ 
+ 
+GRANTED_ROLE
+ ------------------------------
+ RESOURCE
+ SELECT_CATALOG_ROLE
+ CONNECT
+
+
+
+*********
+
+
+make sure setting Oracle home env variable on CS machine before configuring docbase with oracle

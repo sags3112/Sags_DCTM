@@ -1,0 +1,14 @@
+
+SQL_ID               SQL_TEXT                                                                                           
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test_emc43 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh                                                           
+                                                                                                                        
+
+
+SQL_ID               SQL_TEXT                                                                                           
+-------------------- ----------------------------------------                                                           
+cstgya8t79a43        select /* test_emc43 */ r_object_id, obj                                                           
+                     ect_name from acs53sp4.dm_sysobject_s wh                                                           
+                                                                                                                        
+

@@ -1,0 +1,65 @@
+
+Table created.
+
+
+19 rows selected.
+
+Elapsed: 00:00:00.56
+
+Execution Plan
+----------------------------------------------------------                                                              
+   0      SELECT STATEMENT Optimizer=ALL_ROWS (Cost=441 Card=19 Bytes=                                                  
+          1178)                                                                                                         
+                                                                                                                        
+   1    0   TABLE ACCESS (FULL) OF 'DM_SYSOBJECT_S' (TABLE) (Cost=441                                                   
+          Card=19 Bytes=1178)                                                                                           
+                                                                                                                        
+
+
+
+
+Statistics
+----------------------------------------------------------                                                              
+          0  recursive calls                                                                                            
+          0  db block gets                                                                                              
+       2012  consistent gets                                                                                            
+       2004  physical reads                                                                                             
+          0  redo size                                                                                                  
+       1177  bytes sent via SQL*Net to client                                                                           
+        523  bytes received via SQL*Net from client                                                                     
+          3  SQL*Net roundtrips to/from client                                                                          
+          0  sorts (memory)                                                                                             
+          0  sorts (disk)                                                                                               
+         19  rows processed                                                                                             
+
+
+19 rows selected.
+
+Elapsed: 00:00:00.61
+
+Execution Plan
+----------------------------------------------------------                                                              
+   0      SELECT STATEMENT Optimizer=ALL_ROWS (Cost=441 Card=19 Bytes=                                                  
+          1178)                                                                                                         
+                                                                                                                        
+   1    0   TABLE ACCESS (FULL) OF 'DM_SYSOBJECT_S' (TABLE) (Cost=441                                                   
+          Card=19 Bytes=1178)                                                                                           
+                                                                                                                        
+
+
+
+
+Statistics
+----------------------------------------------------------                                                              
+          0  recursive calls                                                                                            
+          0  db block gets                                                                                              
+       2012  consistent gets                                                                                            
+       2000  physical reads                                                                                             
+          0  redo size                                                                                                  
+       1177  bytes sent via SQL*Net to client                                                                           
+        523  bytes received via SQL*Net from client                                                                     
+          3  SQL*Net roundtrips to/from client                                                                          
+          0  sorts (memory)                                                                                             
+          0  sorts (disk)                                                                                               
+         19  rows processed                                                                                             
+

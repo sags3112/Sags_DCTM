@@ -1,0 +1,200 @@
+Subject:  Dynamic SGA 
+  Doc ID:  Note:148495.1 Type:  BULLETIN 
+  Last Revision Date:  01-AUG-2006 Status:  PUBLISHED 
+
+
+PURPOSE
+  This document gives a brief introduction to the Oracle9i New Feature: 
+  Dynamic SGA.
+
+SCOPE & APPLICATION
+  This article can be used by Database administrators and anyone interested in 
+  this new feature.
+
+
+Dynamic SGA:
+============
+
+Since the inception of Oracle, the System Global Area (SGA) has been static. 
+In Oracle8i Database Administrators (DBAs) do not have any control over the 
+SGA size once the instance is started. Oracle9i allows a DBA to modify the SGA 
+size dynamically. This provides an SGA that will grow and shrink in response to
+a DBA command.
+
+This feature implements an infrastructure to allow the Oracle server to change
+the SGA configuration without shutting down the instance. The Oracle Server
+can modify the physical address space use to respond to the operating system's 
+use of physical memory.
+ 
+Begining with Oracle9i, the dynamic SGA infrastructure will allow for the 
+sizing of the Buffer Cache, Shared Pool and the Large Pool (see note below)
+without having to shutdown the database.
+
+The dynamic SGA infrastructure also allows the limits to be set at run time on 
+how much physical memory will be used for the SGA. The instance will be started
+under-configured and will use as much memory as the operating system gives it.
+
+
+Granule
+-------
+
+In this new model, a new unit of allocation is created called the 'Granule'. A 
+granule is a unit of contiguous virtual memory allocation. The size of a granule
+depends on the estimated total SGA size, whose calculation is based on the 
+value of the parameter SGA_MAX_SIZE. This would be 4MB if the SGA size is less 
+than 128MB, otherwise it will be 16MB.
+
+The Buffer Cache, Shared Pool, Large Pool and Java Pool are allowed to grow and 
+shrink based on granule boundaries.
+
+SGA memory will be tracked in granules by SGA components. To monitor the 
+creation, the V$BUFFER_POOL view can used.
+
+At instance startup the Oracle Server allocates the granule entries, one for
+each granule to support SGA_MAX_SIZE bytes of address space. During the startup
+each component acquires as many granules as it requires.
+
+The minimum SGA is three granules, as follows:
+
+    1. One Granule for Fixed SGA (includes redo buffers)
+    2. One Granule for Buffer Cache
+    3. One Granule for Shared Pool
+
+
+Altering the Granule for Components
+-----------------------------------
+
+We can alter the granules allocated to components using the 'ALTER SYSTEM'
+command. The granules are rounded up to the nearest of the default granule 
+size (4MB or 16MB). Adding a number of granules to a component with an 'alter
+system' command would succeed if Oracle has sufficient free granules to satisfy
+the request. Oracle cannot free another component's granules for adding granules
+to a component. Instead, the DBA must ensure the instance has enough free 
+granules to satisfy the increase of a component's granule use. If the current 
+amount of SGA memory is less than  SGA_MAX_SIZE, then Oracle is free to allocate
+more granules until the SGA size reaches this limit.
+
+The Oracle Server which invokes the alter system command reserves a set of 
+granules for the corresponding SGA component. After the reservation is complete, 
+the foreground hands the completion to the background process. The background 
+process completes the operation by taking the reserved granules and adding them
+to the component's granule list. This is referred to as growing a component's 
+SGA memory area.
+
+The new cache sizes are set to the next granule boundary.
+
+Example:
+
+    SQL> show sga
+
+    Total System Global Area  588325440 bytes
+    Fixed Size                   455232 bytes
+    Variable Size             234881024 bytes
+    Database Buffers          352321536 bytes
+    Redo Buffers                 667648 bytes
+
+
+    SQL> select name, value from v$parameter
+         where name in ('sga_max_size', 'shared_pool_size', 'db_cache_size',
+         'large_pool_size','java_pool_size');
+
+    NAME                 VALUE
+    ----------------     ---------
+    sga_max_size         588325440
+    shared_pool_size      58720256
+    large_pool_size       75497472
+    java_pool_size        25165824
+    db_cache_size        352321536
+
+    
+    SQL> show parameter shared_pool
+    NAME                                 TYPE        VALUE
+    ------------------------------------ ----------- ---------
+    shared_pool_reserved_size            big integer 5872025
+    shared_pool_size                     big integer 58720256
+    
+
+    SQL> alter system set shared_pool_size=130m;
+    alter system set shared_pool_size=130m
+    *
+    ERROR at line 1:
+    ORA-02097: parameter cannot be modified because specified value is invalid
+    ORA-04033: Insufficient memory to grow pool
+
+ This error comes up since we are trying to exceed the sga_max_size.
+
+    SQL> alter system set shared_pool_size=100m;
+
+    System altered.
+
+
+    SQL> show parameter shared_pool
+
+    NAME                                 TYPE        VALUE
+    ------------------------------------ ----------- ---------
+    shared_pool_reserved_size            big integer 5872025
+    shared_pool_size                     big integer 109051904
+  
+
+New Initialization Parameters for Buffer Cache Sizing
+-----------------------------------------------------
+
+The Buffer Cache consists of independent sub-caches for buffer pools and for 
+multiple block sizes. The parameter db_block_size determines the primary block
+size. This would be the block size used for the SYSTEM and temporary tablespaces.
+
+The following are the Size parameters which define the sizes of the caches for 
+buffers for the primary block size:
+
+    DB_CACHE_SIZE
+    DB_KEEP_CACHE_SIZE
+    DB_RECYCLE_CACHE_SIZE
+
+The db_keep_cache_size and db_recycle_cache_size are independent of 
+db_cache_size.
+
+These parameters are specified in units of memory rather than in units of 
+buffers (as is the case in Oracle8i, or below).
+
+
+Initialization Parameters Affected
+----------------------------------
+
+The following parameters are automatically computed:
+
+    DB_BLOCK_LRU_LATCHES - The number of LRU latches in each buffer pool for 
+        each block size will be equal to the half the number of CPUs.
+
+    DB_WRITER_PROCESSES - The number of DBWR's will be equal to 1/8th the 
+        number of CPUs.
+
+The following parameters have been deprecated and have been maintained only for
+backward compatibility:
+
+    DB_BLOCK_BUFFERS
+    BUFFER_POOL_KEEP
+    BUFFER_POOL_RECYCLE
+
+These parameters cannot be combined with the dynamic SGA feature parameters.
+Setting these along with the Dynamic SGA parameters would error out.
+
+For example, if db_block_buffers as well as db_cache_size are set, then startup
+would error out as follows:
+
+    SQL> startup pfile=initv09.ora
+    ORA-00381: cannot use both new and old parameters for buffer cache size 
+    specification
+ 
+
+
+RELATED DOCUMENTS
+-----------------
+
+Note 152269.1 Oracle9i: ORA-2095 Modifying LARGE_POOL_SIZE or 
+                 JAVA_POOL_SIZE Parameters
+
+Search Words:
+=============
+
+ORA-2097 ORA-4033 ORA-381
+
