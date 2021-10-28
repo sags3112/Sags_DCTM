@@ -1,0 +1,32 @@
+
+customer has recently changed their installation owner account, following the guidelines in Content Server installation guide.
+The previous installation owner account was dmadmin (local administrator), which is changed to dctm_services (domain administrator account) in domain 'exchange'.After that custom job is not working with trusted login:
+
+
+Resolution:
+
+A few things. Since the install owner was changed, try updating the startMethodServer script to include the following:
+set JAVA_OPTIONS=-Duser.name=<installation owner>
+
+Once done, remove the dfc.keystore and restart docbase / JMS.
+If issue still appears, look at the auth trace again and check the client id being referenced. Using this, open the dfc.keystore file. Although cryptic, you will see a dfc_xxxxxxxxx  value. This should match what you see in the error from the trace. using the value from the trace file for the dfc client ID, go to DA and add it to the Privileged client list. 
+Login to Documentum Administrator (DA) as the superuser.
+Navigate to Privileged Clients node and select Manage Clients button.
+In the list on the left, select the dfc value which was noted from the dfc.keystore and move it to the right and click OK.
+Back on the Privileged client list, right click on the new entry and select Approve Privilege.
+Then right click again and select Properties.
+Place a check mark in the boxes for “Trusted Login” and “Trusted Server Privilege” and click OK.
+Restart the repository.
+
+
+
+
+*******************************
+
+Can you check you service user and startMethodserver.cmd, and see whether it points to original dmadmin.
+
+
+set NOPAUSE=true
+set USER_MEM_ARGS=-Xms256m -Xmx256m -XX:PermSize=64m -XX:MaxPermSize=256m -Xss256k -XX:+DisableExplicitGC -Xrs
+set JAVA_OPTIONS=-Duser.name=dmadmin
+E:\Documentum\jboss4.3.0\bin\run -c DctmServer_MethodServer -b 0.0.0.0 %JAVA_OPTIONS%

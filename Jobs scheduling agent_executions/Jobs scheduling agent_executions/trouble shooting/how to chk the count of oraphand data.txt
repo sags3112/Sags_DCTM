@@ -1,0 +1,5 @@
+select count(*) from dmr_content where any parent_id=' NULL'
+
+ or 
+
+select count(*) from dmr_content where any parent_id is NULL and parent_count='0'

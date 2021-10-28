@@ -1,0 +1,65 @@
+esg21235 
+
+How do I set up a new locale for Webtop to support another language?
+
+
+Webtop comes installed with US English language support by default. You can obtain Language packs for support in the following languages: 
+
+1. French 
+2. German 
+3. Italian 
+4. Japanese 
+5. Korean 
+6. Spanish 
+
+For other languages, qualified international Documentum partners can use the "Localization Kit" to create their own language packs. At this time, Webtop does not support languages that are written right-to-left. 
+
+The procedure for creating and registering a new locale is outlined in the Chapter 4 of the Configuring Documentum Webtop (pdf) document. Basically, create a set of translated JAVA properties files for each of the Webtop and WDK which will be present a UI to the user. Add this new locale to the custom/app.xml file for your new locale to show up in the login options in Webtop. 
+
+Basic Steps are as follows: 
+
+Translate the NLS Properties Files 
+
+All of the NLS Properties files are located in the strings folder in each application folder. While translating your strings for a new locale, you must create new files and folders for your new locale in the custom/strings folder. 
+
+To create a new locale: 
+
+1. Copy all of the NLS files, maintaining the directory structure, from a Documentum-supplied locale in the Webtop folder into the custom/strings folder. 
+
+2. Copy all of the additional files (not contained in the webtop/strings folder) from the same locale in the webcomponent layer into the same custom/strings folder. 
+
+3. Copy all of the additional files (not contained in the webtop/strings and webcomponent/strings folder) from the same locale in the in the wdk layer into the same custom/strings folder. 
+
+4. Rename all of the NLS files according to the following convention: 
+<NLS File Name>_<language code>_<country code> where: 
+
+<NLS File Name> is the file name from the Documentum-supplied locale. 
+<language code> is the appropriate language code taken from ISO 639. 
+<country code> is the appropriate country code taken from ISO 3166. 
+
+For example, for a Portuguese locale rename the TabBarNlsProp.properties file to TabBarNlsProp_pt_PT.properties. 
+
+5. Translate all of the strings in the NLS files for the new locale. 
+
+After creating all of the necessary files for a locale, you must add the locale to Webtop. 
+
+Copy the entire <language> section from ../webtop/wdk/app.xml to ../webtop/custom/app.xml and add you new locale. In this case: <locale>pt_PT</locale>, and set the new default locale if you want. 
+
+<language> 
+<!-- List of Locales supported by this application --> 
+<supported_locales> 
+<locale>en_EN</locale> 
+<locale>fr_FR</locale> 
+<locale>de_DE</locale> 
+<locale>it_IT</locale> 
+<locale>es_ES</locale> 
+<locale>ja_JP</locale> 
+<locale>ko_KR</locale> 
+<locale>pt_PT</locale> 
+</supported_locales> 
+
+<!-- Default Locale --> 
+<default_locale>pt_PT</default_locale> 
+</language> 
+
+Note: It is important to remember that inheritance occurs only at the <language> primary element level. Therefore, you must copy the whole section from the /wdk/app.xml file into the /custom/app.xml file. 

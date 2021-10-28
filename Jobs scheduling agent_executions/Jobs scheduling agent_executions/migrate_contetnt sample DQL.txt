@@ -1,0 +1,39 @@
+esg40332 
+
+In order to migrate content from one filestore to another filestore you need to use the MIGRATE_CONTENT method 
+
+
+If you include a DQL predicate, the query built from the predicate is applied to DMR_CONTENT objects. It is recommended that you use a query that references a unique value in the content object. For example, the storage area ID there is only one storage area in the Docbase with any given storeage ID. 
+
+
+Syntax: 
+
+
+EXECUTE migrate_content WITH target_store=?target_storage_name?,query= 
+
+?DQL_predicate?,log_file=?log_file_path? 
+
+[,max_migrate_count=value][,batch_size=value] 
+
+[,remove_original=value] 
+
+
+apply,session,NULL,MIGRATE_CONTENT,TARGET_STORE,S,target_storage_name,QUERY,S,dql_predicate[,LOG_FILE,S,log_file_path][,MAX_MIGRATE_COUNT,I,value] [,BATCH_SIZE,I,value][,REMOVE_ORIGINAL,B,T|F] 
+
+
+Sample: 
+
+
+DQL> EXECUTE migrate_content WITH target_store='filestore_02', query='r_object_id=''0619978f8000877b''',max_migrate_count=1000, 
+
+batch_size=100,log_file='C:\migration.log'; 
+
+
+result 
+c
+====== 
+
+
+1 
+
+(1 rows affected)

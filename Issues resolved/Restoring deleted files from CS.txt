@@ -1,0 +1,54 @@
+http://solutions.emc.com/emcsolutionview.asp?id=esg75723
+ 
+How do I recover deleted files in Content Server.
+ 
+
+1. Obtain the r_object_id of the deleted file: 
+ 
+Run the following DQL statement: 
+ 
+select r_object_id,set_file,set_time,full_format 
+from dmr_content 
+where any parent_id is null 
+ 
+You would get a result like the following: 
+ 
+r_object_id set_file set_time full_format 
+ 
+0600006580003dbb C:\Documentum\contentXfer\da\server01-2006.05.10-1155h.34s_37161\ac4d3b1q10b1f02a3611q1d7fe8\10037219.txt 5/10/2006 01:40:09 PM crtext 
+ 
+The set_time column indicates when the file was last checked in. 
+You could narrow down the DQL as in the example below: 
+ 
+select r_object_id,set_file,set_time,full_format 
+from dmr_content 
+where any parent_id is null 
+and set_time > DATE('05/09/2006 11:59:59 PM','MM/DD/YYYY HH:MM:SS AM') 
+and set_time < DATE('05/11/2006 00:00:01 AM','MM/DD/YYYY HH:MM:SS AM') 
+ 
+
+2. Locate the content filestore path of the deleted file. 
+ 
+Run GET_PATH job to locate the filestore path of the deleted file. 
+ 
+Select Admnistration > Job Management > Administration Methods 
+in Documentum Administrator (DA) and click on the GET_PATH method. 
+ 
+In the Content ID textbox, enter the r_object_id of the dmr_content object that you obtained in the previous step and click Run. 
+ 
+The complete path to the deleted content file will be returned under the heading Result. 
+ 
+For example: 
+ 
+Content ID Result 
+0600006580003dbb C:\Documentum\data\server01\content_storage_01\00000065\80\00\02\db.txt 
+ 
+Using this file path, navigate to the location where the file is stored, and verify that this is the correct file. 
+ 
+3. Import the deleted file. 
+ 
+Select File > Import in Documentum Administrator (DA), 
+Click the Add Files and navigate to path you saved earlier. 
+Save the file. 
+ 
+Note: If dm_DMClean job is run after the file is removed, then it will remove the file from the content storage and there will be no way to recover the file. 

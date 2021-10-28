@@ -1,0 +1,37 @@
+esg110232 
+
+dtc_CheckCacheConfig_5_1 job becomes obsolete from 6.0 and higher versions
+
+
+
+Content Server 6.5 SP2, 6.5 SP1, 6.5, 6.0 SP1, 6.0   
+
+
+Symptoms
+
+ 
+
+Job dtc_CheckCacheConfig_5_1 is not used any more from 6.0 and higher versions. Hence this job becomes obsolete
+
+ 
+
+Cause
+
+ 
+
+Job dtc_CheckCacheConfig_5_1 gets installed only when the mandatory Documentum Desktop Client docapp is installed. This job is used for caching the queries/objects used by the Desktop Client. It uses the dm_CheckCacheConfig Method. 
+
+ 
+
+ 
+
+ 
+
+Resolution
+
+ 
+
+Since the Documentum Desktop Client is no longer supported with the D6.0 and above. But still the job exists in the upgraded system (For e.g 5.3 SP5 upgraded to 6.0 or higher versions) .
+
+This job could be disabled.
+

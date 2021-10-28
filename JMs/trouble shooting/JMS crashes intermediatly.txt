@@ -1,0 +1,11 @@
+If any one says JMS crashes intermediatly collect the below info
+
+from host:
+
+- JVM heap size (JMS Heap size (send me the start method that you are using, ie 
+documentum\bea9.2\domains\DctmDomain\startMethodServer.cmd))
+
+jmS LOGS FOR 6.0SP1
+
+Also, could you send me the JMS logs? ..Ie $DOCUMENTUM_SHARED\bea9.2\domains\DctmDomain\servers\DctmServer_MethodServer_docbasename\logs
+

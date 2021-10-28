@@ -1,0 +1,3 @@
+EXECUTE do_method
+WITH method = 'dmclean',
+arguments = '-no_note -no_acl -no_wf_templates -include_ca_store'

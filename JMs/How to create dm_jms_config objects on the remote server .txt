@@ -1,0 +1,25 @@
+esg119396
+
+How to create dm_jms_config objects on the remote server manually on remote server
+
+Symptoms
+
+When we install 6.6 HA environment, and all jobs and methods can only run on primary content server successfully, and it always fails on the secondary server.
+ 
+Docbase log throws the following error message when jobs and method is posted to run on the secondary server.
+Sat Nov 20 18:14:16 2010 756180: 9406[9406] JMS DEBUG: NO JMS available, method_id=1001cd77800dff4f, method_name=xxxxxxx
+fo, trace_launch=1, is_restartable=0, appServerName=do_method, is_workflow=0, jms_location=ANY
+
+Cause
+
+In 6.6, the JMS failover was introduced, therefore a new object type - dm_jms_config can be found in 6.6. Each JMS server have one dm_jms_config object associated. If there are two content servers and two JMS servers, it has to have two dm_jms_config objects.
+ 
+When CT runs CFS configuration program, it did not create a dm_jms_config object properly on the remote Content Server. Normally, you should see the error  dm_jms_config_setup.out as the following:
+Wrong number of arguments (4) passed to entry point 'installForRCS'.
+Fail to connect to second server
+
+Resolution
+
+Run the following script on Remote Server to create a second dm_jms_config object
+./dmbasic  $DM_HOME\install\admin\dm_jms_config_setup.ebs -e installForRCS -- <docbase> <install_owner > <install_owner passwd>  <hostname> <Jms_port>
+After the second dm_jms_config object is created, the issue should be resolved.

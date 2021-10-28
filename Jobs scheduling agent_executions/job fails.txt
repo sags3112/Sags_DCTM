@@ -1,0 +1,18 @@
+Check agent exec logs 
+Check next invocation date, you can set this manually 
+Check if agent exec is running, you can run this process with tracing on 
+ 
+
+esg90822
+
+
+Changing the start date in Documentum Administrator does not change the next invocation date of a job.
+
+Cause
+
+The start date is not used in the computation of the a_next_invocation attribute.  The agent exec uses the a_next_invocation to compute the time for the next run taking into consideration the job interval and run mode
+
+Resolution:
+
+To change the execution time of the job, the a_next_invocation needs to be changed to something in the near future and then the new time and run interval will be taken into account.  This will need to be performed using DQL or API since the attribute cannot be changed in DA.
+

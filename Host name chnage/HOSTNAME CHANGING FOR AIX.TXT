@@ -1,0 +1,284 @@
+esg98266 
+
+CS 6.0
+
+Symptoms
+
+
+
+Migrate D6.0 content server environment. Change content server host name.
+
+
+
+Cause
+
+
+
+Customer wanted to migrate to new platform which had more CPU and memory capacity. They did not have time to complete an entire new install on the new platform and wanted to migrate the existing server installation and data. Oracle was installed on a separate AIX platform.
+
+
+
+Resolution
+
+
+
+Step 0) Server renaming overview
+
+ 
+
+1.)  Make sure that the proper usernames and group names appear on the
+
+new server.
+
+ 
+
+2.)  Copy the directories from the old server to the new server being
+
+sure to preserve ownership and link relationships.
+
+ 
+
+3.)  Search the new directory for any directory with a reference to the
+
+old server name.
+
+ 
+
+4.)  Search the new directory for any filenames with a reference to the
+
+old server name.
+
+ 
+
+5.)  Search the new directory for any files with a reference to the old
+
+server name inside of the files.
+
+ 
+
+ 
+
+ 
+
+Step 1) Server renaming - specific steps
+
+ 
+
+While on the new server:
+
+ 
+
+# to copy all files from the old server to the new server
+
+ssh oldservername tar -cvf - /filesystem | tar -xvf -
+
+ 
+
+# search for directories with a reference to the old server
+
+find /filesystem -type d | grep -i oldservername
+
+ 
+
+# search for regular files with a reference to the old server
+
+find /filesystem -type f | grep -i oldservername
+
+ 
+
+# search for regular files that contain references to the old server
+
+Find /filesystem -type f | xargs grep -il oldservername /dev/null
+
+ 
+
+ 
+
+Run find commands for any other servers that have changed
+
+at the same time, as well as against the ip addresses that have changed.  Run this for any
+
+directories that have been copied.  In the instance of the content
+
+server /documentum and /edmdata have been copied.
+
+ 
+
+ 
+
+Step 2) Update the ACS object:
+
+ 
+
+(by way of example)
+
+ 
+
+API> retrieve,c,dm_acs_config
+
+API>set,c,object_name
+
+RES>"acs config object name" # same as acs_config name in acs.properties
+
+API> set,c,l,acs_base_url
+
+res> http://hostname:9080/ACS/servlet/ACS
+
+API> save,c,l
+
+API> reinit,c
+
+4. Shutdown content server
+
+5. Clean dmcl cache
+
+6. Restart content server and JMS server.
+
+ 
+
+ 
+
+ 
+
+Step 3) Review each of the following files for server name dependencies and change old host name to new 
+
+
+host name:
+
+ 
+
+$DOCUMENTUM/dba/config/<docbase>/dmcl_bypass.ini
+
+$DOCUMENTUM/dba/config/<docbase>/server.ini
+
+ 
+
+EXAMPLE
+
+ 
+
+For this particular migration the following DQL queries worked:
+
+ 
+
+update dm_acs_config objects 
+
+set object_name = 'amstelACS1'
+
+where object_name = 'lynnACS1'
+
+ 
+
+update dm_server_config objects
+
+ set r_host_name ='amstel'
+
+ 
+
+update dm_job objects 
+
+set target_server = 'eohhs_edm_dev.eohhs_edm_dev@amstel'
+
+ 
+
+update dm_mount_point objects 
+
+set host_name = 'amstel'
+
+where host_name = 'lynn'
+
+ 
+
+ 
+
+After each update query the objects to see if the hostname was changed. If not you will have to change 
+
+
+the data at the Oracle table level per the SQL queries listed above.
+
+ 
+
+For this particular example we needed this SQL update - on all rows of the table:
+
+ 
+
+update dm_server_config_s set r_host_name = 'amstel' where r_host_name = 'lynn;
+
+commit;
+
+ 
+
+ 
+
+ 
+
+Step 4) Review each of the following underlying Oracle tables to host name dependencies. 
+
+ 
+
+update dm_job_s set target_server = '$DOCBASE.$DOCBASE@$NEWHOST' where target_server = 
+
+
+'$DOCBASE.$DOCBASE@$OLDHOST';
+
+ 
+
+update dm_mount_point_s set host_name = '$NEWHOST' where host_name = '$OLDHOST';
+
+ 
+
+update dm_audittrail_s set host_name = '$NEWHOST' where host_name = '$OLDHOST';
+
+ 
+
+update dm_server_config_s set web_server_loc = '$NEWHOST' where web_server_loc = '$OLDHOST';
+
+update dm_server_config_s set r_host_name = '$HOST' where r_host_name = '$OLDHOST';
+
+ 
+
+update dm_server_config_r set PROJECTION_TARGETS = '$HOST' where PROJECTION_TARGETS = '$OLDHOST';
+
+ 
+
+ 
+
+ 
+
+Step 5) The final step is to apply a script documented in support note esg92607:
+
+ 
+
+http://solutions.emc.com/emcsolutionview.asp"id=esg92607
+
+ 
+
+(NOTE: for the above link to work, change the ' asp"id ' to ' asp"id ')
+
+ 
+
+A script must be run as the docbase owner - by way of example the output will look like:
+
+ 
+
+# ./pkiD6ChangeId.sh eohhs_edm_dev dmadm
+
+type password (no echo given):
+
+keystore file already exists
+
+old keystore file just deleted
+
+keystore file NOT existing
+
+new keystore file just created
+
+getting session for dmadm on eohhs_edm_dev
+
+granting rights to all roles . . . done
+
+ 
+
+ 
+
+

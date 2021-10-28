@@ -1,0 +1,31 @@
+Resolution
+
+
+
+Use this query to see which jobs are eligible to run right now:
+
+ 
+
+SELECT ALL r_object_id, object_name, a_next_invocation FROM dm_job WHERE ( (run_now = 1) OR ((is_inactive = 0) AND ( ( a_next_invocation <= DATE('now') AND a_next_invocation IS NOT NULLDATE ) OR ( a_next_continuation <= DATE('now') AND a_next_continuation IS NOT NULLDATE ) ) AND ((expiration_date > DATE('now')) OR (expiration_date IS NULLDATE)) AND ((max_iterations = 0) OR (a_iterations < max_iterations))) ) AND (i_is_reference = 0 OR i_is_reference is NULL) AND (i_is_replica = 0 OR i_is_replica is NULL) ORDER BY a_next_invocation, r_object_id
+
+ 
+
+Use this query to see which jobs are eligible to be run right now, as well as what jobs are eligible to be run at a future date:
+
+ 
+
+SELECT ALL r_object_id, object_name, a_next_invocation FROM dm_job WHERE ( (run_now = 1) OR ((is_inactive = 0) AND ( ( a_next_invocation IS NOT NULLDATE ) OR (  a_next_continuation IS NOT NULLDATE ) ) AND ((expiration_date > DATE('now')) OR (expiration_date IS NULLDATE)) AND ((max_iterations = 0) OR (a_iterations < max_iterations))) ) AND (i_is_reference = 0 OR i_is_reference is NULL) AND (i_is_replica = 0 OR i_is_replica is NULL) ORDER BY a_next_invocation, r_object_id
+
+
+
+List of reasons why a job can be considered invalid:
+
+The job may have no method name specified.
+The start date of the job is set to null or is not formed correctly.
+The start date of the job is before the year 1970.
+The next invocation date of the job is null or is not formed correctly.
+The next invocation date of the job is before the year 1970.
+The expiration date of the job is not formed correctly.
+The expiration date of the job is before the year 1970 or is later than the start date.
+The max iterations of the job is set to a number less than 0.
+The run_mode and run_interval values for the job object conflict. For example, if run_mode is set to be a specific day of the month (run_mode = 8) and run_interval is set to 33.

@@ -1,0 +1,23 @@
+CREATE TABLESPACE DM_DOCBASE.....
+CREATE TABLESPACE DM_INDEX....
+ 
+CREATE USER DCTM_OWNER
+  IDENTIFIED BY PASSWORD
+  DEFAULT TABLESPACE DM_DOCBASE
+  TEMPORARY TABLESPACE TEMP
+  PROFILE DEFAULT
+  ACCOUNT UNLOCK;
+ 
+CREATE ROLE DCTM_OWNER_ROLE NOT IDENTIFIED;
+ 
+grant create procedure   to  DCTM_OWNER_ROLE;
+grant create sequence    to  DCTM_OWNER_ROLE;
+grant create table       to  DCTM_OWNER_ROLE; 
+grant create trigger     to  DCTM_OWNER_ROLE;
+grant create view        to  DCTM_OWNER_ROLE;
+grant create session     to  DCTM_OWNER_ROLE;
+grant select_catalog_role to DCTM_OWNER_ROLE;
+ 
+alter user DCTM_OWNER  quota unlimited on DM_DOCBASE;
+alter user DCTM_OWNER  quota unlimited on DM_INDEX;  
+ALTER USER DCTM_OWNER  DEFAULT ROLE ALL;

@@ -1,0 +1,46 @@
+Symptoms
+
+
+
+In some situations we need to change the host name of CS
+
+
+
+Resolution
+
+
+
+1) Changing Host name :(Windows)
+
+Open the System applet in Control Panel (or right-click My Computer and choose Properties). 
+In the Computer Name tab click Change. 
+A warning message appears. Read it and if you accept, click Ok. 
+In the Computer Name box type the new host name of the Domain Controller. Click Ok. 
+In the Computer Name Changes window, type the name and password of a user that is a member of the Domain Admins group 
+A warning window appears saying that you must restart your computer. Acknowledge it. 
+Click Ok all the way out, reboot your computer. 
+
+ 2) The Docbase projection targets in the server.ini file and also in the server config object (if they have them there) need to be changed if the docbroker host name is changing. The dmcl.ini file on the server & clients needs to be changed if the docbroker host changed. 
+
+Verify that the database tables have the correct value for the test system hostname by checking the following values: ( Need to update all the below tables with new host name )
+
+ 
+
+• r_host_name in dm_server_config_s
+
+• host_name in dm_mount_point_s
+
+• target_server in dm_job_s
+
+• projection_targets in dm_server_config_r
+
+
+Connect to the database that is serving the repository copy as the repository owner and check the connectivity
+
+ 
+
+Note : If it is 6.0 or 6.5, after changing hostname you need to run PKID6ChangeID to recreate keystore and user privileges
+
+
+projection value in server.ini.
+projection  value in dfc.properties.

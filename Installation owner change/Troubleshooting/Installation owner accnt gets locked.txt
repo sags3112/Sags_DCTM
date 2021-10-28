@@ -1,0 +1,31 @@
+What to look for if installation owner account gets locked out? 
+
+Looking at docbase log error reported is as under. 
+
+Wed Feb 16 14:26:12 2005 000000 [DM_SESSION_E_PASSWORD_CHECK_GETPWNAM]error: "Operating System Failure during user validation. Operation: getpwnam(). Operating System Error: (The referenced account is currently locked out and may not be logged on to. 
+
+)." 
+Wed Feb 16 14:26:12 2005 000000: 7072[6096] AT 6096: End-AuthenticateByPassword: 
+Wed Feb 16 14:26:12 2005 000000: 7072[6096] AT 6096: failure 
+
+Discussed various things that can cause problem 
+
+1. dbpassword.txt file, run 
+
+decrypttext,c,<info from dbpassword.txt file> 
+
+If you are able to deencrpt the password then it is not a password file issue. 
+
+2. Full text job 
+
+3. WDK bug related to dmcl 
+
+4. Any other job where there is wrong hardcoded password. 
+
+5. If there is a custom wdk application 
+
+If there is then you will need to set the following in dmcl.ini fielon the app server machine 
+
+connect_retry_limit=1 
+
+6. Also deactivate all jobs, documentum as custom application job and see what happens.

@@ -1,0 +1,19 @@
+One of my customer has recently changed their installation owner account, following the guidelines in Content Server installation guide.
+The previous installation owner account was dmadmin (local administrator), which is changed to dctm_services (domain administrator account) in domain 'exchange'.
+
+Now, everything is working fine except for their custom java methods (deployed on method server) which uses a simple code for trusted login as shown below -
+
+
+Resoution:
+
+
+Can you check you service user and startMethodserver.cmd, and see whether it points to original dmadmin.
+
+
+set NOPAUSE=true
+set USER_MEM_ARGS=-Xms256m -Xmx256m -XX:PermSize=64m -XX:MaxPermSize=256m -Xss256k -XX:+DisableExplicitGC -Xrs
+set JAVA_OPTIONS=-Duser.name=dmadmin
+E:\Documentum\jboss4.3.0\bin\run -c DctmServer_MethodServer -b 0.0.0.0 %JAVA_OPTIONS%
+
+
+

@@ -1,0 +1,208 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss\fcharset0 Arial;}}
+{\*\generator Msftedit 5.41.21.2508;}\viewkind4\uc1\pard\f0\fs20 Please refer to WDK/Webtop deployment guide (version 6.5 sp1/sp2) and the recommended parameters should be applicable to WDK-based application versions 5.3x and 6.x.\par
+Note see the section on "Setting the Java memory allocation" for full details and keep in mind the heap settings are specific to Sun JDK.   You might also search this pdf for 'maxperm' to find this section.\par
+\par
+For IBM SDK (IBM WAS 6.x): refer IBM for equivalents.  Also see IBM "Tuning Java virtual machines" - http://publib.boulder.ibm.com/infocenter/wasinfo/v6r1/index.jsp?topic=/com.ibm.websphere.express.doc/info/exp/ae/tprf_tunejvm_v61.html\par
+\par
+See related Solution esg104146 for thread sizing\par
+\par
+-----------------------\par
+\par
+Common Application Server heap settings (paraphrased from WDK/Webtop deployment guide):\par
+\par
+-server\par
+-XX:+UseParallelOldGC    NOTE: only applies to Sun Java 1.5.0_06 and later.\par
+\par
+-XX:MaxPermSize=128m\par
+Document caching can consume at least 80 MB of memory. User session caching can consume approximately 2.5 MB to 3 MB per user.   Fifty connected users can consume over 200 MB of VM memory on the application server. Increase the values to meet the demands of the expected user load.\par
+\par
+\par
+Some additional heap and heap related parameters to consider research:\par
+-XX:PermSize=64m   \par
+Starting size for the permanent generation while -XX:MaxPermSize= sets the maximum size\par
+\par
+-XX:MaxPermSize=128m\par
+This space is reserved for class metadata and interned strings about classes that have been loaded/created.  Many applications servers will already set this.  An exception is Tomcat.  Consider 128m-512m, or roughly up to 1/4  of xmx setting and size as needed.\par
+\par
+-Xloggc:<file.log> -XX:+PrintGCDetails\par
+Sun Java 1.4.2 and later.  Option logs each garbage-collection event in the specified location & .log file.  Also simplifies review and montoring heap usage, as well as parsing via external tool.  For more information, perform an internet search.  Consider searching on: xloggc review\par
+\par
+\par
+For JVM syntax and details on JAVA_OPTS, start with:\par
+- "Java HotSpot VM Options" http://java.sun.com/javase/technologies/hotspot/vmoptions.jsp \par
+- A Collection of JVM Options  http://blogs.sun.com/watt/resource/jvm-options-list.html\par
+\par
+\par
+Java Method Server (JMS) example for CS 65x (JBoss):\par
+    set USER_MEM_ARGS=-Xms1024m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=256m -Xss256k -XX:+DisableExplicitGC -Xrs\par
+  -----\par
+\par
+NOTES:\par
+- Per to java.sun.com, Java 5.0 (1.5.0_xx)  has many improvements over the earlier Java 4.0 version.  Such as improved garbage collection, which will add to application server stability.  Please refer to java.sun.com for details.\par
+- Tomcat 5.x and higher installers on will look for and prefers a JRE.  This will imply that Tomcat runs in a 'client' mode which is the default Sun Java egonomics mode on the Windows platform.  Our complex WDK-based applications benefit from running in 'server' mode.  To check for 'server' mode for Tomcat/Windows service, check the registry:\par
+  [HKEY_LOCAL_MACHINE\\SOFTWARE\\Apache Software Foundation\\Procrun 2.0\\Tomcat5\\Parameters\\Java]\par
+  "Jvm"="C:\\\\jdk1.5.0_08\\\\jre\\\\bin\\\\server\\\\jvm.dll"\par
+  If you instead see <jdk>\\\\jre\\\\bin\\\\client\\\\jvm.dll", you are running 'client' mode and are utilizing Tomcat's bundled Eclipse compilier.\par
+-----------------------\par
+NOTE: Following is LEGACY, 5.2x related details and may not be appropriate for 5.3x and D6.\par
+\par
+\par
+J2EE Memory Allocation \par
+\par
+\par
+If the memory allocated to the J2EE server Java virtual machine (VM) is not correctly set, the VM will spend a lot of time destroying objects, garbage collecting, and creating new objects. To change the memory allocation, use a setting similar to the following in the Java arguments set in the J2EE server start script. Following are the locations for the file setting the Application Server memory allocation for BEA WebLogic (1) and Tomcat (2).: \par
+\par
+\par
+Startup scripts to modify for some of the application servers: \par
+\par
+\par
+================================= \par
+\par
+1/ BEA: \par
+\par
+J2EE server start script file: \par
+\par
+- Unix: $BEA/user_projects/.../startDocumentum.sh \par
+\par
+- Windows: $BEA/user_projects/.../startDocumentum.cmd \par
+\par
+Look for the line that sets the MEM_ARGS variable. Following is an example of the default settings in BEA: \par
+\par
+\par
+set MEM_ARGS -Xms256m -Xmx256m -XX:NewSize=64m -XX:MaxNewSize=64m -XX:SurvivorRatio=14 -verbose:gc \par
+\par
+\par
+Note if BEA is set to run as a Windows service, update the service parameters in the registry. If you make any registry changes, be certain to have a current backup of that machine before making any changes. Following is an example of the registry settings: \par
+\par
+[HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\beasvc dadomain_daserver\\Parameters] \par
+\par
+"CmdLine"="-server -Xms256m -Xmx256m -XX:NewSize=64m -XX:MaxNewSize=64m -XX:SurvivorRatio=14 -verbose:gc \\"-Dda52.war=C:\\\\bea\\\\user_projects\\\\dadomain\\\\applications\\\\da52.war\\" -classpath \\"C:\\\\Program Files\\\\Documentum\\\\shared\\\\dfc.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\bsf.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\log4j.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\xalan.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\xml-apis.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\workflow.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\subscription.jar;C:\\\\Program Files\\\\Documentum\\\\shared\\\\admin.jar;C:\\\\bea\\\\jdk131_06\\\\lib\\\\tools.jar;C:\\\\bea\\\\weblogic700\\\\server\\\\lib\\\\weblogic_sp.jar;C:\\\\bea\\\\weblogic700\\\\server\\\\lib\\\\weblogic.jar;C:\\\\Program Files\\\\Documentum\\\\dctm.jar;C:\\\\Documentum\\\\config;C:\\\\bea\\\\user_projects\\\\dadomain\\\\applications\\\\da52-config\\" \\"-Dweblogic.Name=daserver\\" \\"-Dbea.home=C:\\\\bea\\" \\"-Dweblogic.management.username=dmadmin\\" \\"-Dweblogic.ProductionModeEnabled=\\" \\"-Djava.library.path=C:\\\\Program Files\\\\Documentum\\\\shared\\" \\"-Djava.security.policy=C:\\\\bea\\\\weblogic700\\\\server\\\\lib\\\\weblogic.policy\\" weblogic.Server" \par
+\par
+\par
+================================= \par
+\par
+2/ Tomcat: \par
+\par
+- Unix: $Tomcat/bin/catalina.sh \par
+\par
+- Windows: $Tomcat/bin/catalina.bat \par
+\par
+\par
+For example with Tomcat, if you check the catalina.bat startup file you should see something like the following for the Memory settings: \par
+\par
+\par
+set CATALINA_OPTS=%CATALINA_OPTS% -Djava.library.path="C:\\Program Files\\Documentum\\shared" -Xms256m -Xmx256m -XX:NewSize=64m -XX:MaxNewSize=64m -XX:SurvivorRatio=14 -verbose:gc \par
+\par
+\par
+\par
+================================= \par
+\par
+Additional information on the memory allocation variables and the values to set: \par
+\par
+\par
+... -Xms256m -Xmx256m -XX:NewSize=64m -XX:MaxNewSize=64m \par
+\par
+\par
+Where: \par
+\par
+-Xms Starting heap size (default is 256m) \par
+\par
+-Xmx Maximum Heap size (default is 256m) \par
+\par
+-XX:NewSize Starting NewSize memory allocation (default is 64) \par
+\par
+-XX:MaxNewSize Maximum NewSize allocation (default is 64) \par
+\par
+-XX:SurvivorRatio Fraction of NewSize reserved for survivor (not GC) space (default is 14) \par
+\par
+\par
+The typical defaults are mentioned above in parenthesis (). \par
+\par
+\par
+NOTE: Expect to use 20+ MB per user, more if busy users. The resources used will also depend on the application session timeout on how the sessions will tie up resources. See Support Note 23351 for details on how to check or set the session timeout for a WDK-based application. \par
+\par
+\par
+Ensure that MaxNewSize is around 20% of total memory and NewSize is about 20% of starting heap size. For most implementations, set -Xms = -Xmx, and NewSize=MaxNewSize, unless it is a very large implementation. This will allow the servers to spend less time growing and sizing the heap. For more information on these settings, see Sun documentation at the Sun Web site. \par
+\par
+\par
+Memory usage by the Java process can be monitored with third party J2EE tools or simply using the OS tools. You can use the Windows task manager to compare with memory allocations and monitor the java.exe process that corresponds to the application server process. Likewise, on Unix, you can use similar tools. For Solaris, you can use 'top' if installed. If not installed, you may want to check The Freeware for Solaris web site http://sunfreeware.com/. Also check the link at the end of this support note for some related J2EE tools on the BEA web site page "Related Reading: Performance Tools and Information". \par
+\par
+\par
+You can monitor Java garbage collection by setting the command -verbose:gc in the J2EE server start script. Increased Java memory settings will increase the amount of time before a major garbage collection takes and will also increase the amount of time that garbage collection takes to execute. Garbage collection is the greatest bottleneck in the application, and all application work pauses during garbage collection. \par
+\par
+\par
+Garbage collection tracing has the following syntax: \par
+\par
+\par
+[GC 776527K->544591K(1040384K), 0.4283872 secs] \par
+\par
+\par
+The trace can be interpreted as follows: \par
+\par
+1/ [GC 2/ 776527K-> 3/ 544591K( 4/ 1040384K), 5/ 0.4283872 secs] \par
+\par
+\par
+1. GC indicates minor garbage collection event, Full GC indicates full garbage collection \par
+\par
+2. Amount of total allocated memory at start of minor collection \par
+\par
+3. Amount of total allocated memory at end of minor collection \par
+\par
+4. Amount of total memory on host \par
+\par
+5. Time in seconds to run garbage collection \par
+\par
+\par
+Allocated memory as shown in consecutive GC traces continues to grow until full garbage collection occurs. Full garbage collection takes much longer than minor garbage collection, often on the order of 10 times as long. \par
+\par
+\par
+\par
+The following describes some memory troubleshooting inferences that can be drawn from garbage collection. \par
+\par
+\par
+Symptom Reason \par
+\par
+Frequent full GC, starting point higher Total memory too small, or memory leak \par
+\par
+after each full GC, decreasing number of \par
+\par
+GC between full GC \par
+\par
+\par
+Garbage collections take too long (GC 1 Too much memory allocated to JVM \par
+\par
+sec, full GC 5 sec), server cannot create \par
+\par
+new threads \par
+\par
+\par
+Too many minor GC, high CPU usage NewSize allocation too small \par
+\par
+\par
+No GC, terrible performance NewSize allocation too large \par
+\par
+(>20% of total memory) \par
+\par
+\par
+\par
+\par
+Please check the Application Server Vendor Web sites for more details on tuning and performance settings. Following are a few links: \par
+\par
+BEA: WebLogic Server Performance and Tuning \par
+\par
+81x http://edocs.bea.com/wls/docs81/perform/WLSTuning.html \par
+\par
+70x http://edocs.bea.com/wls/docs70/perform/WLSTuning.html#1112119 \par
+\par
+Related Reading: Performance Tools and Information \par
+\par
+70x http://edocs.bea.com/wls/docs70/perform/appa_reading.html#1027383 \par
+\par
+\par
+\par
+Note, much of the above information was compiled from page 54+ of the Web Development Kit Applications Configuration Guide Version 5.2 June 2003. Also see this guide for some thread management suggestions. For further details both on memory management and threads, please check the Application Server Vendor Web site. \par
+\par
+\par
+For some Websphere specific info and how to set via the console, also see Support Note 25522 - How do I modify the Java Heap Size in Websphere used in WDK Applications?\par
+}
+ 

@@ -1,0 +1,66 @@
+CS 6.5 and 6.5 SP1
+
+esg103221 
+
+
+How do you get rid of a "Incomplete Deployment listing" upon JBoss Java Method Server startup?
+
+
+Symptoms
+
+The JBoss Java Method Server log contains errors that look like the following:
+
+2009-01-08 20:23:30,364 ERROR [org.jboss.deployment.scanner.URLDeploymentScanner] Incomplete Deployment listing:
+ 
+--- MBeans waiting for other MBeans ---
+ObjectName: jboss.ejb:service=EJBTimerService,persistencePolicy=database
+  State: CONFIGURED
+  I Depend On:
+    jboss.jca:service=DataSourceBinding,name=DefaultDS
+ 
+ObjectName: jboss:service=KeyGeneratorFactory,type=HiLo
+  State: CONFIGURED
+  I Depend On:
+    jboss:service=TransactionManager
+    jboss.jca:service=DataSourceBinding,name=DefaultDS
+ 
+--- MBEANS THAT ARE THE ROOT CAUSE OF THE PROBLEM ---
+ObjectName: jboss.jca:service=DataSourceBinding,name=DefaultDS
+  State: NOTYETINSTALLED
+  Depends On Me:
+    jboss.ejb:service=EJBTimerService,persistencePolicy=database
+    jboss:service=KeyGeneratorFactory,type=HiLo
+
+Cause:
+
+The JBoss default data source is not correctly configured or is missing.
+
+
+
+
+Resolution
+1. Copy $DOCUMENTUM_SHARED/jboss4.2.0/docs/examples/jca/hsqldb-ds.xml into $DOCUMENTUM_SHARED/jboss4.2.0/server/DctmServer_MethodServer/deploy/hdqldb-ds.xml
+
+
+
+2. The <connection-url> element should be defined as:
+
+<connection-url>jdbc:hsqldb:hsql://localhost:1701</connection-url>
+
+
+
+3. The <depends> element should be defined as:
+
+<depends>jboss:service=Hypersonic</depends>
+
+
+
+4. Comment out the 'localDB' mbean definition.
+
+
+
+5. Stop the Java Method Server, and clear the cache directory at $DOCUMENTUM_SHARED/jboss4.2.0/server/DctmServer_MethodServer/tmp
+
+
+
+6. Restart the Java Method Server.

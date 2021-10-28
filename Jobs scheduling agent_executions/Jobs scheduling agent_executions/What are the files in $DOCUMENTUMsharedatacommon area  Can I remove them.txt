@@ -1,0 +1,33 @@
+esg9531
+
+
+INTERNAL 
+
+************** 
+
+
+The location for server side common area for file sharing is $DOCUMENTUM/share/data/common . Whenever a method gets executed the content of the method is written to this location irrespective of whether the content is already existing or not. The above behaviour for generation of these files is by design, however the algorithm did not remove the existing files after execution of the methods. Infact the automatic number generation for the filename that is put in this location uses certain algorithm, sometimes the random number generation did not check for unique filenames, which caused some methods to fail. This issue has been logged as bug # 32649 which engineering has planned to fix it in future release I believe the 4.2 version of server. 
+
+
+These files are harmless and can be removed, the following flag can be set at server startup or using the SET_OPTIONS function. 
+
+
+Clean - Used to purge the /common area of the server , this is very useful on large systems. This flag can be used upon server startup as the "-o" flag 
+
+
+esg9531
+For Docbases on Unix: 
+
+
+You can start up the server using this option: dm_start_docbase -oclean (Note: this only runs once, when the server initially starts up) in your docbase it would be dm_start_xxx -oclean. This should clean up the share/data/common area and free the disk space. 
+
+
+You can also use the IAPI tool to clean up the common area on server with the command below: 
+
+
+Apply,c,NULL,SET_OPTION,OPTION,S,clean,VALUE,B,T 
+
+
+This latter API command can be run anytime by an Admin. You can run this periodically to clean the /common area. Perhaps you can create a dm_job to be scheduled to run this periodically. Also consider running the other server maintenance jobs we provide, such as the dm_DMClean, dm_GwmClean, dm_DMFilescan and dm_LogPurge jobs (found in Workspace under (Administration->Job Manager) to removed unused objects from the docbase and filesystem as part of a maintenance program.  
+ 
+ 

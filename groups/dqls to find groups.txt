@@ -1,0 +1,37 @@
+
+
+1) List of groups a user belongs to ..
+
+Here is the DQL to query the list of groups a user belongs to:
+
+select group_name from dm_group where any i_all_users_names = ‘<user id>’;
+
+This gives the list of all groups a user belongs to directly or indirectly.
+i_all_users_names is a computed value.
+
+If you want to query for list of groups the logged in user belongs to:
+
+select group_name from dm_group where any i_all_users_names = USER ;
+
+The USER is a place holder for the current logged in User.
+
+Querying for ‘users_names’ attribute instead of i_all_users_names will return only the groups where the user is directly part of that group (no sub groups)
+
+
+**************************************
+
+DQL to list of users in a group
+
+DQL to query the list of users in a group
+
+select users_names from dm_group where group_name = ‘mygroup’; 
+DQL to query the list of active users (Users who can log in) in a group:
+
+select user_name from dm_user where user_state = 0 and user_name in (select users_names from dm_group where group_name = ‘mygroup’);
+user_state of dm_user indicates the user’s current state.
+Valid alues are:
+
+0, indicating a user who can log in. 
+1 indicating a user who cannot log in. 
+2 indicating a user who is locked. 
+

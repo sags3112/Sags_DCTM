@@ -1,0 +1,53 @@
+	Syntax of LDIF file
+
+
+How To use an input file to add multiple users in one step: 
+
+
+- Connect to Documentum Administrator 
+
+- Under Docbase Management, click Users (Local) 
+
+- Under USERS (LOCAL), click IMPORT 
+
+- Complete Input File Path 
+
+- Click Import 
+
+
+This input file must be set up in LDIF format. 
+
+LDIF file is a text file and have the following syntax: 
+
+object_type: dm_user 
+
+user_name: 
+
+user_os_name: 
+
+user_address: 
+
+user_group_name: 
+
+user_privileges: 
+
+default_folder: 
+
+user_db_name: 
+
+description: 
+
+acl_domain: 
+
+acl_name: 
+
+user_os_domain: 
+
+home_docbase: 
+
+user_state: 
+
+client_capability: 
+
+
+All property names must match the attribute for the dm_user object.

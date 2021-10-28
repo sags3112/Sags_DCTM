@@ -1,0 +1,35 @@
+
+Here is steps to disable Twiddle, I create  esg128610  for this
+
+Symptoms
+ 
+1) JBOSS java method server terminates unexpectedly  without any error message
+2) JBOSS throw following error message
+   2012-04-11 09:48:05,050 WARN  [org.jboss.system.ServiceController] Problem starting service jboss:service=invoker,type=jrmp
+java.rmi.server.ExportException: Port already in use: 8066; nested exception is: 
+ java.net.BindException: Address already in use: JVM_Bind
+ 
+Cause
+ 
+This issue  maybe is  caused by Twiddle  status check of JBOSS application, we see this issue occurs many time with JBOSS JMS Server.
+Twiddle will monitor JBOSS application, if JBOSS is busy or is down, twiddle will shutdown JBOSS and restart it again.
+The issue is that, sometime, JBOSS is running and all port is listening, however, JBOSS is busy to response to twiddle monitor script.
+The Twiddle will treat JBOSS is down, then Twiddle to try to restart it. However, as you can see JBOSS is still running, that is reason , new JBOSS start will fail due to port is occupied by running JBOSS application
+then JBOSS application will go down within 20 minutes
+ 
+Resolution
+ 
+1)  Make a copy of file $Documentum\jboss4.2.0\bin\<hostname>_status_output.txt file that contains "true",  and named it "override_status_output.txt" in the bin directory.
+2)  Backup dctmServerStatus.bat to dctmServerStatus.bat.backup, open dctmServerStatus.bat
+    edited the line: 
+   REM clean up temp file from previous run if it exists
+    IF EXIST %CHECK_FILE% DEL /F %CHECK_FILE%
+    REM run twiddle to get server status
+    call twiddle.bat --server=%HOST%:%PORT% %CREDENTIALS% get --noprefix "jboss.system:type=Server" Started > %CHECK_FILE%
+  TO: 
+ REM clean up temp file from previous run if it exists
+ REM IF EXIST %CHECK_FILE% DEL /F %CHECK_FILE%
+ REM run twiddle to get server status
+ call twiddle.bat --server=%HOST%:%PORT% %CREDENTIALS% get --noprefix "jboss.system:type=Server" Started > override_status_output.txt 
+ 
+3)    Restart JMS and keep monitor JMS, and issue should be resolved

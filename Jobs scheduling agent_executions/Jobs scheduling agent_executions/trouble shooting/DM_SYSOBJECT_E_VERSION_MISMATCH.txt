@@ -1,0 +1,89 @@
+sHello Team,
+
+Any idea why we see the below 2 errors for the Job "dm_DataDictionaryPublisher
+
+Job "dm_DataDictionaryPublisher" failed to execute successfully. The message was:  "[ERROR] [LAUNCHER 6372] Detected while completing processing for job dm_DataDictionaryPublisher: Command Failed: save,s0,080f424680000234, status: 0, with error message [DM_SYSOBJECT_E_CANT_SAVE]error:   Cannot save 080f424680000234 sysobject. [DM_SYSOBJECT_E_VERSION_MISMATCH]error:   save of object failed because of version mismatch: old version was 554,024   ."
+
+***********************************************
+
+Job "dm_DataDictionaryPublisher" failed to execute successfully. The message was:  "[ERROR] [AGENTEXEC 4292] Detected while processing dead job dm_DataDictionaryPublisher: The job object indicated the job was in progress, but the job was not actually running.  It is likely that the dm_agent_exec utility was stopped while the job was in progress
+
+
+
+esg96107
+
+
+Symptoms
+
+Command Failed: save,s0,0800176f8000955a, status: 0, with error message [DM_SYSOBJECT_E_VERSION_MISMATCH]error:   save of object failed because of version mismatch: old version was 16460   ."  Job will not run
+
+ Cause
+Basically, the save operation of the object is failing because the version stamp in the object is inconsistent with the version stamp that is  stored in the database.
+
+ Resolution
+
+Execute the following API statements from DA:
+API>fetch,c,0800176f8000955a
+...
+API>save,c,0800176f8000955a
+
+ That was preventing the job from completing successfully. Once we issue these two API statements we will  be able to update the version for object 0800176f8000955a
+ After having executed these commands wait for the next job execution and monitor it to see if the job will complete correctly.
+
+
+
+
+**********************
+
+
+Resolution
+
+Execute the following API statements from DA:
+
+1)
+
+API>fetch,c,080515f4802d2288
+...
+API>save,c,080515f4802d2288
+
+2) 
+
+API>fetch,c,080879ec800005ed
+...
+API>save,c,080879ec800005ed
+
+3)
+
+API>fetch,c,0801b2078000020a
+...
+API>save,c,0801b2078000020a
+
+4)
+API>fetch,c,0803640e8000020a
+...
+API>save,c,0803640e8000020a
+
+5) 
+
+API>fetch,c,080516158000020a
+...
+API>save,c,080516158000020a
+
+6)
+
+API>fetch,c,0806c81c80000262
+...
+API>save,c,0806c81c80000262
+
+That was preventing the job from completing successfully. Once we issue these API statements we will  be able to update the version for all Jobs whic were having problem
+
+
+After having executed these commands wait for the next job execution and monitor it to see if the job will complete correctly.
+
+
+**********************
+
+
+
+
+

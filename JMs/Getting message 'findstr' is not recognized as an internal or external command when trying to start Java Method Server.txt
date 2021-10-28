@@ -1,0 +1,31 @@
+esg123487
+
+
+Content Server 6.7, 6.6, 6.5 SP3, 6.5 SP2, 6.5 SP1, 6.5
+
+Symptoms
+
+
+
+When trying to start Java Method Server from command line, the following message is returned:
+
+
+
+C:\Documentum\jboss4.2.0\server>startMethodServer.cmd
+C:\Documentum\jboss4.2.0\server>set NOPAUSE=true
+C:\Documentum\jboss4.2.0\server>set USER_MEM_ARGS=-Xms256m -Xmx256m -XX:PermSize=64m -XX:MaxPermSize=256m -Xss256k -XX:+DisableExplicitGC -Xrs
+C:\Documentum\jboss4.2.0\server>C:\Documentum\jboss4.2.0\bin\run -c DctmServer_MethodServer -b 0.0.0.0
+'findstr' is not recognized as an internal or external command,
+operable program or batch file.
+
+
+
+Cause
+
+findstr binary is not on system PATH variable.
+
+
+
+Resolution
+
+findstr binary exists in C:\Windows\system32. Make sure that this path is included to PATH system environmental variable in Windows.

@@ -1,0 +1,40 @@
+http://solutions.emc.com/emcsolutionview.asp?id=esg120833
+
+
+
+	
+"NO JMS Available error" in CS HA mode where *MULTILE* DOCUMENTUM PROCESS running on one CS host
+
+Symptoms
+
+When we install 6.6 in HA environment,
+One CS host having Multiple Documentum Processes -> where jobs and methods run on once process on another process JMS throws error message. "NO JMS Available"
+Multiple CS Host with one Documentum Process per host
+and all jobs and methods can only run on primary content server successfully, and it always fails on the secondary server.
+ 
+Docbase log throws the following error message when jobs and method is posted to run on the secondary server.
+ 
+Sat Mar 26 08:14:30 2011 064531: 8663[8663] JMS DEBUG: NO JMS available, method_id=1001551f8011cd07,method_name=MoveToRecycleBin, trace_launch=1, is_restartable=0, appServerName=do_method, is_workflow=0, jms_location=ANY
+ 
+Cause
+
+In 6.6, the JMS failover was introduced, therefore a new object type - dm_jms_config can be found in 6.6.
+Each CS has one JMS which will have one dm_jms_config object associated.
+If there are
+One content server and one JMS, but having multiple documentum process configured or
+Two content servers and two JMS servers, it has to have two dm_jms_config objects.
+Bby default Documentum will associate one dm_jms_config with once Documentum process to dm_server_config object. Hence the other documentum process can not use the JMS. 
+ 
+Having 1 Jboss instance serving 2 Documentum instances but the dm_jms_config only references one of the Documentum Instance.
+NOTE:  This was working fine prior to 6.5, but due to the introduction of dm_jms_config which supports the JMS failover you have to update the dm_server_config with the another documentum process.
+You are hitting a bug (CS-31755)
+ 
+Resolution
+
+Run the dm_jms_admin.sh script to assigned an additional server_config_id for the missing documentum instance.
+Run the following script on CS host which has multiple documentum process.
+$DOCUMENTUM_SHARED/jmsTools/bin/dm_jms_admin.sh  by passing values
+E.g:
+$DOCUMENTUM_SHARED/jmsTools/bin/dm_jms_admin.sh  -docbase <docbase_documentum instnace name> -username dmadmin -action add,enableDFC,testDFC,migrate,dumpServerCache,listAll  -jms_host_name <hostname as per server config> -jms_port <JMS port no> -jms_proximity 1 -webapps ServerApps  -server_config_id <server config id>
+which is something like below:
+$DOCUMENTUM_SHARED/jmsTools/bin/dm_jms_admin.sh  -docbase KP66REPO.KP66REPO_service2 -username dmadmin -action add,enableDFC,testDFC,migrate,dumpServerCache,listAll  -jms_host_name kpcs006.awdocumentum.com -jms_port 9080 -jms_proximity 1 -webapps ServerApps  -server_config_id 3d00638880373901

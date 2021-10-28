@@ -1,0 +1,39 @@
+
+CS 6.5 or 6.5 sp2
+
+
+java method server logs whn launching jav mthod if JMs is installed in the clustered env
+
+error : Request ignored from illegal address : 192.168.1.1
+
+esg100906
+
+**********
+
+
+Symptoms
+
+When working in a clustered Content Server environment, the following error may be seen in the Java Method Server logs when launching java methods:
+
+javax.servlet.ServletException: Request originated from illegal IP Address:192.168.1.1
+
+
+
+Cause
+
+In the above message, the referenced IP is the virtual IP which is referenced in the Do_Method value for the app_server_uri listed in the dm_server_config object. In addition to adding it to the server config object, it may also be required to add it to the web.xml for the Java Method Server.
+
+
+
+Resolution
+
+1. Navigate to $DOCUMENTUM_SHARED/jboss4.2.0/server/DctmServer_MethodServer/deploy/ServerApps.ear/DmMethods.war/WEB-INF and open the web.xml with an editor.
+2. Add the following parameter to the file
+<init-param>
+  <param-name>ip-</param-name>
+  <param-value>192.168.1.1</param-value>
+</init-param>
+
+Replace the above IP with that of the Virtual host.
+
+3. Restart Java Method Server

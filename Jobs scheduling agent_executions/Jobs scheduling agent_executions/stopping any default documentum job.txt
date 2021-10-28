@@ -1,0 +1,21 @@
+update dm_job object set a_special_app = '', set a_current_status = '0', set a_last_completion = DATE(TODAY) where object_name = 'dm_LDAPSynchronization'
+
+Tony Qiu: update dm_job object set a_special_app = '', set a_current_status = '0', set a_last_completion = DATE(TODAY) where object_name = 'xxxxxxx
+
+
+***********
+
+from seven dctm jobs:
+
+
+
+To stop a currently executing job, terminate its process in the Windows Task Manager2.
+o First, determine the job’s process id (PID) with DQL:
+
+?? select object_name, r_object_id, a_last_invocation,a_last_completion, a_last_process_id, a_current_status from dm_job where a_special_app = 'agentexec' order by a_last_process_id
+
+o Then, terminate the job’s PID in the Window’s Task Manager.
+
+o After you terminate the job, you will need to manually reset the status attribute of the dm_job object. Use DQL like this:
+
+update dm_job object set a_special_app = '', set a_current_status = 'ABORTED', set a_last_completion =DATE(TODAY) where object_name = 'dm_ConsistencyChecker'

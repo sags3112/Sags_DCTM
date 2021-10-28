@@ -1,0 +1,43 @@
+
+esg92607 
+
+Content Server 6.5 SP1, 6.5, 6.0 SP1, 6.0
+
+Changing the name of the host or IP address after Content Server installation (147071)
+
+Symptoms
+
+After successfully installing Documentum D6, D6 SP1 or D6.5 of Content Server you shutdown the Server and restart. The Agent Exec may fail with the following Authentication error when trying to restart the Content Server: 
+
+[DM_SESSION_E_CLIENT_AUTHENTICATION_FAILURE]error:  "Could not authenticate the client installation for reason: Client hostname in authentication string doesn't match value in registry" 
+Cause
+
+This is a known issue and is reported in the D6 SP1 Content Server Release Notes:
+
+Changing name of the host or IP address after Content Server installation (147071)
+
+If you change the name of the host or its IP address after installing Content Server, you will get the following authentication error when the agent exec program is attempting
+
+to start Content Server:
+
+Error [DM_SESSION_E_CLIENT_AUTHENTICATION_FAILURE]error:
+
+"Could not authenticate the client installation for reason:
+
+Client hostname in authentication string doesn’t match value in registry."
+
+To resolve this issue, download and run the following tool to reregister Content Server with the new host name or IP address:
+
+ftp://dev_pre:qa5.grN6@ftp2.lss.emc.com/sustaining/6.0/Bug147071_pre60SP1_engr_fix.zip
+
+Resolution
+
+The link in the Release Notes (as shown above) is not correct.
+
+
+
+The correct link is:
+
+ftp://dev_pre:qa5%2EgrN6@ftp2.lss.emc.com/sustaining/Content_Server/Archives/6.0/Bug147071_pre60SP1_engr_fix.zip
+
+The recommendation is to download the fix from the FTP site via the command line.

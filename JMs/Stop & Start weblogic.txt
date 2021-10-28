@@ -1,0 +1,90 @@
+
+Starting and stopping the Weblogic application server
+
+
+To stop an admin server:
+
+1. On Windows:
+
+a. Navigate to DctmUserDir\bea9.2\domains\DctmDomain\bin.
+b. Execute stopWeblogic.cmd
+
+2. On UNIX:
+a. Navigate to DctmUserDir/bea9.2/domains/DctmDomain/bin.
+b. Execute stopWeblogic.sh
+Use the following procedure to start an admin server.
+
+
+To start an admin server:
+
+1. On Windows:
+a. Navigate to DctmUserDir\bea9.2\domains\DctmDomain.
+b. Execute startWeblogic.cmd
+
+2. On UNIX:
+a. Navigate to DctmUserDir/bea9.2/domains/DctmDomainn.
+b. Execute startWeblogic.sh
+
+Starting and stopping the instance servers
+
+An instance server hosts one or more Java applications or processes. In a Content Server
+installation, the method server instance server hosts the Java Method Server, ACS server,
+and the DmMail application, for example.
+Before you start an instance server using the script, be sure that the Weblogic admin
+server is running. Starting an instance server using the Windows service also starts
+the admin server if it is stopped.
+
+Note: Do not use the BEA Admin Console to stop or start an instance server or the
+applications they host. Use the procedures in this section.
+
+To start an instance server:
+
+1. On Windows:
+a. Navigate to DctmUserDir\bea9.2\domains\DctmDomain.
+EMC Documentum Content Server Version 6 Administration Guide 127
+Servers
+
+b. Execute startapplicationGroupName.cmd
+
+The applicationGroupName for the instance server installed with a Content Server
+installation is ’MethodServer’. Consequently, to start that instance, you execute
+startMethodServer.cmd.
+
+c. Alternatively, start the Windows service for the server instance.
+For the Java method server, and the server instance hosting the Java method
+server, the service name is Documentum Java Method Server. Starting that
+service is equivalent to executing startMethodServer.cmd.
+
+2. On UNIX:
+a. Navigate to DctmUserDir/bea9.2/domains/DctmDomain.
+b. Execute startapplicationGroupName.sh.
+The applicationGroupName for the instance server installed with a Content Server
+installation is ’MethodServer’. Consequently, to start that instance, you execute
+startMethodServer.sh.
+Use the following procedure to stop an instance server. Stopping an instance server stops
+all applications running within the instance.
+
+To stop an instance server:
+
+1. On Windows:
+
+a. Navigate to DctmUserDir\bea9.2\domains\DctmDomain.
+b. Execute stopapplicationGroupName.cmd
+The applicationGroupName for the instance server installed with a Content Server
+installation is ’MethodServer’. Consequently, to start that instance, you execute
+stopMethodServer.cmd.
+c. Alternatively, stop the Windows service for the server instance.
+For the Java method server, and the server instance hosting the Java method
+server, the service name is Documentum Java Method Server. Stopping that
+service is equivalent to executing stopMethodServer.cmd.
+
+2. On UNIX:
+
+a. Navigate to DctmUserDir/bea9.2/domains/DctmDomain.
+b. Execute stopapplicationGroupName.sh.
+128 EMC Documentum Content Server Version 6 Administration Guide
+Servers
+
+The applicationGroupName for the instance server installed with a Content Server
+installation is ’MethodServer’. Consequently, to start that instance, you execute
+stopMethodServer.sh.

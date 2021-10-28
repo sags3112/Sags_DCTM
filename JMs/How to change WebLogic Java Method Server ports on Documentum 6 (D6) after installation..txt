@@ -1,0 +1,71 @@
+esg92523 
+
+How to change WebLogic Java Method Server ports on Documentum 6 (D6) after installation.
+
+Symptoms
+
+Documentum 6 (D6) Content Server comes with an embedded WebLogic 9.2 application server. 
+
+In this application server, a default domain dctmDomain is created with two servers:
+
+- The admin server configured by default on port 7001. 
+
+- The Java Method Server (JMS) configured by default on port 9080.
+
+
+
+Users are able to change the default ports on the Content Server installer when installing it to fit your requirements. However, changes must be made after installation.  Follow the instructions to change the defaults.
+
+
+
+Resolution
+
+In the following sections, <DOCUMENTUM> designates the path pointed by: 
+
+- $DOCUMENTUM_SHARED in UNIX/linux environments.
+
+- %DOCUMENTUM% in Windows environments.
+
+Idem, <cs_host> designates the hostname/IP address of the Content Server and <admin_port> designates the port of the admin server in the dctmDomain.
+
+Log in to the Weblogic admin console for the domain
+http://<cs_host>:<admin_port>/console
+
+In the left frame, click on "Lock and Edit" button. 
+Then under DctmDomain, click on Environment > Servers > <server_name> 
+
+In the right frame, go to "Configuration" tab and click on "General" link.
+Change the port mentioned in the "Listen Port" field.
+Click the "Save" button.
+
+In the left frame, click the "Activate Changes" button.
+
+Note: To modify the admin server port itself, after changing the port and activate changes, re-open the admin console using the new port in the URL.
+
+
+Change the following files:
+
+Changing the JMS port:
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/upload/MethodServer/acs.ear/APP-INF/classes/config/acs.properties
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/upload/MethodServer/acs.ear/APP-INF/classes/jmx.properties
+
+changing the admin server port:
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/init-info/tokenValue.properties
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/startMethodServer.(sh/cmd)
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/stopMethodServer.(sh/cmd)
+$DOCUMENTUM_SHARED/bea9.2/domains/DctmDomain/shutdown.py
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/bin/stopWebLogic.(sh/cmd)
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/bin/startManagedWebLogic.(sh/cmd)
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/bin/stopManagedWebLogic.(sh/cmd)
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/init-info/startscript.xml
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/upload/MethodServer/acs.ear/APP-INF/classes/jmx.properties
+
+
+For Windows environments only, change this file:
+<DOCUMENTUM>/bea9.2/domains/DctmDomain/serviceConfig/MethodServer/conf/DmMethodServer.xml
+
+
+Important: Change the port in the dm_server_config object referring to the JMS when changing the JMS port.
+
+
+Stop and restart the admin server and the JMS

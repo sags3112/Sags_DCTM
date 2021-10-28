@@ -1,0 +1,20 @@
+How long will it take???
+
+
+
+Single Host Failover
+
+Create Content Server/Repository
+Create Content-File Server/CFS
+Run JMS Packager: 1 minute
+Run JMS Configuration Program: 10 minutes
+Update JMS objects via DA: 10 minutes
+
+
+
+Multiple Host JMS Failover
+
+Create Content Server/Repository
+Create Content-File Server/CFS
+Update JMS objects via DA: 10 minutes
+

@@ -1,0 +1,13 @@
+You might see an error like this in the agentexec.log file 
+
+[ERROR] [AGENTEXEC 5604] Detected while processing dead job job_name: The job object indicated the job was in progress, but the job was not actually running.  It is likely that the dm_agent_exec utility was stopped while the job was in progress. 
+
+Or
+
+ecieve the following error for dm_WFCheckPoint
+[ERROR] [AGENTEXEC 15191] Detected while processing dead job dm_WFCheckPoint: The job object indicated the job was in progress, but the job was not actually running. It is likely that the dm_agent_exec utility was stopped while the job was in progress.
+
+
+Resolution:
+
+esg93550 

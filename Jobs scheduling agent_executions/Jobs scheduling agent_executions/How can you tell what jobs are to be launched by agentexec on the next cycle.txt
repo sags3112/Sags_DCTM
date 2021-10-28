@@ -1,0 +1,10 @@
+
+How can you tell what jobs are to be launched by agentexec on the next cycle?
+
+
+By default the agent_exec process runs every 5 minutes. When jobs are started, Documentum Adminstrator (DA) will update the dm_job_request. 
+
+
+Here is a query to see what is listed to be run. 
+
+select * from dm_job_request

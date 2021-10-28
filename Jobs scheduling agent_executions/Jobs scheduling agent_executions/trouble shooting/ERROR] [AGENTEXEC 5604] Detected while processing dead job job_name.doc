@@ -1,0 +1,55 @@
+
+esg93550
+
+You might see an error like this in the agentexec.log file 
+
+[ERROR] [AGENTEXEC 5604] Detected while processing dead job job_name: The job object indicated the job was in progress, but the job was not actually running.  It is likely that the dm_agent_exec utility was stopped while the job was in progress. 
+
+Or
+
+recieve the following error for dm_WFCheckPoint
+[ERROR] [AGENTEXEC 15191] Detected while processing dead job dm_WFCheckPoint: The job object indicated the job was in progress, but the job was not actually running. It is likely that the dm_agent_exec utility was stopped while the job was in progress.
+
+
+Resolution:
+
+esg93550 
+
+
+
+Symptoms
+
+You might see an error like this in the agentexec.log file 
+
+[ERROR] [AGENTEXEC 5604] Detected while processing dead job job_name: The job object indicated the job was in progress, but the job was not actually running.  It is likely that the dm_agent_exec utility was stopped while the job was in progress. 
+
+
+
+Cause
+
+This error is thrown when the agent_exec utility queries the content server to see if there are any jobs that were once running on the same machine and are no longer running, but failed to finish successfully. 
+
+
+
+If it determines that the job was in fact launched on the current machine, it then checks to see if the file lock created by the method launcher still exists. This file lock is created when the method launcher process starts and removed automatically when it ends. If the lock is found, then the process is still running and nothing will be done. If the lock is not found, then the job must have been launched on the current server but is no longer running, which indicates that execution failed.
+
+If a job meets all of these conditions, the properties of the job are reset so that it can be run again. When a job has its properties cleaned up, an error message is generated stating that a “dead job” was found on the server:
+
+
+
+A very common occurrence for this happens when the installation has multiple content servers.  If you do have multiple content servers you will need to check both sets of server logs for errors and confirm which server the job is set to run against.
+
+
+
+Resolution
+
+Sometimes “processing dead job” error messages will contain a DMCL error or some other error message that indicates some problem while trying to modify the job’s properties.
+
+
+
+An isolated occurrence of this error message with no additional errors does not necessarily indicate a serious problem. (It may just be that the content server shut down before the job finished or that the Java Method Server was down etc.) 
+
+
+
+Looking into these log files will give a better understanding of the reason why the job failed during execution.
+

@@ -1,0 +1,34 @@
+
+Please see the following SN that may help with this problem:
+---------------------------------------------------------------------
+FixmlSizeFilter ERROR 
+ 
+ID:    esg90162   
+ 
+SOLUTION  
+ 
+ 
+Symptoms
+
+Getting the following error in the FAST indexing queue:
+DOCUMENT_ERROR Module :FixmlSizeFilter - ERROR: Process(0901883c83124128) failure: docproc.ProcessorStatus.NotPassing
+
+Cause
+
+You may be hitting bug #134733.
+Bug 134733
+"InStream 4.3.1 generates much larger FIXML files."
+
+Resolution
+Check the Linguistics.XML file in DOCUMENTUM/fulltext/IndexServer/etc/config_data/Linguistics/etc and see if <IncludeOriginal> is set to 1.  If so, set it to 0, restart Index Server and test the same document.
+
+Or, get the fixml file to see how big it is.
+
+getfixml -c repository_name r_object_id > my_fixml.xml
+
+FIXML size limit is by default set to 10MB, and we don't recommend customers change this value, because a larger value may lead to Indexer crashes. If your original file size is not that big and still it fails to create FIXML due to the size limitation, please contact Support and open a case.
+---------------------------------------------------------------------
+
+Thank you.
+
+Regards,

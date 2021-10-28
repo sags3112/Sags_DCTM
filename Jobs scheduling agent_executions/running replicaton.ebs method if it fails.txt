@@ -1,0 +1,10 @@
+
+
+Syntax :
+\dmbasic -f.\replicate_folder.ebs -eReplicateMain -- -docbase_name <docbase name where the job runs> -user_name<user name setup in the job> -job_id <r_object_id of the job> -method_trace_level 10 
+
+**************** In order to get the job_id value you can try the following DQL: 
+
+DQL> select r_object_id from dm_job where object_name='<Job name>' 
+
+You need to run this at the command prompt from the %DM_HOME%\bin for Windows $DM_HOME/bin for Unix. 

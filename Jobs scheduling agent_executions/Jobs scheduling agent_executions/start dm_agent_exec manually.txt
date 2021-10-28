@@ -1,0 +1,4 @@
+You can start dm_agent_exec manually with parameter trace_level, i.e.:
+
+$DM_HOME/bin/dm_agent_exec -docbase_name <docbase_name> -docbase_owner <installation owner> -trace-level 1 &
+

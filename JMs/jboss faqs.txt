@@ -1,0 +1,71 @@
+In 6.5, JBoss is the application server that serves as the Java Method Server.  
+
+1.) Q: Where is JBoss server instance directory located"
+A Jboss server instance is created in the following directory:
+<JBossHome>\server\<ServerInstanceName>
+Example: c:\documentum\jboss4.2.0\server\DctmServer_MethodServer 
+
+2.) Q: Where is the staging/deployment directory for my web application"
+A: Web application files are installed in the following location:
+<JBossHome>\server\<ServerInstanceName>\deploy\<WAR file or EAR file name>
+Example, for MethodServer, it is installed at 
+<JBossHome>\server\DctmServer_MethodServer\deploy\ServerApps.ear
+
+3.) Q: How do I run BOF modules via the Java Method Server"
+A:   BOF modules can be invoked in java code like:
+myModuleObject = IDfSession.getClient().newModule(
+   docbase-name, 
+   module-name, 
+   session-manager); 
+However, to run modules as jobs or methods via the Java Method server, simply set the method_verb to the module name in the dm_method object.
+Trying to invoke them like the code-sample above within java method code running in the Java Method Server will not work due to the way modules are loaded.  The easier and recommended way is to simply use the module name in the method_verb parameter.
+
+4.) Q: What is the user name and password for the JBoss jmx console and web console"
+A: User name is “admin”. The password is what you have entered during installation.
+ 
+5.) Q: What is the port number for my server instance" 
+A: The http port number for your server instance is what you have entered during installation. You can also find it in ../deploy/jboss-web.deployer/server.xml, under <Service name="jboss.web"> tag.
+ Example:
+ <Connector port="9080" address="${jboss.bind.address}"    
+         maxThreads="250" maxHttpHeaderSize="8192"
+         emptySessionPath="true" protocol="HTTP/1.1"
+         enableLookups="false" redirectPort="9082" acceptCount="100"
+         connectionTimeout="20000" disableUploadTimeout="true" />
+
+6.) Q: Where should I place my java method server classes"
+A:The java_method folder is deprecated since 6 and should not be used.
+d6.x webapp are sandboxed now, so it is a standard j2ee deployment.
+Here is an example path directory:
+C:\Documentum\jboss4.2.0\server\DctmServer_MethodServer\deploy\ServerApps.ear\DmMethods.war\WEB-INF\lib
+
+7.) Q: How do I start window service for my server instance"
+A: Go to your service control panel, you can find the service for your instance. Start it as you would for any other services. Below is the display name for BOCS, Java Method Server, IndexAgent, DMS, DFS and DSCR:
+ Documentum Branch Office Caching Services
+ Documentum Java Method Server
+ Documentum IndexAgentn 
+ Documentum Messaging Application Server 
+ EMC Documentum Foundation Services 
+     EMC| Documentum Solution Catalog Repository
+
+8.) Q: How to find out if my server instance is up and running"
+A:  
+a)You can easily check the status by accessing 
+http://<host>:<port>/jmx-console
+if you see the page up, your instance is started.
+b) You can also use the following command to check your server status:
+cd to <JBossHome>/bin directory and run
+ twiddle.bat -s  <serverJndiUrl > -u admin -p <password>  get "jboss.system:type=Server" Started
+Where <serverJndiUrl >  is  <host name>:<naming service port>, 
+Example: SDETEST1:8990
+You can find the value of <serverJndiUrl > in the stop scripts that the installer created for your server instance.
+
+9.) Q: How do I change logging level for my server instance"
+A: You can modify your logging configuration for your server instance by editing <ServerInstanceDir>/conf/jboss-log4j.xml.  Example, if you want to set org.jboss.* to TRACE level, you can change the following:
+ <!-- Limit JBoss categories -->
+   <category name="org.jboss">
+      <priority value=“TRACE"/>
+   </category>
+Note: By default, any category that is not defined in jboss-log4j.properties, the logging level is set to DEBUG.
+
+10.) Q: How do I change logging level for my applications"
+A: You can modify your logging configuration for your application by editing <ServerInstanceDir>/deploy/<appName>.ear/APP-INF/classes/log4j.properties

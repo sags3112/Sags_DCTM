@@ -1,0 +1,26 @@
+Activating or Inactivating a Job
+
+When you set a job to inactive, the agent exec process ignores the job when it polls the
+repository and the job is never started by agent exec. When you set a job to active, the
+agent exec examines the job when it polls the repository and executes the job on the
+schedule defined in the job.
+
+for particular job:
+
+update dm_job objects set is_inactive=1 where object_name='Name of the job'.
+
+
+
+A job’s activation status is recorded in its is_inactive attribute. To change the status,
+use Documentum Administrator.
+
+A job can be set to inactive automatically if you have set a maximum number of executions for the job. In such cases, the job is inactivated after the specified number of executions are completed. Similarly, if you specify an expiration date for a job, it is
+inactivated on that date.
+
+Disabling All Jobs
+
+
+To disable all job executions, set the agent_launcher attribute in the server config object
+to an empty string ("") and stop and restart the server. Stopping the server stops the
+current running agent exec process. When you restart the server, the agent_exec process
+is not launched.

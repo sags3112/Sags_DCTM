@@ -1,0 +1,22 @@
+esg11136
+
+What needs to be changed when changing the host name on the eContent server machine?
+
+
+The docbase projection targets in the server.ini file and also in the server config object (if they have them there) need to be changed if the docbroker host name is changing. The dmcl.ini file on the server & clients needs to be changed if the docbroker host changed. 
+
+
+
+cs 6.0/above
+
+projection value in server.ini.
+projection  value in dfc.properties.
+
+
+• r_host_name in dm_server_config_s
+
+• host_name in dm_mount_point_s
+
+• target_server in dm_job_s
+
+• projection_targets in dm_server_config

@@ -1,0 +1,2 @@
+Disabled the agent launcher via DQL command:
+update dm_server_config object set agent_launcher = '' where agent_launcher = ''

@@ -1,0 +1,54 @@
+This message will explain some of the behavioral aspects of the system admin tools and the reasons for them. The tools encompass a wide range of functions, many of which are very time consuming (dmclean, dmfilescan) and/or database intensive (version manager). Because of this it would not be a good practice to allow some of these jobs to run unexpectedly or during peak usage hours, so we set about defining a way to protect the customer from themselves using the functionality of the agent exec and the job object available at the time of 3.1 development. 
+
+
+First a little background... 
+
+
+The agent exec polls the server to run any job objects with a next invocation date less than the current system date. The next_innvocation_date is an attribute of the job object. So, if a server is down awhile, then upon server startup there will be a "backlog" of jobs and they will all launch when the server starts up. A job was scheduled to run at midnight, but the server was down because the laptop was turned off, then will run when the server starts up. 
+
+
+So, the first thing we did was default the time consuming jobs to run during night hours (by setting the time accordingly in the next invocation attribute). Secondly we designed the window_interval argument as a "application level" solution which is in all the tools. 
+
+
+The window_interval defines the time period before and after the next invocation date that a job can run. For example, the dmclean job has a window of 120 (measured in minutes) and is defaulted to run at 11:00 PM hrs. So unless you change the window_interval argument you can only run this job from 9:00 PM to 1:00 AM. 
+
+
+We do more safety measures by only setting the low-overhead jobs in the active state. These three jobs are the Content Warning, Database Space Warning and State of the Docbase. However, if your system has been down for awhile such as overnight, then they will launch simultaneously when the server starts since the window_interval is defaulted to 120. 
+
+
+So when you run dmclean job during the day the window_interval setting combined with the next_innvocation_date prevents you. The best way is to increase the window_interval to be a large number such as 720. 
+
+
+So, this is what I would recommend: 
+
+
+1) If you launch Documentum live in front of customers, then keep all jobs inactive including the three we default to active in the install. This will speed up the server startup. However, the Database Space Warning and the Content Warning tools can be your best friend so run them routinely. The reports also demo nice. 
+
+
+NOTE: The reports are text documents in the /System cabinet (in System administration/Reports folder I think) -jkk 
+
+
+2) Set the window interval to the admin jobs you run frequently (I am assuming dmclean is one) to 720. Then when you run it on demand, the job will not kick back and tell you it can't run outside its time window. 
+
+
+NOTE: The window interval is one entry in a repeating attribute list. To edit the value, keep double-clicking on it and eventually you'll have a window for editing the value. This behavior is how Workspace supports editing of repeating attribute values. -jkk 
+
+
+3) At any time you can change the window interval, active/inactive state 
+
+or any other argument for all the jobs. If your logged in as a 
+
+superuser, you will see a "Job Manager" menu item in the Administration 
+
+window. Double click the job and change as you would any attribute 
+
+setting. 
+
+
+3) You can run any job on-demand by checking the box on the job dialog. 
+
+You do NOT have to make it active first. For example, with dmclean, set 
+
+the window_interval to 720, keep inactive and then run it when you need 
+
+to by setting the box in the Schedule tab of the job.

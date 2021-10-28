@@ -1,0 +1,23 @@
+
+esg103948
+
+How to increase Java heap size in BEA Weblogic method server?
+
+
+
+Set to any value depend on how much RAM hardware has... For example, if you want to set it to 1GB, modify these files. 
+  
+1. \Documentum\bea9.2\domains\DctmDomain\startMethodServer.cmd 
+  
+set USER_MEM_ARGS=-Xms1024m -Xmx1024m -XX:MaxPermSize=256m -Xrs 
+  
+2. \Documentum\bea9.2\domains\DctmDomain\serviceConfig\MethodServer\conf\wrapper.conf 
+  
+# Initial Java Heap Size (in MB)
+wrapper.java.initmemory=1024 
+  
+# Maximum Java Heap Size (in MB)
+wrapper.java.maxmemory=1024 
+  
+And restart the JMS instance. 
+

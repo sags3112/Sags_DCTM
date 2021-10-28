@@ -1,0 +1,75 @@
+
+esg90541
+
+Symptoms:
+
+
+You are getting OutOfMemoryError errors in the Java Method Server (on Windows).
+
+
+
+Cause:
+
+
+Java Method Server service is actually an Apache Tomcat which serves requests for method executions through the method exposed in it.
+
+
+
+Apache Tomcat is a Java application, therefore it runs inside a Java Virtual Machine (JVM). An OutOfMemoryError is thrown by Java whenever it runs out of memory for new objects (this memory region is called 'heap').
+
+
+
+Resolution:
+
+
+The maximum heap size for a Java Virtual Machine is defined when starting it. It cannot be changed while the Java Virtual Machine is running.
+
+
+
+The maximum heap size is usually set using Java command line parameters. However, since Java Method Server runs as a service, we need to configure how the service is launched, so it can start the JVM properly.
+
+
+
+This can be achieved in two ways:
+
+
+
+1) Using the Apache Service Configuration tool:
+
+1.1) Navigate to the directory: C:\Program Files\Documentum\tomcat\5.0.28\bin (assuming you are using the default directories).
+
+1.2) Run the tool: tomcat5w.exe
+
+1.3) Click on the Java tab
+
+1.4) Modify the 'Initial Memory Pool' and 'Maximum Memory Pool' values (i.e. from 256 to 512 MB).
+
+1.5) Click Apply
+
+1.6) Restart the Java Method Server
+
+If the tomcat5w.exe tool is not available, here is another way of altering this values:
+
+
+
+2) Using the registry editor:
+
+2.1) Open the registry editor (Start > Run > "regedit")
+
+2.2) Navigate to the registry key: HKEY_LOCAL_MACHINE\SOFTWARE\Apache Software Foundation\Procrun 2.0\DmJavaMethodServer\Parameters\Java
+
+2.3) Modify the values for JvmMs and JvmMx
+
+2.4) Restart the Java Method Server service
+
+Other Tips:
+
+
+
+1) If you need to increase the maximum memory size up to a high value, it might happen that the Java Method Server is suffering a memory leak. Therefore, increasing the maximum heap size will only delay the problem, but not solve it.
+
+
+
+2) There is a command line tool (tomcat5.exe) to alter the JvmMs and JvmMx values. However, bugs have been reported on Tomcat version 5.0.28, so be aware it might not work. 
+
+

@@ -1,0 +1,24 @@
+esg106237 
+Symptoms
+
+User account gets locked, even after the install owner has been properly changed following the steps in the Installation Guide.  
+
+
+
+Cause
+
+The account was locked by applications on JBoss, since the username of ACS still contained the old install owner name.  This information is missing at the steps to change the install owner in the Install Guide.
+
+
+
+Resolution
+
+Check the file acs.properties file located at location: 
+
+ C:\Documentum\jboss4.2.0\server\DctmServer_MethodServer\deploy\acs.ear\APP-INF\classes\config.
+
+If it still contains the old install owner, then change it to the new install owner.
+
+
+
+From now on you should not see any account lock issues in the docbase log.

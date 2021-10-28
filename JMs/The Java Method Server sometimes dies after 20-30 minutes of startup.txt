@@ -1,0 +1,43 @@
+esg114830
+
+The Java Method Server sometimes dies after 20-30 minutes of startup. 
+ 
+
+OS windows
+ 
+ 
+The JBOSS JMS on  Windows 2008 R2 (64-bit)-based Content Server D65 SP3 installation shuts down on a regular basis about every 20-30 mins. It appears to start ok -- although it does show the following message:
+
+
+warUrl=.../deploy/dfs.ear/ucf.war/
+2010-05-17 10:36:51,260 INFO  [org.jboss.deployment.EARDeployer] Started J2EE application: file:/D:/Documentum/jboss4.2.0/server/DctmServer_MethodServer/deploy/dfs.ear/
+2010-05-17 10:36:51,463 INFO  [org.jboss.system.server.Server] JBoss (MX MicroKernel) [4.2.0.GA_CP01 (build: SVNTag=JBPAPP_4_2_0_GA_CP01 date=200709131706)] Started in 54s:860ms
+2010-05-17 10:55:58,640 INFO  [org.jboss.system.server.Server] Shutting down the server, blockingShutdown: false
+2010-05-17 10:55:58,640 INFO  [org.jboss.system.server.Server] Server exit(0) called
+2010-05-17 10:55:58,656 INFO  [org.jboss.system.server.Server] Runtime shutdown hook called, forceHalt: true
+2010-05-17 10:55:58,656 INFO  [org.jboss.system.server.Server] JBoss SHUTDOWN: Undeploying all packages
+2010-05-17 10:55:58,671 INFO  [org.jboss.web.tomcat.service.TomcatDeployer] undeploy, ctxPath=/services/ucf-1264424021889, warUrl=.../deploy/dfs.ear/ucf.war/
+
+ 
+
+Cause
+
+"It appears that the Content server was  installed on D: drive, but the dctmServerStatus.bat expects them to be in C: drive.  
+
+ 
+
+Resolution
+
+"It appears that the CS is installed on D: drive, but the dctmServerStatus.bat expects them to be in C: drive.  
+
+If you modify the dctmServerStatus.bat so that the paths are correct, the problem should go way.
+
+ 
+
+"C:/Program Files/Documentum/Shared/dfc.jar";"C:/Program Files/Documentum/Shared/aspectjrt.jar";"C:/Documentum/jboss4.2.0/DctmUtils/DctmUtils.jar"
+
+ 
+
+=> "D:/Program Files/Documentum/Shared/dfc.jar";" D:/Program Files/Documentum/Shared/aspectjrt.jar";" D:/Documentum/jboss4.2.0/DctmUtils/DctmUtils.jar"
+ 
+ 

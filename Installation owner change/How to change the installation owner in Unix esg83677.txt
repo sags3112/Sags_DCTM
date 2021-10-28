@@ -1,0 +1,46 @@
+How do I change the Installation Owner in UNIX?
+
+based on esg14879 but that was for pre-5.3 Content Server.
+
+
+** INTERNAL ONLY ** 
+
+
+Please ensure that you have a full back up before making any changes. 
+
+
+Stop the DocBase and the DocBroker 
+
+
+If changing the Installation Owner you need to go into: 
+
+The top level of the directory 
+
+
+$DM_HOME and change the owner for all files and directories owned by the Installation Owner and change to the New User. 
+
+
+For example: 
+
+
+find . -user dmadmin1 -print |xargs chown dmadmin2 
+
+
+dmadmin1 is the installation owner 
+
+dmadmin2 is the new installation owner 
+
+
+
+You then need to do the same for the rest of the $DOCUMENTUM directories (usually DM_HOME is $DOCUMENTUM/product…) BUT there is a caveat, the messy part is in the $DOCUMENTUM/dba directory.  You must NOT change the owner of the files in that directory owned by root (their permissions must not change either).   You should record those files’ permissions and ownership and not change them if possible (if you do by accident then change them back to what you recorded).
+./dm_check_password
+./dm_secure_writer
+./dm_assume_user
+./dm_change_password.local
+./dm_change_password.yp
+This is not supported. 
+
+
+** INTERNAL ONLY **  
+ 
+ 

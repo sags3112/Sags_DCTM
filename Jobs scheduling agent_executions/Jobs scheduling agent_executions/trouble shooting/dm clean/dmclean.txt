@@ -1,0 +1,15 @@
+esg15816
+
+
+How can I remove some orphan objects that dmClean doesn't remove?
+
+
+Sometimes the dmClean job report shows that some content objects are removed, but if you query the dmr_content table, the objects are still there. In order to remove those objects you need to run the following queries: 
+
+
+select r_object_id, parent_count, parent_id from dmr_content 
+
+where any parent_id is not NULL and parent_count = 0 
+
+
+If this query returns any value, this object won't be removed by dmClean. You need to change the value of the parent_id attribute to NULL, and then run the dmClean job again. This time 

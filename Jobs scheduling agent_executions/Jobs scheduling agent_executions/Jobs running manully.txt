@@ -1,0 +1,23 @@
+API:
+
+
+apply,c,NULL,DO_METHOD,METHOD,S,dm_LogPurge,ARGUMENTS,S,'-cutoff_days 30'
+
+DQL
+
+EXECUTE do_method WITH method = 'dm_LogPurge', arguments = '-cutoff_days 30'
+
+
+API:
+
+apply,c,NULL,DO_METHOD,METHOD,S,dm_ConsistencyChecker
+
+DQL
+
+EXECUTE do_method WITH method = 'dm_ConsistencyChecker'
+
+CMD
+
+dmbasic -f%DM_HOME%/install/admin/ consistency_checker.ebs
+-e Entry_Point -- <repository name> <superuser ID>
+<superuser password>

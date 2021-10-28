@@ -1,0 +1,152 @@
+Golajana, Sagar [7:54 PM]: 
+tony
+any idea 
+DM_METHOD_E_NO_JMS_AVAILABLE2
+Qiu, Tony [7:58 PM]: 
+yes
+that means, not avaialble JMS
+run following command to check
+ API> apply,c,NULL,DUMP_JMS_CONFIG_LIST
+...
+q0
+API> next,c,q0
+...
+OK
+API> dump,c,q0
+Golajana, Sagar [7:59 PM]: 
+only result if you say select count (*) from dm_jms_config
+Qiu, Tony [8:02 PM]: 
+above dql query only show dm_jms_config object
+does not mean it is running
+Golajana, Sagar [8:02 PM]: 
+ya
+Qiu, Tony [8:02 PM]: 
+that API will list all live jms server
+Golajana, Sagar [8:02 PM]: 
+i just ran dql
+and it shows only 1
+Qiu, Tony [8:03 PM]: 
+ok
+Golajana, Sagar [8:03 PM]: 
+and same sql shows 1
+and tested web url
+jms is wrking fine
+he is having 1 jms and 1 docbase and 1 CS
+recently upgraded from cs 66 to 6.7 
+api shows only 1
+Qiu, Tony [8:04 PM]: 
+can you run followin API
+API> apply,c,NULL,DUMP_JMS_CONFIG_LIST
+...
+q0
+API> next,c,q0
+...
+OK
+API> dump,c,q0
+return any running jms server
+Golajana, Sagar [8:05 PM]: 
+ok
+		API> apply,c,NULL,DUMP_JMS_CONFIG_LIST
+
+...
+
+q0
+
+API> next,c,q0 ...
+
+...
+
+OK
+
+API> dump,c,q0
+
+...
+
+USER ATTRIBUTES
+
+
+
+jms_list_last_refreshed : Wed May 30 16:55:47 2012
+
+incr_wait_time_on_failure : 30
+
+max_wait_time_on_failure : 3600
+
+current_jms_index : -1
+
+jms_config_id [0]: 0801bacc80ef4b14
+
+jms_config_name [0]: JMS itsus013:12080 for JNJDOCS.JNJDOCS
+
+server_config_id [0]: 3d01bacc80ef2910
+
+server_config_name [0]: JNJDOCS
+
+jms_to_cs_proximity [0]: 1
+
+is_disabled_in_docbase [0]: F
+
+is_marked_dead_in_cache [0]: F
+
+intended_purpose [0]: DM_JMS_PURPOSE_FOR_FAIL_OVER
+
+last_failure_time [0]: N/A
+
+next_retry_time [0]: N/A
+
+failure_count [0]: 0
+
+
+
+SYSTEM ATTRIBUTES
+
+
+
+
+
+APPLICATION ATTRIBUTES
+
+
+
+
+
+INTERNAL ATTRIBUTES 
+From DA Associated CS is null
+i think he needs to associate to CS
+Qiu, Tony [8:08 PM]: 
+it is running
+Golajana, Sagar [8:08 PM]: 
+yaa
+JMS is up
+he gets error from DA
+whn he first time login
+and second it will be success
+no error
+Qiu, Tony [8:09 PM]: 
+it always occurs when ct logon first time
+Golajana, Sagar [8:09 PM]: 
+ok
+yaa
+but second time no error
+Qiu, Tony [8:10 PM]: 
+it seem that dm_jms_config did not config properly
+the screenshot you send to me
+there is no associated content server
+Golajana, Sagar [8:10 PM]: 
+ya
+told him to associate
+Qiu, Tony [8:10 PM]: 
+you need to assoicated jms to CS
+Golajana, Sagar [8:10 PM]: 
+i said
+already
+Qiu, Tony [8:11 PM]: 
+please do so, otherwise, JMS server will have issue to attach JMS to CS
+Golajana, Sagar [8:12 PM]: 
+ok sir
+will do now
+thanks alot
+Qiu, Tony [8:18 PM]: 
+sr
+Golajana, Sagar [8:23 PM]: 
+48125062

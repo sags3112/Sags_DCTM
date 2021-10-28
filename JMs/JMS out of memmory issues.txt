@@ -1,0 +1,36 @@
+Content Server 6.5 SP2, 6.5 SP1
+
+esg108759 
+
+
+
+Symptoms
+
+You want to debug the jms for out of memory issue or you want to tune the jms jvm.
+
+
+
+Cause
+
+$DOCUMENTUM_SHARED/jboss4.2.0/server/startMethodServer.sh give it only 256m of ram to the JMS. This sometime is not enough.
+
+
+
+Resolution
+
+
+
+edit $DOCUMENTUM_SHARED/jboss4.2.0/server/startMethodServer.sh in unix or %DOCUMENTUM_SHARED%/jboss4.2.0/server/startMethodServer.cmd and modified it to do this:
+-Xms1024m -Xmx2048m -XX:MaxPermSize=512m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+HeapDumpOnOutOfMemoryError -XX:+HeapDumpOnCtrlBreak"
+
+
+
+-Xms1024m -Xmx2048m - give it at start 1024m and max 2048m of ram
+
+-XX:MaxPermSize=512m  - give it perm gen of of 512m
+
+-XX:+PrintGCDetails -XX:+PrintGCTimeStamps  - this print out valuable garage collection details.
+
+-XX:+HeapDumpOnOutOfMemoryError - this output a useful stack dump if heap memory is exhausted, useful for debug out of memory error.
+
+-XX:+HeapDumpOnCtrlBreak - this sent a control break signal to the jvm to generate a heap dump, useful for debug out of memory error as well. This might be a little tricky on windows services.

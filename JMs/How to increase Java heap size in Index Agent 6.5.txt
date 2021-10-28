@@ -1,0 +1,52 @@
+esg106287 
+
+
+Symptoms
+
+Following error in IndexAgent#.log
+java.lang.OutOfMemoryError: Java heap space
+
+
+
+Cause
+
+Index Agent process is running out of Java heap size.
+
+
+
+Resolution
+
+Windows:
+-Stop the Index Agent service
+-Backup wrapper.conf in Documentum\jboss4.2.0\server\serviceConfig\IndexAgent#\conf
+-Edit wrapper.conf
+wrapper.java.initmemory=1024
+wrapper.java.maxmemory=1024
+-Restart the Index Agent service, start it from login.jsp page
+-If it fails with the same error, increase the maxmemory to 2GB and try again
+wrapper.java.initmemory=1024
+wrapper.java.maxmemory=2048
+
+(option 2)
+
+-Stop the Index Agent service
+-Backup startIndexAgent#.cmd file in Documentum\jboss4.2.0\server
+-Edit startIndexAgent#.cmd file:
+set USER_MEM_ARGS=-Xms1024m -Xmx1024m -XXermSize=64m -XX:MaxPermSize=512m -Xss256k -XX:+DisableExplicitGC -Xrs
+-Run startIndexAgent#.cmd file in Documentum\jboss4.2.0\server, start it from login.jsp page
+(* keep the command prompt from the startIndexAgent#.cmd file open)
+-If it fails with the same error, increase the maxmemory to 2GB and try again
+set USER_MEM_ARGS=-Xms1024m -Xmx2048m -XXermSize=64m -XX:MaxPermSize=512m -Xss256k -XX:+DisableExplicitGC -Xrs
+(* if Index Agent is started from cmd file, you have to close the command prompt window to kill java.exe process)
+
+UNIX:
+
+-Stop the Index Agent process
+-Backup wrapper.conf in $DOCUMENTUM_SHARED/jboss4.2.0/server/serviceConfig/IndexAgent#/conf
+-Edit wrapper.conf
+wrapper.java.initmemory=1024
+wrapper.java.maxmemory=1024
+-Restart the Index Agent process, start it from login.jsp page
+-If it fails with the same error, increase the maxmemory to 2GB and try again
+wrapper.java.initmemory=1024
+wrapper.java.maxmemory=2048

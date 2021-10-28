@@ -1,0 +1,23 @@
+
+esg18219 
+
+What could cause all the jobs to fail with DM_SESSION_E_START_FAIL and DM_SESSION_E_AUTH_FAIL in the docbase log  with missing job reports ?
+
+
+Check the environment settings the account in question. 
+
+
+Notice if the account is using the environment variable $DOCUMENTUM. If the user does not have the correct environment variables the jobs will not run correctly. 
+
+
+RESOLUTION: 
+
+
+1) Create the environment by reviewing the eContent Server Installation Guide and Release Notes. 
+
+2) Stop and Restart the docbase. 
+
+3) Start a job. 
+
+
+The errors should not exist.

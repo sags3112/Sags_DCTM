@@ -1,0 +1,62 @@
+esg104173 
+
+
+How to add en_GB locale to repository
+
+Symptoms
+
+You are seeing some locale error message, such as "[DM_QUERY2_E_INVALID_LOCALE_SETTING]" and "The session_locale setting of 'en_GB' in the sessionconfig object is not a valid locale in the docbase".
+
+
+
+Cause
+
+This issue is caused by the WDK application default locale setting. 
+
+For example, user changed the default locale from en_US to en_GB for an English version of WDK application due to displaying the right format of date time. 
+
+As there is no data dictionary for the certain locale and the application hits error when user perform a locale sensitive operation.
+
+
+
+Resolution
+
+The following is the steps you need to take for adding en_GB to the repository.
+
+
+
+1. Prepare the data dictionary information.
+
+• Go to the $DOCUMENTUM\product\<version>\bin directory.
+• Copy the data_dictionary_en.txt file and rename it as data_dictionary_en_GB.txt.
+• Edit data_dictionary_en_GB.txt
+
+          Change the LOCALE statement to LOCALE = en_GB.
+• Modify the data dictionary initialisation file $DOCUMENTUM\dba\config\<repository_name>\data_dictionary.ini 
+
+         Add the en_GB locale file to the [NLS_FILES] section;
+
+                eg. add  data_dictionary_en_GB.txt
+
+
+
+
+
+2. Populate en_GB Data Dictionary
+• Go to the $DOCUMENTUM\product\<version>\bin directory.
+• Enter the following command line at the operating system prompt:
+
+dmbasic -f dd_populate.ebs -e Entry_Point -- <repository_name> <username> <password> <ini_filename>
+
+
+
+ini_filename is the name of the initialization file that contains the data files. This can be a full path specification or only the file name. If you include just the file name, the file must be in the same directory as the population script.
+
+eg.
+
+dmbasic -f dd_populate.ebs -e Entry_Point -- <repository_name> <username> <password> C:\Documentum\dba\config\<docbase>\data_dictionary.ini
+
+
+
+3. Then run the data dictionary publishing job 
+  From API>publish_dd,c,en_GB

@@ -1,0 +1,67 @@
+
+Migrate_Content method  listed in Documentum Administrator does not work for moving content to one filestore to another despite the fact  the result code is 0 in DA.  A check of the target filestore filesystem shows no content was moved. However DQL work
+
+This is a bug 107024, which has been logged against Documentum Administrator 5.3 and not fixed in 53sp1 too
+
+
+
+When using the method in Documentum Administrator which is located under Jobs / Administrative Methods, the method exit status is 0 however a check of the filesystem where the target filestore stores content shows no files from a directory ls -l or dir *.* OS command. 
+
+
+The problem then has two issues, the method exit status is wrong and the files are not moved
+
+These two examples migrate a single content file, represented by the content object 
+
+0600000272ac100d: 
+
+
+1) EXECUTE migrate_content FOR 0600000272ac100d WITH target_store='filestore_02'
+
+2) dmAPIGet("apply,s0,0600000272ac100d,MIGRATE_CONTENT,TARGET_STORE,S,filestore_02") 
+
+
+
+
+The next two examples migrate all the content from filestore_01 to engr_filestore: 
+
+1) 
+
+EXECUTE migrate_contentWITH source_store='filestore_01',
+
+target_store='engr_filestore',batch_size=100, 
+
+log_file='C:\temp\migration.log' 
+
+
+2) 
+
+dmAPIGet("apply,s0,NULL,MIGRATE_CONTENT,
+
+SOURCE_STORE,S,filestore_01,
+
+TARGET_STORE,S,engr_filestore,BATCH_SIZE,I,100, 
+
+LOG_FILE,S,C:\temp\migration.log 
+
+
+
+The final two examples use a DQL predicate to select the content to migrate. The query uses content size to select the content. 
+
+
+1) 
+
+EXECUTE migrate_content WITH target_store='engr_filestore', 
+
+query='content_size>1000',max_migrate_count=1000, 
+
+batch_size=100,log_file='C:\temp\migration.log' 
+
+2) 
+
+dmAPIGet("apply,s0,NULL,MIGRATE_CONTENT, 
+
+TARGET_STORE,S,engr_filestore, 
+
+QUERY,S,content_size>1000,MAX_MIGRATE_COUNT,I,1000 
+
+BATCH_SIZE,I,100,LOG_FILE,S,C:\temp\migration.log
