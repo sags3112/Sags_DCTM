@@ -1,0 +1,28 @@
+D6 new in webtop
+
+right click
+reomved checkboxes
+double clck
+
+Shift & Control Click
+Keyboard Shortcuts
+Auto Complete
+URL Addressability
+Better Bread crumbing
+Change view to a more traditional OS experience 
+Thumbnail, list, and detail view
+Replace classic and streamline
+
+****************
+
+Presets:
+
+Limit the selections or actions available for a given user, location, or object type Constrains, focuses, and tailors the user experience. It Can help to configure Webtop down from a general-purpose Documentum client to a more domain-specific or task-focused client
+
+To create presets:
+The Presets and Webtop DocApps must be installed .Users must be assigned to the dmc_wdk_presets_coordinator role in order to create and edit presets in Webtop
+
+Why we use Presets and advantage:
+
+
+

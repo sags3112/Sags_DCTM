@@ -1,0 +1,3 @@
+Neeed to disable pooling by making value as false  at web.xml
+
+path : c:\tomact\conf\web.xml
