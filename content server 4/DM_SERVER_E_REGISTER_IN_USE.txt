@@ -1,0 +1,21 @@
+esg14272
+What to do when you get [DM_SERVER_E_REGISTER_IN_USE]?
+
+
+What to do if you get the following in the docbase log when trying to start the docbase. 
+
+Wed Aug 22 15:05:40 2001 752653 [DM_SERVER_E_REGISTER_IN_USE]error: "The server failed to register itself as there is already a server on port (8521). Error (5 
+15) Service name already in use. errno: 125, message: Address already in use. 
+
+Here is what you can check for: 
+
+Check after the shutdown completes for any documentum processes 
+
+ps -ef | grep documentum or agent_exec 
+
+If there are no processes running try to run ipcs to check if there are any 
+semaphores or shared memory segments which are owned by dmadmin. 
+
+Try to remove these with ipcrm -s ipcrm -m. 
+
+If there are no shared memory and semaphores that need to be removed and there no other Documentum process running, try changing the port number in the Services file for the Docbase. The $DOCUMENTUM/dba/config/<docbase name>/ server.ini file shows the Service that the Docbase is using. 

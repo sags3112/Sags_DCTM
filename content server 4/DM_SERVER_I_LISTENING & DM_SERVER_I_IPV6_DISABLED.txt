@@ -1,0 +1,26 @@
+You may see the error in docbase logs:
+
+on Nov 23 14:05:57 2009 891449 [DM_SERVER_I_LISTENING]info:  "The server is listening on network address (Service Name: dmsdev, Host Name: irmsrv14 :V4 IP)"
+Mon Nov 23 14:05:57 2009 891836 [DM_SERVER_I_IPV6_DISABLED]info:  "The server can not listen on IPv6 address because an IPv4 address is specified in the server.ini (host property) file or not able to resolve the IPV6 address for the host(irmsrv14)"
+Mon Nov 23 14:05:57 2009 893107 [DM_SERVER_I_LISTENING]info:  "The server is listening on network address (Service Name: dmsdev_s, Host Name: irmsrv14 :V4 IP)"
+Mon Nov 23 14:05:57 2009 893663 [DM_SERVER_I_IPV6_DISABLED]info:  "The server can not listen on IPv6 address because an IPv4 address is specified in the server.ini (host property) file or not able to resolve the IPV6 address for the host(irmsrv14)"
+
+
+
+Though all the configurations are fine and cleints are able to access it: still you may see the warnings in the logs
+
+
+Resolution:
+
+
+This is just an info message and will not impact any services. IPv6 is next generation internet protocol and is successor to IPv4. IPv6 is for larger address space (128 bit) as against 32 bit of IPv4. Customer should check with system admin to configure IPv6 for host machine OS if supported. IPV6 provides flexibility in allocation addresses and routing traffic and eliminates the primary need for network address translation 
+
+ If ct do want to see IPV6 warning message, you can disable it , add following entry to server.ini
+    ip_mode=V4ONLY
+
+
+or
+
+
+Try it in all upper case.
+IP_MODE=V4ONLY

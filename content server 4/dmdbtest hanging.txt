@@ -1,0 +1,21 @@
+esg96103
+
+Symptoms
+
+During an upgrade in CS 5.3.x dmdbtest may hang
+
+
+
+Cause
+
+$ORACLE_HOME/network/admin/sqlnet.ora NAMES.NO_PERSISTENT_RESOURCES  parameter is incorrectly set.
+
+
+
+Resolution
+
+dmdbtest hanging during upgrade
+
+During an upgrade in CS 5.3.x dmdbtest may hang. In case that happens you should start troubleshooting the issue by looking at the $ORACLE_HOME/network/admin/sqlnet.ora file.
+
+More than likely the parameter NAMES.NO_PERSISTENT_RESOURCES is set to TRUE. So, make sure that the parameter NAMES.NO_PERSISTENT_RESOURCES is set to FALSE. Subsequent run of the of dmdbtest, after this setting has been changed, will be successful. 

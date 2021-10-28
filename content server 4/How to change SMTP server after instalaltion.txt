@@ -1,0 +1,46 @@
+esg92611 
+
+
+Symptoms
+
+Need to change SMTP server after install.
+
+
+
+Cause
+
+Content Server Installation Guide 5.3 SP1 page 43 has the following details on SMTP Server setting:
+-----------------------------------
+SMTP server on Windows
+ 
+On Windows hosts, Content Server must be able to connect to an SMTP mail server. The
+SMTP server can be an SMTP server located on your network or it can be the SMTP
+server provided with Windows 2000. During the installation or upgrade procedure, you
+must provide the name or IP address of the computer hosting the SMTP server.
+ 
+If a valid SMTP server host name is not available during installation, supply an invalid
+host name and the installation will finish. Do not leave the field blank. After installation,
+add a valid SMTP server host name to the smtp_server attribute of the server config
+object. Reinitialize the server after you update the server config object.
+-----------------------------------
+
+
+
+Resolution
+
+You can change smtp_server attribute in one of the following ways: 
+ 
+1. DA
+Navigate to DA > Administration > Configuration > Server
+    Click "i" icon
+    Change the SMTP Server
+    Click OK
+Restart docbase
+ 
+
+2. API
+API> retrieve,c,dm_server_config
+API> set,c,l,smtp_server
+SET> <new smtp server>
+API>save,c,l
+Then restart docbase

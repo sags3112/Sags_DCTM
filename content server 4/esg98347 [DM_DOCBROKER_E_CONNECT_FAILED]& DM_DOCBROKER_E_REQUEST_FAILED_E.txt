@@ -1,0 +1,65 @@
+
+
+ 
+ [DM_DOCBROKER_E_NETWORK_ERROR]error: "An error occured performing a network operation: (Unknown error code 104 (_nl_error_ = 0)). Network specific error: (Extended network error: 0)."
+ 
+ [DM_DOCBROKER_E_CONNECT_FAILED]error: "Unable to connect to DocBroker. Clients please check your dmcl.ini file for a correct host. Server please check your server.ini or target attributes in server config. Network address: (INET_ADDR: family: 2, port: 1489, host:  hostname.domain.com (192.129.252.170, 4281fcaa))."
+ 
+ [DM_DOCBROKER_E_REQUEST_FAILED_E]error: "The Docbroker request failed."
+ 
+ [DM_DOCBROKER_E_NETWORK_ERROR]error: "An error occured performing a network operation: (Unknown error code 104 (_nl_error_ = 0)). Network specific error: (Extended network error: 0)."
+ 
+ [DM_DOCBROKER_E_CONNECT_FAILED]error: "Unable to connect to DocBroker. Clients please check your dmcl.ini file for a correct host. Server please check your server.ini or target attributes in server config. Network address: (INET_ADDR: family: 2, port: 1489, host: hostname.domain.com (192.129.252.170, 4281fcaa))."
+ 
+ [DM_DOCBROKER_E_REQUEST_FAILED_E]error: "The Docbroker request failed."
+ 
+Also we can see same message on Content server log as below:
+ 
+Tue Jun 24 12:57:04 2008 214902 [DM_DOCBROKER_E_NETWORK_ERROR]error:  "An error occured performing a network operation: ((104) Error receiving message).  Network specific error: ( errno: 104, message: Connection reset by peer)."
+Tue Jun 24 12:57:04 2008 215783 [DM_DOCBROKER_E_CONNECT_FAILED]error:  "Unable to connect to DocBroker. Clients please check your dmcl.ini file for a correct host.  Server please check your server.ini or target attributes in server config.  Network address: (INET_ADDR: family: 2, port: 1489, host: sac-p-hostname.domain.com (192.129.252.169, 4281fca9))."
+
+
+
+ esg98347  How to troubleshoot docbroker request failure?
+
+
+
+
+
+
+Cause
+
+
+Possibly a third party application, such as ProActiveNet agent, generated 20 connections to docbroker that never release and blocks all docbroker connection ports.
+
+
+
+Resolution
+
+1) Run netstat -b | grep 1489 to find out if a third party application generated 20 connections to the docbroker that did not release. 
+
+- run netstat -an | grep 1489
+
+- calculate how many docbroker connections .
+
+- if there are 20 established docbroker connections, this indicates that there are no more available docbroker connections and no new connections will be accepted by docbroker. 
+
+
+
+2) Locating the application that is creating the 20 docbroker connections that aren't released. 
+
+- run the following command: 
+
+      unix command :   netstat -p | grep 1489
+
+      window command : netstat -b | grep 1489
+
+The return results will identify which  process creates a docbroker connection, and Identify why the process did not close the connection to the docbroker.
+
+  
+
+3) Once the application is identified, you can shutdown the problematical application, and  then you will see the docbroker connections will go back to normal stage. 
+
+
+
+4) meanwhile, you need to do other research and  find out why that application did not release docbroker connections.

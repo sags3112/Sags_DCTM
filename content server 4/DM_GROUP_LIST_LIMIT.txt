@@ -1,0 +1,60 @@
+
+esg90761 
+
+
+slow query when a user belongs to large number of groups
+
+
+Symptoms
+
+
+select i_all_users_names from dm_group where group_name = 'all users'
+
+The query takes more than 3 minutes to execute, sometimes as much as 9 minutes. 
+
+Cause
+
+
+
+A user belongs more than 250 groups and previous versions of 5.3sp4 cannot handle this
+
+
+
+Resolution
+
+
+Content Server to 5.3 SP4 or higher,  - there is a new setting DM_GROUP_LIST_LIMIT which is documented in the 5.3 SP5 Content Server release notes, when a user is a member of a large number of groups.  For example, suppose a user who is a member of 500 groups executes the following query:
+
+ 
+
+SELECT r_object_id FROM dm_document WHERE object_name LIKE ’%dm%’
+
+ 
+
+When this query is translated to SQL, a subquery is needed to perform the ACL checking because the default group list limit for queries is 250. The performance is slower due to the need for the subquery. The new environment variable is introduced to reset the default group list limit.
+
+ 
+
+**************
+
+
+
+New environment variable for query performance
+The DM_GROUP_LIST_LIMIT variable is introduced to resolve bug 118025. This bug
+reported a query performance problem with SQL Server when a user is a member of a
+large number of groups.
+For example, suppose a user who is a member of 500 groups executes the following
+query:
+SELECT r_object_id FROM dm_document WHERE object_name LIKE ’%dm%’
+When this query is translated to SQL, a subquery is needed to perform the ACL checking
+because the default group list limit for queries is 250. The performance is slower due
+to the need for the subquery. The new environment variable is introduced to reset the
+default group list limit.
+To set the variable on Windows, set the variable as a system variable. Use a no-sign
+integer as the value.
+On UNIX platforms, add the following line to the dm_start_repository script after the
+first line of the script:
+DM_GROUP_LIST_LIMIT=value export DM_GROUP_LIST_LIMIT
+where value is the number to which you wish to reset the limit.
+You must restart Content Server after setting the variable.
+Content

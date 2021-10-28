@@ -1,0 +1,55 @@
+Does anybody knows what Content Server checks during the following steps, that could lead to this DM_SESSION_E_INIT_FAILURE1?
+
+The SQL trace is not helpful since it finishes the queries, and the error comes after that. I would rather like to know what kind of error could lead to a DM_SESSION_E_INIT_FAILURE1. What does the Content Server check or try to do?
+
+...
+Fri Dec 21 16:18:36 2007 065000 [DM_SESSION_I_INIT_BEGIN]info:  "Initialize dmAggrDomain."
+Fri Dec 21 16:18:36 2007 096000 [DM_SESSION_I_INIT_BEGIN]info:  "Initialize dmMountPoint."
+Fri Dec 21 16:18:36 2007 159000 [DM_SESSION_I_INIT_BEGIN]info:  "Initialize dmLocation."
+Fri Dec 21 16:18:36 2007 237000 [DM_SESSION_I_INIT_BEGIN]info:  "Initialize Server Configuration."
+Fri Dec 21 16:18:36 2007 377000 [DM_SESSION_E_INIT_FAILURE1]error:  "Failure to complete Server Configuration initialization."
+Fri Dec 21 16:18:36 2007 377000 [DM_SERVER_I_START_ID]info:  "Docbase MOHO was not successfully opened. Docbase id: (84946)"
+
+***************************************************************************************************
+
+Here’s a potential 5.3 to 6.x upgrade issue you might be seeing as more customers upgrade.
+
+Esg96192:
+
+Symptoms
+
+After doing an upgrade from 5.3 to 6.0, you may see the following error in the docbase log on docbase startup:
+
+Why am I seeing an error like "[DM_SESSION_E_INIT_FAILURE1]error:  "Failure to complete Distributed Content Digital Signatures initialization."" when starting the docbase after an upgrade from 5.3 to 6.0"
+
+Note that even if you've already performed the steps from esg74708, you may have to perform the steps below for 6.0 now as well.
+
+Cause
+
+This is likely seen in an environment that has been cloned or copied from another environment.  The ACS crypto key is referencing the cloned system.
+
+Resolution
+
+The following in SQLPlus will remove the public/private ACS keys.  Please ensure you have a backup before you make any directly modifications against the database in SQLPlus.
+
+Stop your repository.
+
+1)delete dm_sysobject_s where r_object_id = 
+(select r_object_id from dm_public_key_certificate_s where key_type = 1);
+
+2) delete dm_sysobject_r where r_object_id = 
+(select r_object_id from dm_public_key_certificate_s where key_type = 1);
+ 
+
+3) delete dm_public_key_certificate_s where key_type = 1;
+
+4) delete dm_sysobject_s where r_object_id = 
+(select r_object_id from dm_cryptographic_key_s where key_type = 1);
+
+5) delete dm_sysobject_r where r_object_id = 
+(select r_object_id from dm_cryptographic_key_s where key_type = 1); 
+
+6) delete dm_cryptographic_key_s where key_type = 1;
+
+
+Restart your repository.  The error should no longer appear in the docbase log and the docbase should start up normally now

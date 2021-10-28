@@ -1,0 +1,41 @@
+
+esg92773 
+
+CS 5.3/sp2/sp3/sp4
+
+
+If the customer has problem with a docbasic method executed multiple times in parallel and the method contains DFC call and  use_method_server” . and encountered the error “[DM_API_E_BADSESS]error:  "Bad session specifier s0, try using current."” error in the DMCL trace. 
+
+ 
+
+Session gets lost.
+
+
+
+
+
+Cause
+
+The occurrences are random. Although they mostly occur on the function call "adoptDMCLSession", they can also occur at random locations where we use the session object
+
+
+
+Resolution Workaround: 
+
+Disable connection pooling in dmcl.ini" 
+
+Shutdown the client application (application server) and ideally also the method server process and the Content Server itself 
+
+
+
+Get the files from customer:
+
+on server:
+
+server.ini
+dmcl.ini and 
+
+
+on Appserver the 
+
+dmcl.ini

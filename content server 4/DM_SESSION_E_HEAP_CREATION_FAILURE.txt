@@ -1,0 +1,57 @@
+
+
+esg96544
+
+Symptoms
+
+(DM_SESSION_E_HEAP_CREATION_FAILURE) . 
+
+ 
+Investigation:  
+
+1. Enable Windows perfmon logs for the "documentum" process and recreate the error. In the perfmon logs then verify the number of threads and the virtual memory at various points. The peak virtual memory should be about 2GB . 
+
+ 
+
+2. Verify that the amount of physical memory & virtual memory configured is at least 4GB for the system. 
+
+ 
+
+3. The memory used per thread should be less than 100MB. The exact number varies by the server version and the profile of the load on the system.  
+
+ 
+
+Resoultion: 
+
+1.       Increase the  session_heap_size entry in the server.ini. 
+2.       2. Increase the virtual memory and 
+3.        If  Windows Please  add /3GB parameter in the Boot.ini file to enable application memory tuning:   in the boot.ini  add 
+       [boot loader]
+       timeout=30
+       default=multi(0)disk(0)rdisk(0)partition(2)\WINNT
+       [operating systems]
+        multi(0)disk(0)rdisk(0)partition(2)\WINNT="""""" /3GB
+
+
+
+     4. Restart the  content server.
+
+
+
+If there are some more applications on the Windows host the O/S can run out of memory using the parameter /3GB.
+
+To make sure to prevent freezing the machine you need to follow:
+
+
+
+You can view low PTEs directly by using Performance Monitor. Look for the object Free System Page Table Entries under the memory counter. Values that are less than 7,000 are too low. Therefore, the /userva switch must be adjusted down to increase this value.
+
+
+Action:
+============= 
+
+- Settings in boot.ini: /3GB /USERVA=2900 /PAE 
+- Reboot of server, note  „Free System Page Table Entries“ after starting all applications
+--> If above 24.000, ok to run the server productive.
+
+--> If below 24,000, then lower /USERVA to e.g: 2800, reboot and reckeck  „Free System Page Table Entries"

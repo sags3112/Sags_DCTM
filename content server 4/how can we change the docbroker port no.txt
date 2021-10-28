@@ -1,0 +1,30 @@
+esg44452 
+
+How can I change the docbroker port number for a Unix box? 
+
+Here are the steps: 
+
+1) shutdown the docbroker and docbase 
+From the $DOCUMENTUM/dba directory: 
+
+$ dm_shutdown_<docbase name> 
+$ dm_stop_Docbroker 
+
+2) As docbase owner edit the docbroker dm_launch_<host name> ts525o 
+
+Change the port in the script: 
+
+./dmdocbroker -port 1489 $@ >> $tlogfile 2>&1 & 
+
+We do not store the port for the docbroker in the services file 
+
+3) Change the 'port' parameter underneath [DOCBROKER_PROJECTION_TARGET] section in 
+
+the $DOCUMENTUM/dba/config/<docbase name>/server.ini file 
+
+4) change the 'port' parameter in $DOCUMENTUM/dmcl.ini file (UNIX) 
+
+5) restart the docbase & docbroker 
+
+$ dm_launch_Docbroker 
+$ dm_start_<docbase name>

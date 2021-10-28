@@ -1,0 +1,8 @@
+esg26957 
+
+How can I make sure that a fresh installation of Documentum products takes place?
+
+If you have a situation where the Documentum installer complains that there are remnants of a newer Documentum version already installed on the system, re-name the vpd.properties file. This file is usually in C:\Winnt, but a quick search of the filesystem should be able to find it. 
+
+
+Before re-naming the file, make sure that you have uninstalled the Documentum Products and removed the corresponding directories (usually C:\Documentum and C:\Program Files\Documentum). 

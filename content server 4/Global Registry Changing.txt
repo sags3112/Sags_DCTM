@@ -1,0 +1,30 @@
+esg101590 
+
+Symptoms
+
+Since Documentum version 6.0 every installation must have a Docbase designated as a Global Registry. Some customers would like to be able to change the Global Registry in their environments. The steps included below have been used by other customers to change the Global Registry. As always, we recommend that this be tested in a test or development environment first.
+
+
+
+Resolution
+
+The designation of a different repository as a Global Registry was as follows:
+
+Create 6.5 repository newGlobalReg.
+
+Execute:
+
+dmbasic -f globalReg_53_copy.ebs -e EntryPoint -- oldGlobalReg oldGlobalRegUser oldGlobalRegPass newGlobalReg newGlobalRegUser newGlobalRegPass tempFileName
+
+Note: It is necessary to temporarily give the dm_bof_registry of oldGlobalReg superuser-privilege to make a dump.
+Change each dfc.property to point to newGlobalReg.
+Delete oldGlobalReg.
+Import the following internal docapps (with Composer Headless 6.5 or equivalent tool):
+$DM_HOME/install/DARsInternal/AdminAccess.dar
+$DM_HOME/install/DARsInternal/ResourceAgentsRegistry.dar
+
+Note: This is required because we had one customer perform these steps but who received an error. In that instance, they were required to check to see if the docapps were installed on the Global Registry Content Server by checking the following folder:
+$DM_HOME/install/DARsInternal/ResourceAgentsRegistry.dar 
+$DM_HOME/install/DARsInternal/AdminAccess.dar 
+If the dar files are not there, then you have to install/re-install the docapps.
+To check/test, that the Global Registry is ok, you can start the DA application with the Global egistry pointing to this docbase. You should not see any errors if everything is fine.

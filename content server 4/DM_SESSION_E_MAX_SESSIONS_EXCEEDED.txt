@@ -1,0 +1,10 @@
+
+
+
+
+DM_SESSION_E_MAX_SESSIONS_EXCEEDED:"Maximum number of server sessions exceeded"
+
+The below settings exist for server.ini & dfc.properties:
+
+concurrent_sessions = 1000
+dfc.session.max_count=1000

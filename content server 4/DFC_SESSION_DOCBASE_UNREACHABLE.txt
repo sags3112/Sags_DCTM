@@ -1,0 +1,44 @@
+esg96662 
+
+Symptoms
+
+Application Server with Document Administrator (DA) is deployed on a separate machine from Content Server.
+
+On the AppServer machine, all the steps indicated in DA 6 SP1 Deployment Guide were followed:
+- Disable tag reuse in Apache Tomcat in the web.xml file of the Tomcat /conf directory (page 23)
+- Enabling DFC connections to repositories (page 40)
+
+We checked that the port (1489) indicated in dfc.properties is open in firewall.
+
+However,after deploying the .WAR file on Apache Tomcat 5.5.25 we receive the following message in the log file:  
+
+2:51:31,379 ERROR Trace
+ Preference repository is not available, reason: repository credentials are not valid
+com.documentum.web.env.PreferenceRepository$DisabledException: repository credentials are not valid
+at com.documentum.web.env.PreferenceRepository.initialize(PreferenceRepository.java:248)
+...
+Caused by: DfServiceException:: THREAD: Thread-1; MSG: [DFC_SESSION_DOCBASE_UNREACHABLE] Docbase "testdocbase" is unreachable; ERRORCODE: ff; NEXT: null
+at com.documentum.fc.client.impl.connection.docbase.DocbaseConnection.establishNewRpcClient(DocbaseConnection.java:228)
+
+
+
+
+Cause
+
+Port defined in \Winnt\System32\drivers\etc\services file must also be open in firewall.
+
+
+
+Resolution
+
+Open the ports on the firewall for Content Server defined in: 
+Windows: \Winnt\System32\drivers\etc\services.ini 
+Unix: /etc/services
+ 
+For example, if these entries exist for the primary Content Server:
+ testdocbase 10000/tcp # repository service caruso
+ testdocbase_s 10001/tcp # repository secure service
+
+Then open ports 10000 and 10001.
+
+Restart the docbase.

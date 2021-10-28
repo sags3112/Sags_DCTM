@@ -1,0 +1,89 @@
+While upgrading 65 to 6.7:
+
+[DM_SESSION_E_AUTH_PLUGIN_LOAD_ERROR]error:  "Failed to load Authentication Plugin /opt/app/documentum/dba/auth/dm_netegrity_auth.so. Reason: Generic Status: Library Open failed, Library Name: /opt/app/documentum/dba/auth/dm_netegrity_auth.so, Platform Status: ld.so.1: documentum: fatal: libsmagentapi.so: open failed: No such file or directory."
+
+
+
+
+Symptoms
+
+The following issue happens after setting up Documentum Netegrity Authentication Plugin ('dm_netegrity').
+
+You may see the below error in the docbase logfile when docbase is starting:
+
+
+
+Thu Oct 01 16:29:19 2009 027000 [DM_SESSION_E_AUTH_PLUGIN_LOAD_ERROR]error:  "Failed to load Authentication Plugin D:\Documentum\dba\auth\gTestISU001\dm_netegrity_auth.dll. Reason: Generic Status: Library Open failed, Library Name: D:\Documentum\dba\auth\gTestISU001\dm_netegrity_auth.dll, Platform Status: System was out of memory, executable file was corrupt, or relocations were invalid." 
+
+
+
+Cause
+
+In 6.5 the steps to setup Netegrity changed slightly.
+
+
+
+Resolution
+
+Compared to 5.3, in 6.5 you will need to copy also smerrlog.dll from C:\Documentum\product\6.5\install\external_apps\authplugins\netegrity into %DM_HOME%\bin apart from SMAgentAPI.dll, as described in the README.txt. 
+
+In 5.3 you don't need smerrlog.dll.
+
+
+
+Steps in 6.5 SP2 from the Netegrity README.txt file:
+
+
+
+1. Copy the file 
+     dm_netegrity_auth.dll (Windows) or 
+     dm_netegrity_auth.so (Solaris / AIX / Linux) or
+     dm_netegrity_auth.sl (HPUX) 
+   to the authentication plugin location (usually $DOCUMENTUM/dba/auth).
+
+2. Copy the file dm_netegrity_auth.ini to the same location. 
+   Edit this file and set all mandatory parameters.
+
+3. Copy the supporting shared libraries:
+     Windows: copy the files smagentapi.dll & smerrlog.dll to %DM_HOME%\bin
+     Solaris/AIX: copy the files libsmagentapi.so & libsmerrlog.so to $DM_HOME/bin
+     Linux: copy the files libsmagentapi.so, libsmcommonutil.so & libsmerrlog.so to $DM_HOME/bin
+     HPUX: copy the files libsmagentapi.sl & libsmerrlog.sl to $DM_HOME/bin
+
+4. Restart the docbase. You can verify that the plugin has been loaded by looking in the main server log file ($DOCUMENTUM/dba/log/<docbase>.log) for an entry starting with "[DM_SESSION_I_AUTH_PLUGIN_LOADED]info".
+
+This completes the server-side installation. Refer to the WDK documentation to setup the application server side.
+
+
+
+
+
+
+*********************
+
+esg74923
+
+Why might I see DM_SESSION_E_AUTH_PLUGIN_AUTH_FAIL errors in the repository log when the Netegrity plugin loads and can valid users? 
+
+
+This particular error can be seen sometimes in a repository log file as illustrated below: 
+
+
+Mon Mar 13 17:46:17 2006 222075 [DM_SESSION_I_INIT_BEGIN]info: "Initialize Authentication Plugins." 
+
+Mon Mar 13 17:46:17 2006 253783 [DM_SESSION_I_AUTH_PLUGIN_LOADED]info: "Loaded Authentication Plugin with code 'dm_netegrity' (/opt/local/dmadmin/v5.3/dba/auth/dm_netegrity_auth.so)." 
+
+Mon Mar 13 17:46:17 2006 261173 [DM_SESSION_E_AUTH_PLUGIN_LOAD_ERROR]error: "Failed to load Authentication Plugin /opt/local/dmadmin/v5.3/dba/auth/libsmagentapi.so. Reason: Plugin verification failed. Could not find dm_plugin_version API in the plugin." 
+
+Mon Mar 13 17:46:17 2006 281656 [DM_SERVER_I_START_SERVER]info: "Docbase test_docbase opened" 
+
+
+
+
+
+This happens when the libsmagentapi.so library is incorrectly installed. This library should be installed under $DM_HOME/bin. If encountering this problem then the library has also been installed under $DOCUMENTUM/dba/auth. 
+
+
+
+To resolve this delete the copy under $DOCUMENTUM/dba/auth and ensure that it is properly installed under $DM_HOME/bin.
+

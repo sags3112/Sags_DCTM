@@ -1,0 +1,13 @@
+Hi Everyone
+ 
+Does anyone know how to stop AS4SAP SP1 cache files at c:\winnt\sytem32\dmcl\, Due to this customer is running out of disc space in C drive and eventually causing the performance problems. Is this the expected behavior? I raised this query to SAP engineering, they conformed that this is server side problem. I am not really sure why application server is caching files and not deleting them when the work is completed.
+ 
+Is there any way or work around to permanently stop AS4SAP cache any files at c:\winnt\sytem32\dmcl\ location or can I set client_cache_size=0 so that none of the objects gets cached. Does CS have any performance problem if we change that attribute to zero. 
+
+
+Solution:
+
+Sumanth,
+you may change that location by adding the following parameter in the dmcl.ini file.
+ 
+local_path=<your desire path> 

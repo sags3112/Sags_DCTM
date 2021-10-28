@@ -1,0 +1,13 @@
+How to decommission a remote side from a distribution environment
+
+1.	ContentReplication job is supposed to replicate content among all sites includes Primary and remote. As long as the job successfully run, the same content should be accessible from each site locally.  
+
+2.	We will recommend customer first to shutdown the remote site which they want to decommission for monitoring purpose before remove it from distribution store. 
+
+3.	To remove remote site from a distribution environment, the following objects need to be destroyed as well:
+•	Remove far store which is related to decommission site from each server config objects.  
+•	Remove filestore component related to the remote site from distribution store. 
+•	Destroy dm_store and dm_location object related to the remote site. 
+•	Remove dm_network_location_map object which related to the remote site. 
+•	Follow CS installation guide to un-install RCS from host. 
+

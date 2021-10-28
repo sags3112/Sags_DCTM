@@ -1,0 +1,94 @@
+Do we have any kind of docbase monitoring tools, or any 3rd party ones that we know of
+
+ie..
+
+Monitor as to if the docbase is up or down…there are so many processes spawned off that it’s not possible to just watch the first one and the customer wants to know how to watch all of them….or basically to tell him if the docbase is down
+
+Ans:
+
+BMP Patrol, Tivioli.... but these monitoring programs we don't certify, and have been known to inhibit the docbase operations....
+ 
+What the customer should he asking is what programs are out there can monitor any process which provides real time runtime status ,provides event monitoroing tools like email and paging, provides realtime intervention and statistical history and is SNMP compliant with messaging.
+
+
+2nd Question:
+
+
+
+
+
+Hello, 
+
+ 
+
+I am looking for a kind of Documentum Monitoring Tool; something similar like the Windows "Perfmon":
+
+ 
+
+Something that is capable of recording the number of open DFC Sessions, concurrent users etc. 
+
+That tool should be able to collect the data over a defined period - and make it available for further analysis.
+
+ 
+
+Do you know or even have such a tool? Either from us - or may be from one of our partners?
+
+ 
+
+Thanks for your assistance!
+
+
+
+Answer:
+
+
+dm_monitor_sessions.ebs 
+ 
+--Radjesh
+
+
+
+--------------------------------------------------------------------------------
+From: Beier, Axel 
+Sent: vrijdag 19 september 2008 14:13
+To: Ramautar, Radjesh
+Cc: EMEA_Enterprise_Support (Documentum); DSE-NA-DCTM; Server_Support (Documentum)
+Subject: RE: Looking for a Documentum Monitoring Tool - Recording Number of Open Sessions - Concurrent Users etc.
+
+
+Hello Radjesh,
+
+ 
+
+Thank you very much for your feedback. DM_Developer is a great resource.
+
+http://www.dmdeveloper.com/
+
+ 
+
+However I am not 100% sure about the tool you are thinking of:
+
+What is the name of that script please? Thanks again!
+
+ 
+
+Best regards,
+
+Axel
+
+ 
+
+
+--------------------------------------------------------------------------------
+
+From: Ramautar, Radjesh 
+Sent: Freitag, 19. September 2008 09:06
+To: Beier, Axel; EMEA_Enterprise_Support (Documentum); DSE-NA-DCTM; Server_Support (Documentum)
+Subject: RE: Looking for a Documentum Monitoring Tool - Recording Number of Open Sessions - Concurrent Users etc.
+
+ 
+
+look on the dmdevelopper site, there is a docbasic script which you can download, modify to your needs.
+
+--Radjesh
+

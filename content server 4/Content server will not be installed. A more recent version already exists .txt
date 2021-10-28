@@ -1,0 +1,9 @@
+esg73315 
+
+For some reason, I try to uninstall and reinstall Content Server and keep getting the below error: 
+
+
+"Content server will not be installed. A more recent version already exists " 
+
+
+There could be previous version(s) of Content Server installed on the CS machine. Make sure the vpd.properties file doesn't exist in C:\Windows directory or anywhere on the Content Server machine before you reinstall Content Server.

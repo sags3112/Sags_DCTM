@@ -1,0 +1,40 @@
+Symptoms
+
+Failed to configure Docbase and found the following error message in the docbase logfile:
+
+
+
+Mon Nov 05 16:06:13 2007 926000 [DM_TYPE_MGR_E_EXISTING_TABLE]error:  "Cannot create type dm_mount_point because the table dm_mount_point_s unexpectedly already exists in the database and the server 'preserve_existing_types' flag is enabled.  To complete this operation the table must first be manually dropped or the server flag disabled."
+Mon Nov 05 16:06:13 2007 946000 [DM_MTPT_F_INIT3]fatal:  "The dm_mount_point object subsystem could not be initialized.  A failure was detected attempting to store the dm_mount_point type."
+Mon Nov 05 16:06:13 2007 946000 [DM_SESSION_E_INIT_FAILURE1]error:  "Failure to complete dmMountPoint initialization."
+Mon Nov 05 16:06:13 2007 946000 [DM_SERVER_I_START_ID]info:  "Docbase dev_doc16 was not successfully opened. Docbase id: (105216)"
+
+
+
+
+Cause
+
+In this case, table dm_mount_point_s exists (it could be different a table name, but you can use the same steps by just changing the table name).
+
+
+
+Resolution
+
+Remove the 'preserve_existing_types' flag from the server startup options or set it to false in server.ini and restart the server. 
+
+ 
+
+If the above suggestion is not helpful, you may need to drop the table manually in SQL Server since Docbase can start when the tables are dropped.  You can make a backup before by creating table dm_mount_point _s2 as select * from dm_mount_point _s.  Follow the steps detailed below:
+
+- Stop the docbase in Server Manager.
+- Back up the view:
+   SQL> create view dm_mount_point_sv2 as select * from dm_mount_point_sv;
+   SQL> create view dm_mount_point_rp2 as select * from dm_mount_point_rp;
+   SQL> create view dm_mount_point_sp2 as select * from dm_mount_point_sp;
+- Drop the view:
+   SQL> drop view dm_mount_point_sv;
+   SQL> drop view dm_mount_point_rp;
+   SQL> drop view dm_mount_point_sp;
+- Back up the table:  SQL> create table dm_mount_point_s2 as select * from dm_mount_point_s;
+- Drop the table:  SQL> drop table dm_mount_point_s;
+- Start the Docbase in Server Manager.

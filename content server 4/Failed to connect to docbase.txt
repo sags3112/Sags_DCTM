@@ -1,0 +1,150 @@
+Fail to connect to the Docbase.
+
+What this Troubleshooting guide addresses is the common isue seen during upgrades where you recieve the bahaviour where the installer program seems to 'hang' or 'freeze' when attempting to connect to the docbase.
+
+The critical information and logs to provide are the docbase log, setupError.log and <installation owner>.serverconfigurator.log
+
+You would see something similar to the following entries in the setupError.log and serverconfigurator.log - both are located in %DM_HOME/install
+
+setupError.log:
+
+	Sat Jul 29 17:07:06 EDT 2006: LAST_BEAN_INVOKED=DiWAServerTestDocbaseConnection
+	Sat Jul 29 17:07:06 EDT 2006: LAST_BEAN_ID_INVOKED=TestUpgradeDocbaseConnection
+	Sat Jul 29 17:07:06 EDT 2006: LAST_BEAN_STATUS=FAIL
+	Sat Jul 29 17:07:06 EDT 2006: LAST_BEAN_MESSAGE=An exception occured in: DiWAServerTestDocbaseConnection, beanID: 	TestUpgradeDocbaseConnection - Error  - Fail to connect to the repository. 
+
+Please read error log E:\Southern\Apps\Documentum\product\5.3\install\dmadmin.ServerConfigurator.log for more information.
+
+Serverconfigurator.log:
+
+	Install user decided to set projected connection broker host to X
+	Install user decided to set projected connection broker port to 1489.
+	Install user decided to test connection broker information.
+	Install user decided to set SSL connection mode to native
+	The installer will update dmcl.ini file.
+	The installer will update server.ini file for the repository.
+	The installer will create data_dictionary.ini for the repository.
+	The installer will obtain database information of X
+	The installer will update webcache.ini file for the repository.
+	The installer will validate database connection information in the server.ini file.
+	The installer will update Windows registry for repository X
+	The installer will modify service for repository X
+	The installer will start service for repository X
+	Waiting for repository X to start up.
+	Fail to connect to the repository.
+
+Here are some common causes and resultions to this problem:
+
+1.) Database  - Make sure the database version is supported for your Content server version.
+
+Note -  If the database and content server are on two different hosts then make sure the database server version (on  the database host) and the database client (on the CS host) is exactly the same version.
+
+2.) If you see the following in the docbase log:
+
+ [DM_SESSION_E_AUTH_FAIL]error: "Authentication failed for user dmadmin with docbase dev."  when logging into a Docbase on UNIX?
+
+Make sure the dm_root_task program was run.  Check the $DOCUMENTUM/dba directory:
+
+Make sure the permissions on the following files are set to this:
+
+	-rwsr-s---   1 root     dmadmins   36848 Sep  5 10:07 dm_assume_user*
+	-rwsr-s---   1 root     dmadmins   59196 Sep  5 10:07 dm_change_password.local*
+	-rwsr-s---   1 root     dmadmins   61020 Sep  5 10:07 dm_change_password.yp*
+	-rwsr-s---   1 root     dmadmins   14472 Sep  5 10:07 dm_check_password*
+	-rwsr-s---   1 root     dmadmins   28836 Sep  5 10:07 dm_secure_writer*
+
+3.) Is this docbase one that was created from a docbase clone? Could be problem with the export/import
+
+4.) Crypto errors in the log - then copy the aek.key file. - see #9 below
+
+5.) Is the docbroker running?
+
+6.) If your database is Oracle check the following: 
+
+	From $ORACLE_HOME/network/admin
+
+	A.) Check the TNSNAMES is using the correct host name - compare this to the server.ini database_conn
+
+	B.) Check sqlnet.ora and make sure that it has TNSNAMES first and not ONAMES
+
+7.) Are there 2 NIC cards on this host?  Does the server.ini have the parameter added under root_secure_validator
+
+host = <IP of  the host>  - make sure this IP is for the correct NIC
+
+If not - then add it.
+
+
+8.)  If you see the following in the setupError.log
+
+	WARNING: Parameter install_owner is defined twice. 
+	WARNING: Using command line value (dmadmin) rather than 
+	WARNING: init file value (Dmadmin). 
+
+	The above was due to the user having a different case. 
+
+	You may see the following in the setupError.log: 
+	LAST_BEAN_MESSAGE=An exception occured in: DiWAServerTestDocbaseConnection, beanID:TestUpgradeDocbaseConnection - Error - Fail to connect to the Docbase. Please read error log 		D:\DOCUMENTUM\product\5.2\install\dmadmin.ServerConfigurator.log for more information. 
+	STACK_TRACE=com.documentum.install.shared.common.error.DiException: Fail to connect to the Docbase. 
+
+This will be caused if the following users are not consistent: 
+
+	1) The user defined on the user machine 
+	2) the install_owner in the server.ini
+	3) the logged on user on the machine (logon to the machine as Dmadmin is possible (windows is not case sensitive) althought the 		account is called dmadmin) Trusted login fails then as documentum is case sensitive.
+	4) DM_DMADMIN_USER in the registry
+
+9.)  In the docbase log do you see the following:  Failure to complete CRYPTO OBJECT initialization.
+
+For a 5.2.5 docbase  - use SN 27127
+
+For a 5.3 docbase - use  SN 74708
+
+SN- 74708
+	1. Shutdown all the docbase on the target server 
+
+	2. Backup the database 
+
+	3. Rename the aek.key file located under Documentum\dba\secure
+
+	4. From SQL on the database: 
+		update dm_docbase_config_s set i_crypto_key = ' ';   <--- single space
+	5. From SQL: 
+		select r_object_id from dmi_vstamp_s where i_application = 'dm_docbase_config_crypto_key_init'; 
+	6. From SQL: 
+		delete from dmi_object_type where r_object_id = 'returned r_object_id from above'; 
+		commit; 
+	7. From SQL: 
+		delete from dmi_vstamp_s where r_object_id = 'returned r_object_id from step above' 
+		commit; 
+	8. From SQL: 
+		update dm_docbase_config_s set i_ticket_crypto_key = ' ' (note empty space - one space between the quotes) 
+		commit; 
+	9. From SQL: 
+		select r_object_id from dmi_vstamp_s where i_application = 'dm_docbase_config_ticket_crypto_key_init'; 
+		 
+	10. From SQL: 
+		delete from dmi_object_type where r_object_id = '<id from above>' 
+		commit; 
+	11. From SQL: 
+		delete from dmi_vstamp_s where r_object_id = 'id from above' 
+		commit; 
+	12. Run this file from $DM_HOME/bin: dm_crypto_create 
+
+	13. To re-encrypt the dbpasswd.txt file do the following:
+
+		open the dbpasswd.txt file from Documentum\dba\config\<docbasename>
+		clear the document
+		add your password (only the password)
+		cd $DM_HOME/bin 
+
+		run:
+		%> dm_encrypt_password -docbase <docbase name> -rdbms -encrypt <database password> 
+
+	14. You need to do all modification on the database for each docbase - BUT NOT step 11 - just do step 11 ONCE. 
+	15. Startup the docbases.  
+
+
+
+
+
+

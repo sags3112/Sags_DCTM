@@ -1,0 +1,151 @@
+esg104491 
+
+Checpoints of CS installation to MSCS environment
+
+
+When you install Documentum Content Server to Microsoft Cluster Services (MSCS) environment, there are several check points in addition to the description of CS Installation guide.
+
+
+
+Before installation of CS, you should check the binding order of NICs on each MSCS box.
+Because documentum process and docbroker process will assign their ports to the "first" NIC.
+In case of Windows 2003, you can see and configure the binding order of NICs according to the following step.
+
+
+
+1. Open "Network Connections" from Control Panel.
+2. Select "Advanced"->"Advanced Settings…" from toolbar.
+3. Make sure the NIC that is used by Documentum processes is top of "Connections:" listbox on "Adapters and Bindings" tab.
+
+
+
+
+
+During installing CS into secondly MSCS box, you will see the error message for dmbasic in the configuration wizard and also see the following message in docbase.log. This is known issue, please see SN esg23276.
+
+------
+Mon Aug 04 13:40:58 2003 657000 [DM_SESSION_I_INIT_BEGIN]info: "Initialize Crypto Objects." 
+Mon Aug 04 13:40:58 2003 657000 [DM_SESSION_E_INIT_FAILURE1]error: "Failure to complete Crypto Objects initialization." 
+Mon Aug 04 13:40:58 2003 667000 [DM_SERVER_I_START_ID]info: "Docbase 52test was not successfully opened. Docbase id: (154849)"
+------
+
+
+
+
+
+After completing installation of CS into both MSCS boxes, you will see the following error message in docbase.log on primary MSCS box.
+This is known issue, please see SN esg103473
+
+------
+Thu Feb 19 13:24:30 2009 [ERROR] [AGENTEXEC 335964] Detected during program initialization: Command Failed: connect,globalstore2.globalstore2,dmadmin2,'',,,try_native_first, status: 0, with error message [DM_SESSION_E_CLIENT_AUTHENTICATION_FAILURE]error:  "Failed to authenticate client.  Please check server log for more detail."
+. 
+Thu Feb 19 13:24:30 2009 [FATAL ERROR] [AGENTEXEC 335964] Detected during program initialization: Command Failed: connect,globalstore2.globalstore2,dmadmin2,'',,,try_native_first, status: 0, with error message
+------
+
+
+
+
+
+After creating a Repository in both MSCS boxes and finish "Configuring the connection brokers" section, please copy dfc.properties file of primary MSCS box to secondly MSCS box. Because there is not global registry settings in dfc.properties of secondly MSCS box.
+
+
+
+
+
+To access ACS via virtual host, you have to update hostname in acs_base_url of dm_acs_config object to virtual host name by using DA or iapi. If there is available DA, you can update it according to the following step. 
+
+
+
+1. Login to DA.
+2. Open "Administration"->"Distributed Content Configuration"->"ACS Servers".
+3. Select ACS server config object and open properties.
+4. Edit "ACS Server Connections" to virtual host.
+
+
+
+
+
+Copy acs.properties of primary MSCS box to secondly MSCS box and modify hostname of "jms.url" to physical hostname of secondly MSCS box. But don't change the value of "repository.acsconfig" because the value of "reposigory.acsconfig" is the name of "dm_acs_config" object that is stored in the repository.
+
+---------
+#Mon Mar 16 13:41:47 JST 2009
+bocs.pulling.interval=10
+repository.password=
+primary.content.store.quota=1000M
+mode.cachestoreonly=false
+jms.queue.name=jms/acsQueue
+bocs.keystore=
+mode.debug=false
+repository.acsconfig=<Host name of primary MSCS>
+repository.name=<repository name>
+
+bocs.pulling.mode.enabled=
+repository.login=dmadmin
+jms.url=t3\://<Host name of secondly MSCS>\:9080   
+dms.pulling.url=
+primary.content.store.root=C\:\\Documentum\\acsCache
+jms.connection.factory=jms/MethodServerQueueConnectionFactory
+bocs.configuration.name=
+tracing.enabled=false
+jndi.factory=weblogic.jndi.WLInitialContextFactory
+---------
+
+
+
+
+
+After adding docbase and docbroker to MSCS resources, you should add "Documentum Java Method Server" service to MSCS resources and configure it like that the service depends on docbase and docbroker MSCS resources. Then, please make sure that the "Use Network Name for Computer Name" check box is selected. 
+If you don't add Java Method Server service to MSCS resource, it will not be restarted with CS.
+
+
+
+
+
+To verify whether ACS is working properly on MSCS environment, you should check whether the following messages appear in "DctmServer_MethodServer_<hostname>.log". Please be aware these messages will appear several minutes after Java Method Server service becomes online on the Cluster Administrator utility.
+
+--------
+####<2009/03/18 15¿43¿28¿ JST> <Info> <JMX> <W2K3EEJAMSCS00> <DctmServer_MethodServer_W2K3EEJAMSCS2> <[ACTIVE] ExecuteThread: '2' for queue: 'weblogic.kernel.Default (self-tuning)'> <<WLS Kernel>> <> <> <1237358608108> <BEA-149511> <Established JMX Connectivity with the Adminstration Server adminServer at service:jmx:t3://192.168.144.100:7001/jndi/weblogic.management.mbeanservers.domainruntime.> 
+####<2009/03/18 15¿44¿58¿ JST> <Notice> <WebLogicServer> <W2K3EEJAMSCS00> <DctmServer_MethodServer_W2K3EEJAMSCS2> <main> <<WLS Kernel>> <> <> <1237358698264> <BEA-000365> <Server state changed to RUNNING> 
+####<2009/03/18 15¿44¿58¿ JST> <Notice> <WebLogicServer> <W2K3EEJAMSCS00> <DctmServer_MethodServer_W2K3EEJAMSCS2> <main> <<WLS Kernel>> <> <> <1237358698623> <BEA-000360> <Server started in RUNNING mode>
+-------- 
+
+
+
+
+
+You can also verify via a browser whether ACS is running properly. Please try to access to the following URL.
+
+
+
+http://<virtual host>:9080/ACS/servlet/ACS
+
+
+
+If "ACS Server is running" message is shown on the browser, ACS is running.
+
+
+
+To verify whether contents are sent through ACS actually, you should check access log of method server. In CS6.0, you can find it in the following path. 
+
+
+
+<Documentum Home>\bea9.2\domains\DctmDomain\servers\DctmServer_MethodServer_<hostname>\logs\access.log
+
+
+
+When ACS transfers a content, the following log appears. 
+
+
+
+[IP address of client PC] - - [24/4/2009:09:02:22 +0900] "POST /ACS/servlet/ACS HTTP/1.1" 200 170 
+
+
+
+The number in end of log string is bytes of file size of transferred content. When ACS transfers a content, most of files are compressed. So, the number will not match to the actual file size of transferred content. If you want to transfer a specific file format without compression, you should add the format to ucf.server.config.xml on Web Application Server as follows. 
+
+
+
+  <option name="compression.exclusion.formats">
+
+    <value>pdf</value>
+

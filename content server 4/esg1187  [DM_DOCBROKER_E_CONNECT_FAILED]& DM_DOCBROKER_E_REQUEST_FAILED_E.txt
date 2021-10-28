@@ -1,0 +1,30 @@
+
+[DM_DOCBROKER_E_NETWORK_ERROR]error: "An error occured performing a network operation: (112) Error opening connection). Network specific error: (connection refused; server probably not running)."
+
+
+
+Resolution: esg1187 
+
+The reasons for this problem in the past have included these issues: 
+
+
+1. The number of open files for the Unix kernel config are maxed out and therefore the services files can not be opened. Increase the max open files for the kernel, reboot the server and launch the docbroker. 
+
+
+2. /etc/services was a link not a file. Using the truss command on Solaris it showed that the docbroker failed to open /etc/services file. 
+
+
+3. This is a known bug with Solaris 2.5 when you start the docbroker.
+
+
+4. The /etc/services file doesn't contain the dmdocbroker 1489/tcp entry. 
+
+
+5. The dmcl.ini on the server had port=bad_port. 
+
+
+6. Docbroker is not running on this machine. Do a ps -ef | grep 
+
+
+****************
+

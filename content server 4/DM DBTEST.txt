@@ -1,0 +1,5 @@
+
+Syntax: 
+Dmdbtest -docbase_name docbasename -init_file /xxxxxx/dba/config/xxx/server.ini
+example: 
+Dmdbtest -docbase_name tor_mrmaple_d6sp1 -init_file /export/csd6sp1/documentum/dba/config/tor_mrmaple_d6sp1
