@@ -1,0 +1,19 @@
+cs admin guide cs 6.5 
+pg no 259
+
+Moving content ÉOles
+
+Content Server supports three ways to move content files:
+°E MIGRATE_CONTENT administration method
+This method allows you to move one content file or multiple content files.
+MIGRATE_CONTENT method is the recommended way to move multiple content
+files if you do not have a Content Storage Services license and, consequently, cannot
+use a content migration policy.
+°E Content migration policies
+Content migration policies are implemented as jobs. The jobs automate the
+movement of content files from one storage area to another. A content migration
+policy job invokes the MIGRATE_CONTENT method.
+You must have installed Content Server with a Content Storage Services license to
+use content migration policies.
+°E Records migration jobs
+A records migration job moves batches of content files based on criteria you define.

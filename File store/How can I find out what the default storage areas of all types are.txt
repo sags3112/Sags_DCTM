@@ -1,0 +1,29 @@
+
+esg976
+How can I find out what the default storage areas of all types are?
+
+The following select in the underlying RDBMS will give you a listing of types and their associated default storage locations. Note that subtypes of dm_sysobject will go in its default storage location and will not be listed unless you have altered the default storage of the type. 
+
+Oracle: 
+
+sqlplus docbasename 
+
+>select dmi_type_info_s.r_type_name as type_name, dm_store_s.name as 
+default_storage_name 
+from dm_store_s, dmi_type_info_s 
+where dmi_type_info_s.default_storage=dm_store_s.r_object_id; 
+
+Sybase: 
+
+isql -Udocbase username -Ppassword 
+1> use db_solar30s 
+2> go 
+1> select dmi_type_info_s.r_type_name as type_name, dm_store_s.name as 
+default_storage_name from dmi_type_info_s, dm_store_s where 
+dmi_type_info_s.default_storage=dm_store_s.r_object_id 
+2> go 
+
+
+To alter the default storage of a type you can issue the following dql statement: 
+
+alter type <type_name> set default storage '<storage_area_name>' 

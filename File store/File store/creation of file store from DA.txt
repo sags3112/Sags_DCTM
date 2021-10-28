@@ -1,0 +1,68 @@
+Symptom:
+
+How to create a new file store by using Documentum Administrator"
+
+
+
+Solution:
+
+File Store creation comprise of two parts first is creation of file location and second creation and association of file store with file location.
+
+ 
+
+For creating file location through Documentum Administrator kindly follow the following procedure.
+
+ *************** Ist part:
+
+1 Create the folder physically on your content server for file store.
+
+2 Login to your Documentum Administrator instance.
+
+3 Select the Docbase
+
+4 Expand an Administration tab.
+
+5 Select Storage option under administration 
+
+ 
+
+Click on File and select New Location 
+
+Provide the name for your new desired service location
+
+Now Select the file location where you have created the Folder physically to store the Documents.
+
+Leave the option Path type as Directory and security type as publicopen.
+
+Click on OK to create the new location for file store.
+
+ 
+ *************** 2nd part:
+
+Follow the below procedure to create new File Store.
+
+ 
+
+Now select File and click on New file Store option
+
+Give the name for your new file store
+
+Select the Location which you have created just before from Drop down list.
+
+Now Click on OK.
+
+
+
+Clear the cache from server and client
+ 
+
+Run the following API to reinitialize the docbase connection.
+
+
+API>reinit,c
+
+API>flush,c,persistentcache
+
+API>flush,c,persistentobjcache
+
+

@@ -1,0 +1,30 @@
+The following DQL query statements will return information related to the storage of content. 
+
+1) This DQL statement returns the actual file system path for a particular object's content: 
+select file_system_path from dm_location where object_name in 
+(select root from dm_filestore where name in 
+(select a_storage_type from dm_document 
+where r_object_id = '<r_object_id>')) 
+
+2) This DQL statement returns the name of the filestore for a particular object's content: 
+select a_storage_type from dm_sysobject 
+where r_object_id = '<OID>' 
+
+3) This DQL statement estimates how much disk space is used in a particular filestore: 
+select sum(content_size) from dmr_content 
+where storage_id in(select r_object_id 
+from dm_store where name = '<file store name>') 
+
+4) This DQL statement returns the name of the default file store for a particular type, "dm_document" for this example: 
+select name from dm_store where r_object_id 
+in(select default_storage from dmi_type_info 
+where r_type_id in(select r_object_id 
+from dm_type where name = 'dm_document')) 
+
+5) This DQL statement returns the root directory the default file store for a particular type, dm_document for this example: 
+select file_system_path from dm_location 
+where object_name in(select root from dm_filestore 
+where r_object_id in(select default_storage 
+from dmi_type_info where r_type_id 
+in(select r_object_id from dm_type 
+where name = 'dm_document'))) 

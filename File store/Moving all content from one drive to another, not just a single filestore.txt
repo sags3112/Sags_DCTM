@@ -1,0 +1,61 @@
+esg83582 \
+
+Moving all content from one drive to another, not just a single filestore
+
+Symptoms
+
+Customer's hard drive with the content is filling up and needs to move to a new drive.
+
+
+
+It is possible to create a new filestore on another drive (esg83322), but if the customer has any custom types that are hard coded to go to filestores on the full drive then it can become difficult to find them all and change them to the new filestore.
+
+
+
+Cause
+
+Either the drive is filling up, or the customer has a business need to move all the content to another drive.
+
+
+
+Resolution
+
+The dql UPDATE commands are an example with multiple filestores and differing names.  
+
+
+
+Log on as Install Owner for all steps.
+
+
+1. Take the storage area offline.
+
+2. Stop all jobs and methods (make sure nothing is running).
+
+3. Copy the folders and files to the X: drive in the EXACT same structure.
+
+4. Run the following UPDATE commands:
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\thumbnail_storage_01' where "object_name" = 'thumbnail_storage_01'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\content_storage_01' where "object_name" = 'storage_01'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\streaming_storage_01' where "object_name" = 'streaming_storage_01'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\replicate_temp_store' where "object_name" = 'replicate_location'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\replica_content_storage_01' where "object_name" = 'replica_storage_01'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Prod_Storage\documentum\data\store_3' where "object_name" = 'filestore_03_location'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\content_storage_02' where "object_name" = 'storage_02'
+
+dql> update "dm_location" object set "file_system_path" = 'x:\Documentum\data\USADocuOps\content_storage_04' where "object_name" = 'storage_04'
+
+5.  api> reinit,c
+
+6.  Clear the dmcl cache on the server.
+
+7.  Put storage area online.
+
+8.  Restart the docbase
+
+9.  Reenable any jobs.

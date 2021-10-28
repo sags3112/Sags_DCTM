@@ -1,0 +1,26 @@
+
+The question is:
+
+“Regarding, the content migration, how they could set up a filestore that points to a \\server\share$\path location (instead to a drive letter path). And Is it supported to operate content server using content stores pointing to a CIFS server?”
+
+I checked in the documentations for CIFS and found nothing, also checked for creating filestore and didn’t find anything related to this type of paths . Also checked CS-34734 but seems unrelated
+
+
+
+****************
+
+
+
+Responding to your question: it should be fine.
+
+Use this to create:
+How can I create a dm_location and filestore using api?
+http://solutions.emc.com/emcsolutionview.asp?id=esg81134 
+
+Or this other one to modify:
+How to setup a storage object to allow for UNC path
+http://solutions.emc.com/emcsolutionview.asp?id=esg83723
+
+But beware of this other condition:
+Can I install Content server with UNC path?
+http://solutions.emc.com/emcsolutionview.asp?id=esg114596

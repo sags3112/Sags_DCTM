@@ -1,0 +1,116 @@
+10:36 PMGolajana, SagarGood morning
+
+
+10:37 PMDicks, Davidgood morning 
+
+
+10:37 PMGolajana, SagarNeed help for 1 Vm image..
+the size of the C drive is full  Windows Host: 128.222.105.52
+is there any option to increase it
+
+
+10:37 PMDicks, Davidoh, that sounds like east coast IP
+
+
+10:37 PMGolajana, Sagarno idea
+bob gave me
+just 1 gb or 500 mb
+
+
+10:38 PMDicks, Davidwest coast lab IPs are mostly in vLAN 726  10.8.26.xxx
+
+
+10:38 PMGolajana, Sagaris fine to test
+ok
+
+
+10:38 PMDicks, DavidI have to check my notes to see if I have enough access to east coast vm labs... let me check
+
+
+10:38 PMGolajana, Sagarok 
+take ur time if u busy
+
+
+10:40 PMDicks, Davidcannot connect via VSphere client
+
+
+10:41 PMGolajana, Sagarok
+
+
+10:41 PMDicks, Davidyou might ask Tony Qiu, he is the primary contact for that vm lab
+
+
+10:41 PMGolajana, Sagarwil ask old man to do that 
+lol 
+
+
+10:41 PMDicks, Davidhehehe
+are you able to login to the east coast VSphere client?
+let me try another id
+
+
+10:42 PMGolajana, Sagartony out
+no 
+
+
+10:43 PMDicks, David might be possible to bump up image size
+otherwise common issue that files images are extracted installers
+
+
+10:43 PMGolajana, Sagarhmm
+
+
+10:43 PMDicks, Davidand if this is content server, number 1 issue is dm_logpurge is not running 
+
+
+10:44 PMGolajana, Sagarlet me try that
+
+
+10:44 PMDicks, Davidjust about every time I need to test on Solaris I have to clean up the host 
+
+
+10:44 PMGolajana, Sagarhmm
+
+
+10:45 PMDicks, Davidlogpurge really helps for older installs... I've cleared out over 300k logs for single user (dmadmin) for one docbase before.... for windows with what 4k sector size that's a big chunk of drive space
+
+
+10:46 PMGolajana, Sagarrunning it
+
+
+10:47 PMDicks, Davidanother common location for junk you can try to delete
+%USERPROFILE%\Local Settings\Temp
+
+
+10:47 PMGolajana, Sagarok
+
+
+10:47 PMDicks, Davidalso check
+%windir%\Temp
+
+
+10:47 PMGolajana, Sagarok
+
+
+10:48 PMDicks, Davidand sometimes 
+%windir%\PCHEALTH\ERRORREP\UserDumps
+if still desparate for space there are some more tricks like deleting windows OS hot fix uninstallers... that will possibly get you 800MB or so if you windows updates are current
+under %windir%, the uninstallers are all the directories in color prefixed wth '$'
+
+
+10:50 PMGolajana, Sagargot some space now
+3.95 Mb
+
+
+10:50 PMDicks, Davidhehe
+that is all? wow
+
+
+10:50 PMGolajana, Sagarthnks david
+it wrked
+
+
+10:51 PMDicks, Daviddeleting Windows 2003 uninstallers on my desktop would reclaim about 1.1GB 
+
+
+10:53 PMGolajana, Sagarohh

@@ -1,0 +1,8 @@
+Is it possible to move an encrypted filestore to a different machineplatform
+
+
+answer:
+
+Encrypted file is depended on aek.key, private certificate,  and  filestore public cerficate, you cannot migrate to another OS.
+
+You need to migrate encrypted file to non-encrypted filestore file, then you can migrate to new OS>

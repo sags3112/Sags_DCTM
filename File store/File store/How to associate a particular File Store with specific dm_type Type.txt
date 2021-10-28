@@ -1,0 +1,43 @@
+esg93577
+
+Administrator 6.0, 5.3,Content Server 6.0, 5.3
+
+Symptom: How to associate a particular File Store with a specific dm_type Type.
+
+
+
+Solution:
+
+After creating your filestores kindly follow the following procedure if you want to associate an individual filestore with particular dm_type.
+
+ 
+
+( Note : For New filestore creation kindly refer the Support Note esg83322 from Powerlink)
+
+ How to associate a particular File Store with specific dm_type Type
+
+1 Log IN to your Documentum Administrator
+
+2 Select your Docbase
+
+3 Go to Administration
+
+4 Click on Type and search for your particular dm_type as in this example I am going to set default filestore for dm_acl type.
+
+5 After getting the dm_acl type go to View > Properties > Info tab.
+
+6 The Info screen will looks like shown below in diagram.
+
+7 In that you set your Default Storage from drop down list.
+
+8 After selecting new file store click on OK button.
+
+9 Then just run the following API.
+
+ 
+
+API>	
+
+API>flush,c,persistentcache
+
+API>flush,c,persistentobjcache

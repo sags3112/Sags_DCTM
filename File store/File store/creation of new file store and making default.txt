@@ -1,0 +1,69 @@
+Customer needs to add a new filestore that will be the new default one due to the main one running out of space.
+
+http://solutions.emc.com/emcsolutionview.asp?id=esg83322
+
+How to add a new filestore to become the default one:
+
+ 
+
+1) create the new directory
+
+2) create location object
+
+DQL> CREATE "dm_location" OBJECT
+
+DQL> SET "object_name" = 'storage_05',
+
+DQL> SET "file_system_path" = 'x:\documentum\data\<docbase_name>\content_storage_05',
+
+DQL> SET "path_type" = 'directory'
+
+DQL> GO
+
+If this returns a valid r_object_id then it was created correctly. You can verify all your dm_locations if you want:
+
+DQL> select object_name, file_system_path from dm_location
+
+DQL> go
+
+3)
+
+DQL> CREATE "dm_filestore" OBJECT
+
+DQL> SET "name" = 'filestore_05',
+
+DQL> SET "root" = 'storage_05'
+
+DQL> GO
+
+Again, this should return a valid r_object_id.
+
+4)
+
+DQL> ALTER TYPE dm_sysobject SET DEFAULT STORAGE 'filestore_05'
+
+DQL> GO
+
+5) 
+
+API> reinit,c
+
+6) - Stop the docbase and app server of your webtop 
+
+7) - Clean the dmcl cache, search in the Content Server and app server machine for all the dmcl directories and clean them up (see my other dmcl cache clear note)
+
+
+Clear the cache from server and client
+ 
+
+Run the following API to reinitialize the docbase connection.
+
+
+API>reinit,c
+
+API>flush,c,persistentcache
+
+API>flush,c,persistentobjcache
+
+
+8) - Start Docbase and app server

@@ -1,0 +1,11 @@
+2) regarding to duplicate conflict object, you can run following query to get duplicate object which  data_ticket is same
+
+
+
+   a) run following dql query to get duplicatd data_ticket for that two problematical storage , please provide storage_id for those two problematical storage.
+SELECT data_ticket, count(*) FROM dmr_content and storage_id ('xxx_storageid_xxx01','xxxx_storageid_xx02') GROUP BY data_ticket HAVING count(*) > 1 ORDER BY data_ticket
+
+b)  retrieve all conflict objects with following DQL query, 
+     select * from dmr_content where data_ticket = 'ticketid_xxx from above DQL'
+
+c) then you can recover content based on above step2 parent_id.

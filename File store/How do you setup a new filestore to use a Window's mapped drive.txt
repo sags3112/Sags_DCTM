@@ -1,0 +1,24 @@
+
+
+esg125736
+
+How do you setup a new filestore to use a Window's mapped drive
+
+How do you setup a new filestore to use a Window's mapped drive?
+ 
+Resolution
+DA does not currently allow you to use a mapped drive when creating a filestore.  However, there is a workaround to this if you want to use a mapped drive on Windows.
+ 
+Here is what you need to do:
+You need to do this through a UNC mount on Windows. You'll first need to create a shared drive/path and make sure that the installation owner account has full access. Additionally, the installation owner account must be a domain account or this will not work.
+Once you create the shared location, verify that the installation owner account can create objects in this path.
+Then, in Administrator, create a new dm_filestore object, but choose a local path. It helps if you create a temporary path on your local filesystem that uses a similar name/path as your shared location.
+After you do this, you then need to update the file_system_path attribute on the dm_location object for the newly created filestore. The dm_location object is created automatically and will have a name similar to the dm_filestore object you just created. 
+The API will look like the following:
+
+API>fetch,c,<dm_location ID>
+API>set,c,<dm_location ID>,file_system_path
+SET>\\<hostname>\<path>
+API>save,c,<dm_location ID>
+If the save is successful, then you should be done. 
+You can try to create an object on this filestore location now.

@@ -1,0 +1,29 @@
+esg14624
+
+How can I set up file storage from IAPI?
+
+
+
+To set up file storage from IAPI follow the steps below: 
+- Create a directory on your file server like this: 
+(/documentum_software/dmadmin/data/portalp 
+- Launch iapi then connect to your docbase as a super user 
+- from iapi> create,c,dm_location 
+... 
+<return id > 
+- set,c,<return id>,object_name 
+SET> submission_store_location 
+- set,c,<return id>,file_system_path 
+SET> /documentum_software/dmadmin/data/portalp 
+- set,c,<return id>,path_type 
+SET> directory 
+- save,c,<return id> 
+
+- create,c,dm_filestore 
+... 
+<return id> 
+- set,c,<return id>,name 
+SET><your storage name> 
+- set,c,<return id>,root 
+SET><storage area name> 
+- save,c,<return id> 

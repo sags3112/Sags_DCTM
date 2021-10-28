@@ -1,0 +1,67 @@
+1st step
+
+t does not work from DA so follow these steps from IAPI.
+1. Create dm_location.
+2. Create dm_filestore
+3.set default storage of dm_sysobject/dm_document/custome_type to point to dm_store created in step2. This you can do from DA.
+ 
+IApi Commands:
+Create the dm_location object:
+create,c,dm_location
+set,c,l,object_name
+loc_1_NAS
+set,c,l,path_type
+directory
+set,c,l,file_system_path
+//give the path here , check the dm_location object.
+save,c,l
+Create the dm_filestore object.
+create,c,dm_filestore
+set,c,l,name
+store_1_NAS
+set,c,l,root
+store_1_NAS
+set,c,l,crypto_mode
+save,c,l
+
+
+2nd step: Moving ƒOle store storage areas
+
+You can move an entire file store storage area. For example, to reorganize your hardware,
+you may need to move a storage area to a different disk.
+Use the following procedure to move a file store storage area. 
+The procedure describes how to move an entire storage area. It does not describe how to move individual files from one storage area to another.
+
+To move a ƒOle store storage area:
+
+1. Log in to the repository.
+2. Set the storage area offline.
+EXECUTE set_storage_state
+WITH store = 'filestore_name', offline = TRUE
+3. Copy the files in the storage area to the new location.
+On Windows:
+c:>copy /s /e source_directory target_directory
+On UNIX:
+264 EMC Documentum Content Server Version 6.5 Administration Guide
+Content Management
+% cp -r -p source_directory target_directory
+where source_directory is the top-level directory in the current storage area and
+target_directory is the new directory for the storage area. If the target directory does
+not already exist when this command is issued, the command creates it and copies
+the files and subdirectories into it from the source directory.
+If the target directory does exist when this command is issued, the command copies
+the source directory (and all files and subdirectories) into the target directory as a
+subdirectory.
+4. Set the file_system_path property of the dm_location object associated with the file
+store object to point to the new directory for the storage area.
+UPDATE "dm_location" OBJECT
+SET "file_system_path" = new_directory_path
+WHERE "object_name" = location_object_name
+Note: In a file store object, the root property contains the object name of the location
+object associated with the storage area.
+5. Reinitialize the server and make the change visible.
+6. Put the storage area back online:
+EXECUTE set_storage_state
+WITH store = 'filestore_name', offline = FALSE
+You may remove the old storage area if you have no problems retrieving the contents
+of documents from the new storage area.
