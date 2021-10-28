@@ -1,0 +1,6 @@
+
+
+
+To check  count of the dm_queue item
+
+select count(*) from dmi_queue_item where name in ('dm_autorender_win31','dm_mediaserver')

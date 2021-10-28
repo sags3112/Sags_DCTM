@@ -1,0 +1,46 @@
+1st part
+
+
+To automatically create PDF renditions when importing content, you must first
+rich-media enable the particular format, and then edit the register.xml file.
+
+Rich-media enabling formats
+
+To rich-media enable formats:
+
+1. Run the following DQL statement:
+update dm_format object set richmedia_enabled = 1 where name in
+('<format name>')
+
+For example, to rich-media enable Microsoft Excel and Word formats, run the
+following DQL statement:
+update dm_format object set richmedia_enabled = 1 where name in
+('excel8book','msw8')
+
+2nd part 
+
+Activating a PDF rendition on import
+
+After rich-media enabling the formats, you need to modify the register.xml file to activate
+the PDF rendition on import.
+
+To activate the PDF rendition on import:
+
+1. In the repository, browse to System/Media Server/System Profiles and check out
+register.xml
+
+2. Open register.xml in an XML editor.
+
+3. Change the following tag:
+<Format source="sample" target="sample"/>
+to
+<Format source="<Add source format here>" target="<Add
+target format here>"/>
+
+For example, to enable PDF renditions for Microsoft Word documents, your tag
+would look like the following:
+<Format source="msw8" target="msw8"/>
+
+4. Save the file.
+
+5. Check the file into the repository.

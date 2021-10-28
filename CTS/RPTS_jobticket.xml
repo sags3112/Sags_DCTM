@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?AdLibeXpress applanguage='USA' appversion='3.0.0' dtdversion='2.0' ?>
+	<!DOCTYPE JOBS SYSTEM "C:\Program Files\Documentum\CTS\Adlib\Express\DTD\AdlibExpress.dtd"[]>
+<JOBS xmlns:JOB="http://www.adlibsoftware.com">    
+<JOB>        
+<JOB:DOCINPUTS>            
+<JOB:DOCINPUT FILENAME="Test.doc" FOLDER="C:\Temp\"/>        
+</JOB:DOCINPUTS>        
+<JOB:DOCOUTPUTS>            
+<JOB:DOCOUTPUT DOCTYPE="PDF" FILENAME="Test-output.pdf" FOLDER="C:\Temp\"/>        
+</JOB:DOCOUTPUTS>        
+<JOB:SETTINGS>            
+<JOB:NATIVEAPPSETTINGS>                
+		<JOB:MSWORD ALLOWA4LETTERPAPERRESIZE="No" PRINTTYPE="DocumentContent" USEHTMLPARAGRAPHAUTOSPACING="Yes" USEPRINTERMETRICS="Automatic">                    
+		<JOB:MSWORDMARKUPOPTIONS SHOWALLREVIEWERS="Yes" SHOWCOMMENTS="Yes" SHOWFORMATTING="Yes" SHOWINKANNOTATIONS="Yes" SHOWINSERTIONSANDDELETIONS="Yes" VIEWMODE="Final"/>                
+		</JOB:MSWORD> 
+</JOB:NATIVEAPPSETTINGS> 
+<JOB:PDFSETTINGS PDFVERSION="PDFVersion13" RESOLUTION="600"> 
+	<JOB:OPTIMIZE ENABLED="Yes"/> 
+</JOB:PDFSETTINGS> 
+</JOB:SETTINGS> 
+</JOB>
+</JOBS>

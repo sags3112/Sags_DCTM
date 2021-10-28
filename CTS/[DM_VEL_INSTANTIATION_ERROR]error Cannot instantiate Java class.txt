@@ -1,0 +1,26 @@
+ ****** Whn you seee this type of error on cts.log *********
+
+[DM_VEL_INSTANTIATION_ERROR]error Cannot instantiate Java class
+
+	Work around:
+ 
+-  Login in to DA and Navigate to the  cabinet > system > application and
+-  Delete rich_media_services and transformation folders completely
+-  Re-install same DocApp again by downloading it from Powerlink
+-   Restart all CTS services.
+ 
+
+
+D6.sp1 CHK RN ADTS 6sp1 Pg no 24
+***********************
+
+
+CTS fails to start when con?gured against the global
+registry (150077)
+
+CTS fails to start successfully when configured against a global registry and results in the
+
+following error in the CTS_log.txt for all profiles:
+com.documentum.cts.exceptions.internal.CTSProfileServiceException: [DM_VEL_INSTANTIATION_ERROR]error: "Cannot instantiate Java class"Cause Exception was: Exception during updating profile cache  pdf_processing 
+
+The workaround is to manually run the Transformation and  Rich_Media_Services docapps against the global registry after configuring the CTS product.

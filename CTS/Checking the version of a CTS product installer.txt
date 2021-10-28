@@ -1,0 +1,11 @@
+The following procedure allows you to check the version of a CTS installer (in this case,
+the Advanced Document Transformation Services installer).
+
+Navigate to the directory where the installer exists. Open a command prompt window.
+Run the following command, using the full path to the Java executable on the machine,
+if it is not defined as a system variable:
+
+java -cp <installer_jar_file> DiShowVersion
+For example, the full command for ADTS is: java -cp adtsWinSuiteSetup.jar
+DiShowVersion.
+This displays the full installer version.

@@ -1,0 +1,162 @@
+13:45:29,020      30156 DEBUG [ Thread-27] com.documentum.cts.plugin.advancedpdf.AdvancedPDFPlugin -       Input Arguments: -doc_token_secCpass=" " -doc_token_encryptionMode="40bit" -doc_token_printType="DocumentContent" -doc_token_formFieldFilling="Disabled" -doc_token_allowCopy="Disabled" -doc_token_enableAccess="Disabled" -transformation_type="legacy" -doc_token_pdfVersion="PDFVersion15" -doc_token_resolution="600" -doc_token_docAssembly="Disabled" -doc_token_secOpass=" " -doc_token_enableSecurity="No" -doc_token_printing="Disabled" -doc_token_optimize="Yes" -doc_token_changesAllowed="Disabled" -doc_token_usePrinterMetrics="Automatic" -doc_token_enableBookMarks="Yes" -doc_token_targetFormat="pdf" -overwrite_rendition="false" 
+
+			Or 
+
+In docbase "DEV2":
+
+User "dmadmin" posted event "DTS" with this message:  "The Profile with
+object ID: 080017c5800a3d15 and Name: document_to_pdf failed to execute
+for the document with object ID:  and Name: 083106  Restoration Manual,
+Source Format: msw8, Source Page Modifier: , Target Format: pdf, Target
+Page Modifier: .  See log file for details.".
+
+
+
+------------------------------
+OBJECT DETAILS
+------------------------------
+Object Name...........083106  Restoration Manual
+
+
+
+------------------------------
+COMPUTER-READABLE DATA
+------------------------------
+>>>begin_data_block
+>>>data_block_type=docbase_event
+>>>data_block_name=none
+>>>docbase_name=DEV2
+>>>event_name=DTS
+>>>sender_name=dmadmin
+>>>recipient_name=John.Sweet@us.ngrid.com
+>>>recipient_login_name=sysjcs
+>>>object_name=083106  Restoration Manual
+>>>message_text=The Profile with object ID: 080017c5800a3d15 and Name:
+document_to_pdf failed to execute for the document with object ID:  and
+Name: 083106  Restoration Manual, Source Format: msw8, Source Page
+Modifier: , Target Format: pdf, Target Page Modifier: .  See log file
+for details.
+>>>queue_item_id=1b0017c5800c1da9
+>>>end_data_block
+
+
+
+Resolution 1 :
+
+Browse to:
+C:\Inetpub\wwwroot\ExponentWSA\ExponentWSASettings.xml
+
+Open it with notepad and change:
+
+LogFolder = C:\Adlib Exponent WSA\Log
+ErrorLogType=”EVENTFILE”
+
+To:
+
+LogFolder=”C:\temp”
+ErrorLogType=”EVENTLOG”
+
+Make sure Full permissions are given for ASP.Net user on C:\temp.
+
+ To do that:
+
+Browse to C:\inetpub\wwwroot
+
+Right click on “wwwroot” > Sharing and Security > Add user “ASPNET” and provide full permission on the folder. 
+
+Click on “advanced” tab and replicate the permission to the child object. 
+
+Restart IIS:
+
+
+If above wrks if not try the below:
+
+Resolution 2: esg81542 
+
+Symptoms
+
+When requesting a rendition using DTS 5.3 SP4, the following error is seen in the CTS log file:
+
+HTTP response code: 401 for URL: http://localhost/exponentwsa/exponentwsa.asmx/AddJob
+
+When accessing this URL in a browser, an error 401 - Unauthorized error is returned.
+
+
+
+Cause
+
+This can occur if there is a permissions issue with the user starting IIS or the NETWORK SERVICE/ASPNET users. 
+
+
+
+Resolution
+
+1. Check the permissions on the WINDOWS\Temp folder to see if the NETWORK SERVICE or ASPNET accounts have proper access. The account will differ depending on the .NET version being used.
+
+
+
+For .NET Framework 1.1 :
+
+Grant full permissions on the %Systemroot%\Temp folder to the "NETWORK SERVICE" user account. 
+
+To reset Internet Information Services (IIS), type “iisreset” on the command prompt. 
+
+  
+
+For .NET Framework 2.0:
+
+Grant read/write privileges for the %Systemroot%\Temp folder to the "ASPNET" account. 
+
+To reset Internet Information Services (IIS), type “iisreset” on the command prompt. 
+
+
+
+2. Check Internet Explorer Security. Add the Relay web site, ExponentWSA web service and the RelayWSA webservice to the Trusted Sites zone
+
+a. Open an Internet Explorer browser window.
+
+b. Click Tools --> Internet options --> Select the security tab --> Select Trusted
+
+sites --> Click the Sites button.
+
+c. Enter the following sites to the “Add this Web site to the zone:” field and click the “Add” button after each entry:
+
+http://localhost/exponentwsa/exponentwsa.asmx
+
+http://localhost/RelayWSA/RelayWSA.asmx
+
+http://localhost/Relay/default.aspx
+
+ 
+
+
+
+3. The network security policy may restrict anonymous access to clients / servers. To correct this, change the way in which virtual folders are accessed on the IIS web server. 
+
+a. Click “Start” --> “Control Panel” --> “Administrative Tools” --> “Internet
+
+Information Services (IIS) Manager”.
+
+b. Expand the web hosting machine --> “Web Sites” --> “Default Web Site” -->
+
+Right Click and select Properties on both the virtual folders of ExponentWSA
+
+and ExponentJobs.
+
+
+
+c. Click the Directory Security tab, Authentication and access control and click 
+
+the ”Edit” button.
+
+d. Click “Browse” and select a Domain / Local user account which is the same account in which all services (exponentManager / exponentConnector / Adlib Express Server) log on.
+
+ 
+
+
+
+****
+Try this support note :
+esg96252 
+
+esg77900

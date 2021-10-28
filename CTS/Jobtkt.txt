@@ -1,0 +1,20 @@
+job ticket test
+
+get the dts_jobticket.xml
+
+copy it to any temp folder on DTS box
+
+now copy any sample document to same path ie temp folder on dts
+
+now opne the xml fle in edit mode
+
+now open the wsa sample apllication
+
+select te xml job tikcet
+clk on add job
+
+now clk on get job status()
+
+
+
+

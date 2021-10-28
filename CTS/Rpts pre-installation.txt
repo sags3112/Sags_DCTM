@@ -1,0 +1,11 @@
+RPTS installation:
+
+
+Note : To ensure optimal system performance, RegulatoryPublishing Transformation Server should not be installed on the same machine as Content Server or the FAST (Full Text Index) Server. This configuration is not supported by Documentum.
+
+Software prerequisites before RPTS installation
+
+- iNSTALATION OF .NET Framework
+- Microsoft Office (required) for rendering applications
+- Internet Information Services (IIS) and ASP.Net
+- Microsoft Message Queue (MSMQ)

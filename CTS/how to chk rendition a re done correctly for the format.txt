@@ -1,0 +1,12 @@
+To check renditions in time frame for word to PDF use the below:
+
+select object_name, r_object_id from dm_document where r_object_id in (select parent_id from dmr_content where any i_rendition=2 and full_format = 'pdf'and set_time>'4/28/2009')
+
+To check renditions in time frame for word to html use the below:
+
+select object_name, r_object_id from dm_document where r_object_id in (select parent_id from dmr_content where any i_rendition=2 and full_format='html' and set_time>'4/28/2009')
+
+
+To check renditions in time frame for word to PDF and word to html use the below:
+
+select object_name, r_object_id from dm_document where r_object_id in (select parent_id from dmr_content where any i_rendition=2 and full_format='html' and set_time>'4/28/2009')
