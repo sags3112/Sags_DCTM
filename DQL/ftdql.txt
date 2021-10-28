@@ -1,0 +1,7 @@
+SELECT r_object_id,score,text,object_name,r_object_type,r_lock_owner,owner_name,r_link_cnt,r_is_virtual_doc,r_content_size,a_content_type,i_is_reference,r_assembled_from_id,r_has_frzn_assembly,a_compound_architecture,i_is_replica,r_policy_id,r_modify_date FROM dm_sysobject WHERE (object_name LIKE '%shuttle%' ESCAPE '\') AND (a_is_hidden = FALSE) ENABLE(FTDQL)
+
+*****
+
+select distinct registered_id,count(*) from dmi_registry where user_name='dm_fulltext_index_user' group by registered_id
+
+select user_name, registered_id, event from dmi_registry where user_name='dm_fulltext_index_user'

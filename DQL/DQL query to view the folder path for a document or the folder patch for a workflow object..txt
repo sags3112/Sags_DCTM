@@ -1,0 +1,40 @@
+esg100394 
+
+Administrator 5.3 SP6, 5.3 SP5, 5.3 SP4, 5.3 SP3   
+
+
+Goal
+
+
+Sometimes, for certain situations it is useful to quickly get the folder patch for any document. It is also useful to know this information when you want to know where a workflow object exists so you can navigate to it in DA or Workflow Manager. 
+
+ 
+
+The examples below are also a good reference point for joining a singe attribute from one table to a repeating attribute in another.
+
+ 
+
+Resolution
+
+Below are two simple DQL queries.  
+
+This query can be used for any dm_document or its subtypes. It will return the actual folder path where the document exists within the repository. In the example below "foo" is used in the WHERE clause at the end of the query (object_name = 'foo'). Replace the value "foo" with the name of the document you wish to find the folder path for.
+
+
+
+
+DQL>
+
+select dm_folder.r_folder_path FROM dm_folder WHERE dm_folder.r_object_id in(select i_folder_id FROM dm_document WHERE object_name = 'foo')
+
+ 
+
+
+
+This query can be used for any dm_process object. It will return the actual folder path where the workflow objects exists within the repository. This can be useful if you are not  sure of the path to follow when trying to open a document in Workflow manager. In the example below Hotline is used in the where clause at the end of the query (object_name = 'Hotline’'). Replace the value Hotline with the name of the workflow object you wish to find the folder path for.
+
+ 
+
+DQL>
+
+SELECT dm_folder.r_folder_path FROM dm_folder WHERE dm_folder.r_object_id in (SELECT i_folder_id FROM dm_process WHERE object_name = 'Hotline’)

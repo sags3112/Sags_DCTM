@@ -1,0 +1,41 @@
+
+Symptoms
+
+When upgrading a repository from verson 6 to 6 SPx, you may get the following error:
+
+(Mar 10, 2008 6:14:12 PM), Setup.product.install, com.documentum.install.shared.common.error.DiException, err, An exception occured in: DiWAServerCreateBofRegistryUser, beanID: createBofRegistryUser2 - DiWAServerCreateBofRegistryUser failed! - [DFC_SECURITY_CERTIFICATE_DUPLICATE] multiple certificate records in global registry or docbase saludred for BB2C85FE74396830B10A3273F5E27C36BCC78F0D; For more detailed information, see the error log: /saludred/saludred/Documentum/product/6.0/install/setupError.log
+(Mar 10, 2008 6:14:12 PM), Setup.product.install, com.documentum.install.shared.common.error.DiException, err, DfException:: THREAD: Runnable bean context: Di WA Server Create Bof Registry User (createBofRegistryUser2); MSG: [DFC_SECURITY_CERTIFICATE_DUPLICATE] multiple certificate records in global registry or docbase saludred for BB2C85FE74396830B10A3273F5E27C36BCC78F0D; ERRORCODE: ff; NEXT: null
+at com.documentum.fc.client.security.impl.IpAndRcHelper.getCertificate(IpAndRcHelper.java:339)
+at com.documentum.fc.client.security.impl.IpAndRcHelper.getCertificate(IpAndRcHelper.java:242)
+at com.documentum.fc.client.security.impl.IpAndRcHelper.getRights(IpAndRcHelper.java:427)
+at com.documentum.fc.client.security.impl.DfcRightsCreator.getRights(DfcRightsCreator.java:601)
+at com.documentum.fc.client.security.impl.DfcRightsCreator.registerRightsToAllRoles(DfcRightsCreator.java:294)
+at com.documentum.fc.client.security.impl.DfcRightsCreator.registerRightsToAllRoles(DfcRightsCreator.java:268)
+at com.documentum.fc.client.security.internal.RightsMgr.registerRightsToAllRoles(RightsMgr.java:36)
+at com.documentum.install.server.common.services.DiServerDfcUtilsImpl.registerRightsToAllRoles(DiServerDfcUtilsImpl.java:138)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+at java.lang.reflect.Method.invoke(Method.java:585)
+at com.documentum.install.server.common.services.DiServerDfcUtils.invoke(DiServerDfcUtils.java:484)
+at com.documentum.install.server.common.services.DiServerDfcUtils.registerRightsToAllRoles(DiServerDfcUtils.java:395)
+at com.documentum.install.server.common.beans.wizard.action.DiWAServerCreateBofRegistryUser.execute(DiWAServerCreateBofRegistryUser.java:92)
+at com.installshield.wizard.RunnableWizardBeanContext.run(Unknown Source)
+
+
+
+Cause
+
+This is caused by a certificate being already present for the Bof Registry User.
+
+
+
+Resolution
+
+Follow these steps:
+
+Stop the ongoing repository upgrade process.
+Take a backup of the dfc.keystore file in the $DOCUMENTUM_SHARED/config (for security purposes).
+Remove the dfc.keystore file in $DOCUMENTUM_SHARED/config.
+Restart the repository upgrade process.
+The upgrade should now finish.

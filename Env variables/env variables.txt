@@ -1,0 +1,78 @@
+Environment Variables of Documentum 
+Environment V ariable Description
+
+Required v alues
+
+P A TH The path must include:
+
+• JAVA _HOME /bin before the following two variables
+• $DM _HOME /bin
+• $DOCUMENTUM/dba
+
+JAVA _HOME means Home directory for Java installation on Content
+Server host Ensure that $JA V A _HOME points to the Java version
+shipped by Documentum,$DOCUMENTUM _SHARED /java/version _
+number , where version _number is the correct Jav a v ersion for
+your platform and Content Serv er v ersion . Refer to
+the Content Server Release Notes for the correct
+v ersion number .
+
+CLASSPATH should contain following
+
+• $DOCUMENTUM _SHARED/dctm .jar ,which must be ?rst in
+the CLASSP A TH
+• $DM _HOME /dctm -serv er .jar
+• $DOCUMENTUM _SHARED /con?g
+• $DOCUMENTUM /share /clients /classes
+
+LD _LIBRARY_PATH for Solaris and Linux shared
+library path
+
+• The DFC location,$DOCUMENTUM _SHARED /dfc
+• $JA V A _HOME /lib
+• $DM _HOME /bin
+• T o use electronic signatures on PDF documents,
+$DM _HOME /fusion
+• $DOCUMENTUM/fulltext /fast40
+• $DOCUMENTUM/share/clients/unix/solaris
+• Both Solaris and Sybase include a shared library
+called libintl .so .With Sybase, if you include
+/usr /lib in the library path, ensure that it is
+after any Documentum or Sybase directories
+
+
+SHLIB _P A TH HP -UX shared library path
+• The DFC location,$DOCUMENTUM _SHARED/dfc
+• $DM _HOME /bin
+• $DM _HOME/unix /hpux
+• $DOCUMENTUM/fulltext /fast40
+• $DOCUMENTUM/share/clients/unix /hpux
+• T o use electronic signatures on PDF documents,
+$DM _HOME /fusion
+• $JA V A _HOME /lib
+• $JAVA _HOME/jre/bin/classic
+• $JA VA _HOME /jre/lib/PA _RISC2 .0
+• $JAVA _HOME /jre /bin
+
+LIBP A TH AIX shared library path
+• The DFC location,$DOCUMENTUM _SHARED/dfc
+• $DM _HOME /bin
+• $DM _HOME /unix /aix
+• $JAVA _HOME /lib
+• $JAVA _HOME/jre/bin:
+• $JAVA _HOME /jre /bin /classic
+• $DOCUMENTUM/fulltext /fast40
+• $DOCUMENTUM/share /clients /unix /aix
+• On DB2, $DB2 _BASE /lib
+• T o use electronic signatures on PDF documents,
+$DM _HOME /fusion
+• Any directories in the
+
+Required database environment variables
+
+Variables for Oracle
+• ORACLE _HOME
+• PA TH = $ORACLE _HOME/bin
+• On Solaris, LD _LIBRARY _PATH=$ORACLE _HOME /lib
+• On HP -UX, SHLIB_P A TH =$ORACLE _HOME /lib
+• On AIX, LIBP A TH = $ORACLE_HOME /lib

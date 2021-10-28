@@ -1,0 +1,8 @@
+
+1) Full Test Server or Index server and Index Agent should not be instsalled on VM ware box as per the FTI standards and Documentum
+
+2) FTI should not be installed on the Content server box,this should be done separatly on diff .box
+
+3) As per the FTI standards and Documentum if file size is more than 200 MB (max) the Index server will not be indexed .. 
+
+you have work around for this (esg44165)
