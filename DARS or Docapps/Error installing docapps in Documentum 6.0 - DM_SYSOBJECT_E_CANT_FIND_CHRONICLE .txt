@@ -1,0 +1,58 @@
+Esg97858
+
+Cs 6.0 sP1
+
+Error installing docapps in Documentum 6.0 - DM_SYSOBJECT_E_CANT_FIND_CHRONICLE 
+
+
+Symptoms
+
+When installing a docapp in 6.0 SP1, you may receive an error as follows:
+
+[DM_SYSOBJECT_E_CANT_FIND_CHRONICLE]error:  "Cannot get chronicle identifier for the sysobject name Rich_Media_Services."!] 
+
+This can vary depending on the docapp being installed.
+
+ 
+
+Cause
+
+This issue occurs due to an incorrect chronicle id on the object
+
+ 
+
+Resolution
+
+In order to isolate this issue, a dfc trace will have to be performed on the server hosting the application installer. 
+
+1. To enable the dfc trace, modify the dfc.properties file under the ..Documentum/config folder. Add the following entry:dfc.tracing.enabled=true
+
+2. Once complete, try installing the docapp using Docapp Installer. 
+
+3. Once the error occurs, turn off the tracing in the dfc.properties file by setting the trace value to false. 
+
+4. Navigate to the trace file under Documentum\log. Examining this log will show the complete error as follows:
+
+ 
+
+[main] com.documentum.fc.client.DfSysObject@4ca6b6.appendPart(DfId{0801834e80070e26},null,true,false,0) ==>  [!com.documentum.fc.common.DfException: [DM_SYSOBJECT_E_CANT_FIND_CHRONICLE]error:  "Cannot get chronicle identifier for the sysobject name Rich_Media_Services."!] 
+
+ 
+
+The r_object_id of the problem object is listed as 0801834e80070e26
+
+5. Obtain an API dump of this object:
+
+API>dump,c,0801834e80070e26
+
+6. Note the i_chronicle_id. It should show all zeros
+
+7. Update the i_chronicle_id to be equal to the r_object_id:
+
+API>set,c,0801834e80070e26,i_chronicle_id
+
+SET>0801834e80070e26
+
+API>save,c,l
+
+8. Rerun the docapp installation and the error should no longer appear.
