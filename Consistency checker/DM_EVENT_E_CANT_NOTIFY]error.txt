@@ -1,0 +1,9 @@
+error 
+
+
+DM_EVENT_E_CANT_NOTIFY]error:  "Could not send notification for event dm_save for ASR_Test document/object
+
+Chk this out for some wrk around
+
+
+http://forums.emc.com/forums/thread.jspa?tstart=0&threadID=22561

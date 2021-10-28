@@ -1,0 +1,35 @@
+UNIX clusters can work, but they're not supported (ie HP Service guard, Veritas clustering) due to virtual IPs that can mess things up pretty good.
+
+Jim Mills
+Technical Support Engineer
+416.507.2878    
+Eastern  Time Zone
+Email: mills_james@emc.com
+
+-----Original Message-----
+From: Paci, Andrea 
+Sent: Tuesday, January 29, 2008 10:57 AM
+To: Schuetz, Stephan; Server_Support (Documentum)
+Subject: RE: Content server on Red Hat Cluster Suite 4.0 32 Bit ?
+
+Stephan,
+
+I am pretty sure that Windows Clusters are the only supported clustering technique at the moment. I may be wrong though, someone else can confirm this?
+UNIX Clusters are known to work though...
+
+Regards,
+
+Andrea Paci
+
+-----Original Message-----
+From: Schuetz, Stephan 
+Sent: martes, 29 de enero de 2008 16:47
+To: Server_Support (Documentum)
+Subject: Content server on Red Hat Cluster Suite 4.0 32 Bit ?
+
+Hi,
+
+Is Content server on Red Hat Cluster Suite 4.0 32 Bit supported??
+
+Thanks,
+Stephan

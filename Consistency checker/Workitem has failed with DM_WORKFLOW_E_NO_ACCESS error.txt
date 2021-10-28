@@ -1,0 +1,20 @@
+at time of wroking on WARNING CC-0046
+
+you may get the error 
+
+
+DM_WORKFLOW_E_NO_ACCESS error
+
+
+When using BPM/wrk flow manger , please check the 2 following settings: 
+
+In the server.ini file: enable_workitem_mgmt = T 
+
+
+Work Queue Activities Must Enable Delegation: 
+
+Any activity whose assigned performer is a work queue (performer category 10) must 
+
+allow a work item to be delegated. That is, the Delegate the activity?s work to someone 
+
+else option (on the Performer tab) must be selecte

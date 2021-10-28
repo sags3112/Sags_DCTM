@@ -1,0 +1,197 @@
+' ----------------------------------------------------------------------------
+'
+' Name:     content_check.ebs  
+' Purpose:  This docbasic script creates a report with each content object
+'           where the corresponding content file is missing
+'           
+' Syntax:   dmbasic -fcontent_check.ebs -eContentCheck -- [DocbaseName]
+'
+' Parameters:   DocbaseName     Name of the docbase to run the job 
+'
+' Notes:        - ContentCheck is the main entry point for the script.
+'               - This script has to be run as docbase administrator on the
+'                 Documentum server OS.
+'               - Please change the constant with the dmadmin password below
+'                 before running this script.
+'
+' Report description:
+'               For lines that start on column 1 they list the object id of
+'               the content_object and the file path.
+'               The following lines that start on column 10 list all the parent
+'               object id and object names to the preceding content object.
+'
+' Author:       Werner Worf, Boehringer Ingelheim Pharma Germany
+' Date:         04/10/2001
+'               
+'  Change Log:
+'  Date        Name           Explanation
+'
+' ----------------------------------------------------------------------------
+
+Option Base 0
+
+' Define Constants
+Const dmadmin_password As String = "password"
+
+'Define global variables
+Global session as String                            'Session identifier
+Global err_msg as String                            'Error message string
+
+'Low and medium level subs from Documentum
+'
+' Functions are arranged low-level, then intermediate, then main in this file
+' because Docbasic is a single-pass compiler
+' Functions are in alphabetical order within category
+
+' Low Level Functions (Don't Call Any Other Functions In This File)
+
+Function dmNow(inDate as date) As string
+  dim theMonth as string, theDay as string, theYear as string, theTime as string
+  dim dSep as string
+  dim f2Digits As string
+  
+  theFormat = dmAPIGet("get,c,sessionconfig,r_date_format")
+  theMonth = Format$(datepart("m", inDate))
+  theDay = Format$(datepart("d", inDate))
+  theYear = Format$(datepart("yyyy", inDate))
+  theTime = Format$(inDate, "hh") & ":" & Format$(inDate, "nn") & ":" & Format$(inDate, "ss")
+  f2Digits = mid$(theFormat, 1, 2) 
+  Select Case f2Digits
+  Case "12", "31", "95"
+    dSep = mid$(theFormat, 3, 1)
+  Case Else
+    dSep = mid$(theFormat, 5, 1)
+  End Select
+  If f2Digits = "31" Then
+    dmNow = theDay & dSep & theMonth & dSep & theYear & " " & theTime
+  ElseIf f2Digits = "12" Then
+    dmNow = theMonth & dSep & theDay & dSep & theYear & " " & theTime
+  else 
+    dmNow = theYear & dSep & theMonth & dSep & theDay & " " & theTime
+  End If
+End Function
+
+Function DoQuery(Session As String, ReadFlag As String, QueryString As String) As String
+  If dmAPIExec("execquery," & Session & "," & ReadFlag & "," & QueryString) Then
+    DoQuery = dmAPIGet("getlastcoll," & Session)
+  Else
+    Print "Something wrong with the following query..."
+    Print QueryString
+    Print dmAPIGet("getmessage," & Session)
+    DoQuery = ""
+  End If
+End Function
+
+' Intermediate Level Functions (call low level functions)
+
+Sub CreateLogFile (DocBase As String)
+
+  Dim LogFileName As String
+  
+  On Error goto No_Log
+
+  LogFileName = "ContentCheck_" & DocBase & ".log"
+  If FileExists(LogFileName) Then Kill LogFileName
+
+  Open LogFileName For Output As #2
+  print #2, "Job Log for Content Check Report"
+  print #2, "--------------------------------------------------------------"
+  print #2, " "
+  print #2, "Start of log:" ;dmNow(date$ & " " & time$)
+  print #2, "-------------"
+  Print #2, "   "
+  Exit Sub
+
+No_Log:
+  Print Err, Error(Err)
+  Print "Could not open log file."
+  End
+End Sub
+
+
+' Main Routine
+
+Sub ContentCheck (DocBase As String)
+
+  Dim qry as string
+  Dim start_date As String
+  Dim retstr As String
+  Dim qc1 As String
+  Dim qc2 As String
+  Dim content_id As String
+  Dim content_path As String
+  Dim content_path_woext As String
+  Dim doc_id As String
+  Dim doc_name As String
+
+  On Error Goto DBerrorCatch
+
+  start_date = dmNow(date$ & " " & time$)
+
+  Call CreateLogFile(DocBase)
+
+  session = dmAPIGet("connect," & DocBase & ",dmadmin," & dmadmin_password)
+  If session = "" Then
+    print #2, "Error connecting to docbase <" & DocBase & ">"
+    print "Error connecting to docbase <" & DocBase & ">"
+    err_msg = dmAPIGet("getmessage," & session)
+    print err_msg
+    Exit Sub
+  End If
+  print #2, "Connected to docbase " & DocBase & " as session " & session & "."
+  print #2, " "
+
+  ' Get all content objects
+  qry = "select r_object_id from dmr_content"
+  qc1 = DoQuery(session, "T", qry)
+  Do While dmAPIExec("next,c," & qc1)
+    content_id = dmAPIGet("get,c," & qc1 & ",r_object_id")
+
+    ' Get the file name for the content file
+    qc2 = dmAPIGet("apply,c," & content_id & ",GET_PATH")
+    retval = dmAPIExec("next,c," & qc2)
+    content_path = dmAPIGet("get,c," & qc2 & ",result")
+    retval = dmAPIExec("close,c," & qc2)
+
+    If content_path <> " " And content_path <> "" Then
+      ' Strip extension from path to check if this file exists.
+      char_pos = InStr(content_path, ".")
+      If char_pos <> 0 Then
+        content_path_woext = Left$(content_path,char_pos-1)
+      Else
+        content_path_woext = content_path
+      End If
+
+      ' Check if content file with or without extension exists.
+      If FileExists(content_path) = false And FileExists(content_path_woext) = false Then
+        ' Print content object_id and filename
+        print content_id;Tab(20);content_path
+        print #2, content_id;Tab(20);content_path
+
+        ' Search for all parent objects of this content object.
+        qry = "select r_object_id,object_name from dm_sysobject (all)" &_
+              " where r_object_id in" &_
+              "     (select parent_id from dmr_content" &_
+              "       where r_object_id = '" & content_id & "')"
+        qc2 = DoQuery(session, "T", qry)
+        Do While dmAPIExec("next,c," & qc2)
+          doc_id = dmAPIGet("get,c," & qc2 & ",r_object_id")
+          doc_name = dmAPIGet("get,c," & qc2 & ",object_name")
+          ' Print parent object informations
+          print #2, Tab(10);doc_id;Tab(30);doc_name
+          print Tab(10);doc_id;Tab(30);doc_name
+        Loop
+        retval = dmAPIExec("close,c," & qc2)
+      End If
+    End If
+  Loop
+  retval = dmAPIExec("close,c," & qc1)
+
+  ' Close connection and exit
+  ret% = dmAPIExec("disconnect,c")
+  Exit Sub
+
+DBerrorCatch:
+Print Err, Error(Err)
+DmExit 1
+End Sub

@@ -1,0 +1,36 @@
+esg83255
+
+CC-0080 and CC-0081 
+
+How to resolve Warning CC-0081 from the Consistency Checker report
+
+
+Symptoms
+
+When running the Consistency Checker report, you may see the following error:
+
+
+
+
+Checking for groups with disconnected super groups
+  WARNING CC-0081: Group object with name '<group1>' has a supergroup '<group2>' that does not contain this group as a subgroup
+  
+Cause
+
+The group reported still has a reference to the supergroup, but the supergroup no longer contains the reference to the subgroup.  The job runs the following query to indentify these groups: 
+
+
+select a.r_object_id as p1, a.i_supergroups_names as p2 from dm_group_r a where a.i_supergroups_names is not NULL and a.i_supergroups_names <> ' ' and not exists " (select b.group_name from dm_group_s b where b.group_name = a.i_supergroups_names)
+
+
+
+Resolution
+
+Dump the <group1> group and check the i_supergroup_names attribute to see if the <group2> group is listed there.  Let's say <group2> is at position 1 of the attribute.  You can use the following API to remove the value:
+
+API> remove,c,12xxxxxxxxxxxxxx,i_supergroups_names[1] 
+... 
+Ok 
+API> save,c,12xxxxxxxxxxxxxx
+
+You must repeat this for each group that was reported on
