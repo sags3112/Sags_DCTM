@@ -1,0 +1,48 @@
+Example: Configuring a New BOCS Server:
+
+esg102022 
+
+Branch Office Caching Services 6.5, 6.0, 5.3 SP6, 5.3 SP5, 5.3 SP4, 5.3 SP3, 5.3 SP2, 5.3 SP1   
+
+The BOCS communicates with the ACS running on the Content Server to fetch Content. The ACS must be up and running for the BOCS to work. The following procedure can be used to create a new BOCS and an associated Location object (for Sweden in this particular case). 
+
+
+
+Create new Location Object for Sweden
+
+Login to DA as dmadmin
+Open Configuration > Network Locations
+ File > New > Network Location 
+Display Name: Sweden
+Unique ID: sweden
+Description: Swedish Offices
+"at login time... ": Tick the box
+IP Address Range - Click "Add" 
+Enter the range of IP Address for client machines that will be associated with this location if required (see notes below)
+When all the ranges have been added, click OK
+Click OK
+Create the new BOCS Configuration for Sweden, and associate a location object with the 
+
+BOCS
+
+Login to DA as dmadmin
+Open Configuration > BOCS Servers
+File > New > BOCS Config
+Name: Sweden
+Description: Swedish BOCS Server
+Network Location: Sweden
+Ability to read content; Read Content
+Supported Protocols:
+protocol: http
+Base URL: http://<host>:8086/bocs/servlet/ACS
+Click OK
+Notes:
+
+• Specifying an IP Address Range in the Network Location object is not mandatory, and can be omitted if required. If a users’ IP Address is not registered in any Network Location object, then the user will be prompted to select a Location at login time
+
+• In this example, the Swedish Location object will be presented in the list of available locations on the Webtop login panel drop-down for users to select from. To remove Sweden from this list, untick the "at login time... ": box in the Network Location properties screen in DA
+
+• Multiple location objects can be associated with a single BOCS Server. These can be configured when the BOCS Config object is created, or added later through DA.
+
+
+

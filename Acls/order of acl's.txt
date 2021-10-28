@@ -1,0 +1,107 @@
+order of acl in cs 5.3 sp5
+
+API>dump,c,l
+...
+USER ATTRIBUTES
+
+  name                       : dm_acl
+  super_name                 : 
+  attr_count                 : 20
+  start_pos                  : 0
+  owner                      : hitoshi
+  s_index_attr               : 0000000000000000
+  info                       : 2e00000180000101
+  attr_name              [ 0]: object_name
+                         [ 1]: description
+                         [ 2]: owner_name
+                         [ 3]: r_is_internal
+                         [ 4]: r_accessor_name
+                         [ 5]: r_accessor_permit
+                         [ 6]: r_accessor_xpermit
+                         [ 7]: r_is_group
+                         [ 8]: globally_managed
+                         [ 9]: acl_class
+                         [10]: r_has_events
+                         [11]: r_permit_type
+                         [12]: r_application_permit
+                         [13]: i_has_required_groups
+                         [14]: i_has_required_group_set
+                         [15]: i_has_access_restrictions
+                         [16]: r_template_id
+                         [17]: r_alias_set_id
+                         [18]: i_is_replica
+                         [19]: i_vstamp
+  attr_type              [ 0]: 2
+                         [ 1]: 2
+                         [ 2]: 2
+                         [ 3]: 0
+                         [ 4]: 2
+                         [ 5]: 1
+                         [ 6]: 1
+                         [ 7]: 0
+                         [ 8]: 0
+                         [ 9]: 1
+                         [10]: 0
+                         [11]: 1
+                         [12]: 2
+                         [13]: 0
+                         [14]: 0
+                         [15]: 0
+                         [16]: 3
+                         [17]: 3
+                         [18]: 0
+                         [19]: 1
+  attr_repeating         [ 0]: F
+                         [ 1]: F
+                         [ 2]: F
+                         [ 3]: F
+                         [ 4]: T
+                         [ 5]: T
+                         [ 6]: T
+                         [ 7]: T
+                         [ 8]: F
+                         [ 9]: F
+                         [10]: F
+                         [11]: T
+                         [12]: T
+                         [13]: F
+                         [14]: F
+                         [15]: F
+                         [16]: F
+                         [17]: F
+                         [18]: F
+                         [19]: F
+  attr_length            [ 0]: 32
+                         [ 1]: 128
+                         [ 2]: 32
+                         [ 3]: 0
+                         [ 4]: 32
+                         [ 5]: 0
+                         [ 6]: 0
+                         [ 7]: 0
+                         [ 8]: 0
+                         [ 9]: 0
+                         [10]: 0
+                         [11]: 0
+                         [12]: 128
+                         [13]: 0
+                         [14]: 0
+                         [15]: 0
+                         [16]: 0
+                         [17]: 0
+                         [18]: 0
+                         [19]: 0
+  views_valid                : T
+  unique_tag                 : 69
+
+SYSTEM ATTRIBUTES
+
+  r_object_id                : 0300000180000101
+  r_index_attr               : 0000000000000000
+
+APPLICATION ATTRIBUTES
+
+
+INTERNAL ATTRIBUTES
+
+  i_vstamp                   : 1

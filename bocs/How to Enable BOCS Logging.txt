@@ -1,0 +1,16 @@
+How to Enable BOCS Logging
+
+
+When diagnosing BOCS issues, it is helpful to enable BOCS debug logging.
+ 
+Add the following lines to the log4j.properties file on the BOCS server and restart Jboss for the log settings to take effect.
+ 
+       #------------------- BOCS (added for BOCS logs)--------------------------
+         log4j.category.bocs=DEBUG, BOCS_LOG
+         log4j.category.com.documentum.bocs=DEBUG, BOCS_LOG
+         log4j.appender.BOCS_LOG=org.apache.log4j.RollingFileAppender
+         log4j.appender.BOCS_LOG.File=<user.dir>/documentum/logs/BOCS_Server.log
+         log4j.appender.BOCS_LOG.MaxFileSize=100KB
+         log4j.appender.BOCS_LOG.MaxBackupIndex=10
+         log4j.appender.BOCS_LOG.layout=org.apache.log4j.PatternLayout
+         log4j.appender.BOCS_LOG.layout.ConversionPattern=%d %5p [%t] %m%n

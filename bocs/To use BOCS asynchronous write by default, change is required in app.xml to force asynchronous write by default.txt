@@ -1,0 +1,42 @@
+WDK 6.5, 6.0 SP1, 6.0,Branch Office Caching Services 6.5, 6.0  
+
+esg101251 
+
+To use BOCS asynchronous write by default, change is required in app.xml to force asynchronous write by default.
+
+Symptoms
+
+BOCS Asynchronous write "park" does not work. BOCS always uses synchronous write. How do we enable Asynchronous write to occur by default if we assume all appropriate settings in BOCS,DMS,ACS and Distributed Transfer config are correct"
+
+
+
+Cause
+
+There exists a tag called "<bocs-write-mode>" in app.xml which forces synchronous write only by default.
+
+
+
+Resolution
+
+Modify <WEBAPP>/wdk/app.xml 
+
+
+
+Change:   <bocs-write-mode>prohibit-async</bocs-write-mode>
+
+
+
+To:           <bocs-write-mode>default-async</bocs-write-mode>
+
+
+Options:
+
+1. "prohibit-async" - application doesn't allow BOCS write asynchronously - DEFAULT VALUE
+2. "default-sync" - application should see content written from BOCS to ACS synchronously by default
+3. "default-async" - application should see content written from BOCS to ACS asynchronously by default 
+
+
+
+
+
+

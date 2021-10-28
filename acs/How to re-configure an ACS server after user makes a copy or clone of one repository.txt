@@ -1,0 +1,102 @@
+
+Cs 5.3
+esg90427 
+
+How to re-configure an ACS server after user makes a copy or clone of one repository.
+
+Symptoms
+
+User creates a clone or copy of an existing repository to a new repository, changes the hostname, and upgrades to new version. After, the user restarts the Content Server and JMS method server. Java method fails to start ACS application.  AcsServer.log and Java method server shows the following error message. This error message prevent the ACS server from starting. 
+
+
+
+[DM_DOCBROKER_E_REQUEST_FAILED_E]error:  "The Docbroker request failed."
+
+; ERRORCODE: 100; NEXT: null at com.documentum.fc.client.DfSession.createServerException(DfSession.java:3538)
+
+12:45:08,682 [main] [DFC_DOCBROKER_REQUEST_FAILED] Request to Docbroker "ACSCONFIGNAME" failed
+
+DfException:: THREAD: main; MSG: [DM_DOCBROKER_E_NO_DOCBASES]error:  "There are not any Docbases registered with the DocBroker running on host (ACSCONFIGNAME)."
+
+[DM_DOCBROKER_E_REQUEST_FAILED_E]error:  "The Docbroker request failed."
+
+; ERRORCODE: 100; NEXT: null
+
+
+
+Cause
+
+1. dm_acs_config object  points to non-existed previous dm_acs_config name which is copied over when customers clone a docbase;  the object_name of dm_acs_config should be the same as the object name which is defined in acs.properites file.
+
+2. The value of acs_base_url of dm_acs_config object maps to the wrong ACL URL because it has been copied over from the previous docbase
+
+3.  The paramters in acs.properties are not correct to reflect new ACS setting. The value of repository.acsconfig must same the object name of dm_acs_config object.
+
+
+
+Resolution
+
+1. Shutdown JMS server
+
+2. Modify the acs.properties which is located on $DM_HOME/tomcat/webapps/ACS/WEB-INF/classes/config. Make sure the repository.acsconfig name matches dm_acs_config object name in the docbase, meaning the repository.name points to right repository.
+
+
+
+#Thu May 17 02:03:13 EDT 2007
+
+repository.acsconfig=ACS config object name
+
+mode.cachestoreonly=false
+
+repository.login="superuser name"
+
+repository.password=
+
+repository.name="repository name"
+
+mode.debug=false
+
+tracing.enabled=false
+
+
+
+Launch API editor or IAPI and logon as superuser.
+=== if CS is 5.3 or early version=================
+
+API> retrieve,c,dm_acs_config
+
+          API>set,c,l,object_name
+
+          RES>"acs config object name"     # same as acs_config name in acs.properties
+
+          API> set,c,l,acs_base_url 
+
+          res>  http://hostname:9080/ACS/servlet/ACS
+
+          API> save,c,l
+
+          API> reinit,c
+
+=== if CS is  D6 or latest version =================
+
+API> retrieve,c,dm_acs_config
+
+          API>set,c,l,object_name
+
+          RES>"acs config object name"     # same as acs_config name in acs.properties
+
+          API> set,c,l,acs_base_url 
+
+          res>  http://hostname:9080/ACS/servlet/ACS
+
+          API>begintran,c
+
+          API> save,c,l
+
+         API>commit,c,
+
+          API> reinit,c
+
+Shutdown content server.
+Clean dmcl cache.
+Restart content server and JMS server.

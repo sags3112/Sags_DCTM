@@ -1,0 +1,11 @@
+
+
+Check whether he configured net wrk locations correctly and did he set ip ranges for the net wrk locations
+check the Distributed Configuration Guide on how to set Ip ranges and creating net wrk locations
+
+once thats it done make sure In the network locations did he select the box to allow network location to be visable to the client
+
+Last option is  check the app.xml for the below entry:
+
+allow-override-bocs-write-mode>true</allow-override-bocs-write-mode> 
+

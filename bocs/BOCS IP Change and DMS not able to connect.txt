@@ -1,0 +1,14 @@
+The BOCS server was moved and was assigned a new IP address.Now all documents that are on the BOCS server are parked and unreachable by users when trying to access from the main content server. 
+
+
+
+BOCS IP is changed, cause that bocs cannot connect to DMS
+2) DMS keep send queue message to old bocs IP
+3) recommend ct to install Aqua Data Studio tool to cleanup sybase DB
+4) if ct want to move content manually, there is procedure  >select parent_id,r_object_id,content_attr_name,content_attr_value  from dmr_content   WHERE i_parked_state > 0 
+now launch api>
+
+retrieve,c,dm_document where r_object_id = 'xxx' 
+fetch,c,l
+setfile,c,c:\temp\xxx.tmp,pdf 
+save,c,l
