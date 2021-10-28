@@ -1,0 +1,42 @@
+Unfortunately we don’t have any Oracle Performance Parameters but we still have some Oracle Configuration Recommendations For the Documentum Content Server.
+ 
+ Please find the below parameters:
+ 
+ ********************************************
+ optimizer_mode = CHOOSE
+ optimizer_index_cost_adj = 5 
+ optimizer_index_caching = 95
+ sort_area_size = 52428800
+ shared_pool_size 314572800
+ db_cache_size=524288000
+ open_cursor=1000
+ Processes=320
+ cursor sharing=FORCE
+ 
+ Max_session
+ 
+ query_rewrite_enabled =TRUE
+ replication_dependency_tracking = false 
+ log_checkpoint_timeout = 0 
+
+ 
+ ## CURSOR_SHARING='FORCE' 
+ 
+ Init.ora parameters modified, some change based on one user case.
+ Oracle parameter was Now qi variance 
+ 
+ shared_pool_size 50331648 314572800 
+ db_cache_size 25165824 524288000
+ Java_pool_size 33554432 52428800 
+ large_pool_size 8388608 52428800 
+ pga aggregate target 25165824 805306368 yes 
+ db_file_multiblock_read_count 16 8
+ log buffer 524288 1048576
+ query_rewrite_enabled FALSE TRUE
+ 
+ Replication_dependency_tracking TRUE FALSE 
+ optimizer index cost adj 100 5 
+ optimizer index caching 0 95 
+ cursor sharing EXACT FORCE 
+ processes 150 320 
+ open_cursors 300 3000 yes 

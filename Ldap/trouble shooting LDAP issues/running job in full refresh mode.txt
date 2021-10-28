@@ -1,0 +1,52 @@
+Content Server 6.5 SP1, 6.5, 6.0 SP1, 6.0, 5.3 SP6, 5.3 SP5, 5.3 SP4, 5.3 SP3, 5.3 SP2, 5.3 SP1, 5.3   
+
+Run Full LDAP Sync
+
+esg104078
+
+If there are multiple ldap config objects, and you require to run a full sync on one of the objects, or multiple ldap config objects execute one of the following two procedure : 
+
+
+
+From DA
+
+
+
+locate the ldap config objects you wish to configure by going into dql and excecute the following query : 
+
+
+
+select * from dm_ldap_config
+
+
+
+This will display the list of ldap configurations. Locate the specific object(s) you wish to update and execute the following dql : 
+
+
+
+udpate dm_ldap_config objects
+
+set a_last_run = ''
+
+where object_name = 'name of ldap config object' 
+
+
+
+Go to the jobs tab and run the dm_ldap_synchronization job and it should execute a full sync. 
+
+
+
+From Content Server
+
+
+
+Alternatively, you can also run a full sync from directly on the content server by executing the following command from command prompt : 
+
+
+
+java com.documentum.ldap.LDAPSync -docbase_name repositoryname -user_name superuser_login -method_trace_level integer -full_sync true > ldap.log
+
+
+
+changing the values in bold to the respective variable. The integer for method_trace_level should be an integer between 0 and 10. 
+

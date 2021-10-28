@@ -1,0 +1,10 @@
+
+My customer (Morgan Stanley) experiences deadlocks with SQL server 2005. Engineering recommends enabling of READ_COMMITTED_SNAPSHOT and ALLOW_SNAPSHOT_ISOLATION at the DB level. However their DBAs are reluctant to enable these settings due to tempDB growth. 
+
+They want to talk to few customers who have these settings enabled in production. I was wondering if have a customer with these settings enabled and are willing to talk to Morgan Stanley for few minutes, then please let me know the contact details.
+
+
+****************
+
+
+These settings will keep from the deadlocks and I have recommended to many customers these settings when they experience deadlocks.  I have not heard anything back negative.

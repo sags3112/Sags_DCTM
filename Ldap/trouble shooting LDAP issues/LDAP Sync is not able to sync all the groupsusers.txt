@@ -1,0 +1,8 @@
+
+
+LDAP Sync is not able to sync all the groupsusers
+
+
+answer:
+
+Then we have to update the user_max_cache and group_max_cache and page_size

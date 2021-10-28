@@ -1,0 +1,103 @@
+Understanding projections and proximity values for multiple content server single repository
+
+
+Resolution:
+
+
+Understanding projections and proximity values for multiple content server single repository. Also known as Load Balancing
+ 
+Examples using systemA and systemB
+ 
+server.ini 
+Note: any projection values will take a docbase restart.
+**********************************************
+server.ini for systemA:
+[DOCBROKER_PROJECTION_TARGET]
+host = systemA
+port = 1457
+   # blank or proximity=1, means local
+ 
+[DOCBROKER_PROJECTION_TARGET_1]
+host = systemB
+port = 1489
+proximity = 2  # Note it must be higher than 1 (for remote) and 9XXX is reserved for farstore
+**********************************************
+server.ini for systemB:
+[DOCBROKER_PROJECTION_TARGET]
+host=systemB
+port=1457
+ 
+[DOCBROKER_PROJECTION_TARGET_1]
+host=systemA
+port=1489
+proximity=2 
+ 
+Note: Using $DM_HOME/install/dm_launch_cfs_server_config_program.sh to install the second system will put in Farstore proximities. You will have to remove the 9xxx, since it not using farstore
+ 
+Example:
+[DOCBROKER_PROJECTION_TARGET]
+host=systemB
+port=1457
+proximity=9001
+[DOCBROKER_PROJECTION_TARGET_1]
+host=systemA
+port=1489
+proximity=9002 
+ 
+**********************************************
+ 
+Server Config objects
+Note: the server Config object will inherit the projections from server.ini 
+So if it is wrong in server.ini, then it will take a docbase restart after it is fixed in server.ini file.
+For changes in server config object use DA or iapi (DA is easier) So you can modify or drop and projection value.
+ 
+********************************************** 
+Server config object for systemA:
+projection_targets      [0]: systemA
+                        [1]: systemB
+projection_ports        [0]: 1489
+                        [1]: 1489
+projection_proxval      [0]: 1
+                        [1]: 2
+********************************************** 
+Server config object for systemB:
+projection_targets      [0]: systemB
+                        [1]: systemA
+projection_ports        [0]: 1489
+                        [1]: 1489
+projection_proxval      [0]: 1
+                        [1]: 2
+**********************************************
+ 
+dmcl.ini
+Note: The dmcl.ini on the server is used only by the server as client.
+So iapi or idql from command line on server and jobs
+Now to run the jobs you must be on the local system, since it uses trusted logon.
+Test the trusted logon by logging into system as install owner, using iapi, enter the docbase, then hitting <Carriage Return> for account and password.
+ 
+From the server prospective the only value needed is for the local docbroker in the dmcl.ini
+ 
+Here is a misconception, (Look at dmcl.ini and use the primary, then backup if primary is offline)
+This is NOT true, both are used.
+ 
+example:
+Docbase docA, docB and docC project to docbroker systemA
+Docbase docD, docE and docF project to docbroker systemA
+ 
+So if there was pointing to docbroker on systemA; a docA, docB, docC, docD, docE and docF would be seen.
+ 
+Now the Proximity value has more meaning for server projections since docbase name is the same.
+So if there are 2 entries in dmcl.ini and the the proximity value is left blank in server.ini or server config object.
+A job may point to the remote docbroker and try to authenticate there, but trusted login (authentication) will fail.
+ 
+There has been sight of a configuration where there was no local projection value.
+This will also fail, due to trusted login.
+**********************************************
+Here is a dmcl.ini have 2 listings:
+[DOCBROKER_PRIMARY]
+host = systemA
+port = 1489
+ 
+[DOCBROKER_BACKUP_1]
+host=systemB
+port=1489

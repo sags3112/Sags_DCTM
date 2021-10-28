@@ -1,0 +1,35 @@
+Symptoms
+
+LDAP Synchronization fails with an error like the following:
+
+[DM_LDAP_SYNC_E_EXCEPTION_ERROR]error: "/documentum/dba/config/docbase_name/ldap_0800000c80023102.cnt (No such file or directory)"
+2010-11-21 11:40:06:718 IST [http-0.0.0.0-9080-1]: ERROR: DmLdapException:: THREAD: http-0.0.0.0-9080-1; MSG: [DM_LDAP_SYNC_E_EXCEPTION_ERROR]error: "/documentum/dba/config/docbase_name/ldap_0800000c80023102.cnt (No such file or directory)"; ERRORCODE: 100; NEXT: null
+
+Cause
+
+A possible reason for this error is that there are two Content Servers serving the same docbase, and the LDAPSynchronization job is configured to run on the second Content Server.
+
+
+
+However the cnt file only exists on the first Content Server.
+
+
+
+For more information, the cnt file contains an encrypted password that LDAPSynchronization uses to bind to the LDAP server. This file is read each time LDAPSynchronization is executed.
+
+
+
+Resolution
+
+In order to solve this issue, we can either copy the cnt file to the second Content Server, or configure the job to run on the first Content Server.
+
+
+
+If we copy the cnt file to the second Content Server, we need to make sure that it will be copied on the location expected by the LDAPSynchronization job. In the example above, it would be:
+
+
+
+/documentum/dba/config/docbase_name/ldap_0800000c80023102.cnt 
+
+
+

@@ -1,0 +1,25 @@
+
+esg100867
+
+Symptoms
+
+When running the dm_LDAPSynchronization job, the following error may be encountered:
+
+[DM_LDAP_SYNC_E_EXCEPTION_ERROR]error:  "Operational User Properties not allowed in Attribute Mapping"
+
+Cause
+
+This error indicates that there is a problem with the mappings listed on the LDAP Config Object. 
+
+Any required attribute listed in the mappings cannot have a constant value specified in the mapping. 
+
+This applies to the following attributes:
+
+user_name
+user_login_name
+user_address
+group_name
+user_login_domain
+Resolution
+
+To resolve this issue, make sure that the attributes listed above are not mapped to a constant value. For example, user_login_domain cannot be mapped to a hard coded value such as "TESTLDAP". For this particular attribute, there should be no mapping as this attribute is automatically populated by the dm_LDAPSynchronization run.

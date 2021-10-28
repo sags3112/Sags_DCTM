@@ -1,0 +1,72 @@
+Case description:
+
+
+------------------------------------
+Create new LDAP Server config object.  Click next to get to Sync&connect tab.  Error received is:invokeMethod() failed while calling: onTabSelected org/mozilla/jss/crypto/AlreadyInitializedException 
+ldap server is valid and can ping. ldap user account/password valid.  error details attached to this case.
+
+BUSINESS IMPACT: 
+------------------------------------
+can't configure access for external users - clients and vendors
+
+ENVIRONMENT INFORMATION
+------------------------------------
+<<Primary Product Information>>
+Product: Administrator
+
+
+
+
+Resolution esg93101 
+
+LDAP object not being saved in D6 SP1. An error message is displayed when trying to save object
+
+
+Symptoms
+
+LDAP object is not saved. Error message similar to the one below is displayed.
+
+java.lang.NoClassDefFoundError: org/mozilla/jss/crypto/AlreadyInitializedException
+at com.documentum.ldap.impl.DfLdapConfig.setBindPassword(DfLdapConfig.java:318)
+at com.documentum.ldap.impl.DfLdapConfig___PROXY.setBindPassword(DfLdapConfig___PROXY.java)
+at com.documentum.webcomponent.admin.ldap.LdapInfo.validate(LdapInfo.java:362)
+at com.documentum.webcomponent.admin.ldap.LdapPrimaryInfo.validate(LdapPrimaryInfo.java:232)
+at com.documentum.webcomponent.admin.container.AdminPropertyContainer.onNextComponent(AdminPropertyContainer.java:405)
+at com.documentum.webcomponent.admin.ldap.LdapPropertyContainer.onNextComponent(LdapPropertyContainer.java:151)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+at java.lang.reflect.Method.invoke(Method.java:597)
+at com.documentum.web.form.FormProcessor.invokeMethod(FormProcessor.java:1562)
+at com.documentum.web.form.FormProcessor.fireActionEvent(FormProcessor.java:1271)
+at com.documentum.web.form.RecallOperation.execute(RecallOperation.java:101)
+at com.documentum.web.form.FormProcessor.processAction(FormProcessor.java:107)
+at com.documentum.web.form.FormAction.processAction(FormAction.java:107)
+at com.documentum.web.env.WDKController.doStartRequest(WDKController.java:191)
+at com.documentum.web.env.WDKController.processRequest(WDKController.java:92)
+at com.documentum.web.env.WDKController.doFilter(WDKController.java:83)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:235)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:206)
+at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:233)
+at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:175)
+at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:128)
+at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:102)
+at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:109)
+at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:263)
+at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:844)
+at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.process(Http11Protocol.java:584)
+at org.apache.tomcat.util.net.JIoEndpoint$Worker.run(JIoEndpoint.java:447)
+at java.lang.Thread.run(Thread.
+
+
+
+Cause
+
+Jar file jss311.jar is missing in $Application_root$/WEB-INF/lib 
+
+
+
+Resolution
+
+The workaround for this problem would be copying  $Application_root$/WEB-INF/thirdparty/win32/jss311.jar to  $Application_root$/WEB-INF/lib and restarting the app server. If you are trying to configure the LDAP in SSL mode, perform the manual step as directed in $Application_root$/WEB-INF/thirdparty/readme.txt.
+

@@ -1,0 +1,7 @@
+Docbase Startup initiating 60+ Oracle sessions
+
+1) enable sql trace
+2) check the parallel_max_servers in oracle (DB)
+3) reduced the parallel_max_servers from 350 to 20.now using less than 10% but few queries will take long time
+
+4) 

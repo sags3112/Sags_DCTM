@@ -1,0 +1,23 @@
+LDAPSync Job Unable to be run from DA 66 P13;
+
+Customer is on AIX , CS 66 P13 and oracle.  2 content servers. DA is running on clustered WAS servers on AIX as well. 
+
+
+LDAPSync runs fine from command line. But it is failing from DA. We have tried running on specific servers, we have tried deleting dfc.keystore etc, but no relief. Attached are the LDAPSync report from both servers. This issue is very high level escalation within EMC. So if anyone know how to resolve the issue , please reply back to me
+
+
+WRK AROUND 1;
+
+
+Did customer change aek.key passphrase?
+
+“LDAPSync runs fine from command line.”
+On both content Servers?
+
+cnt files (file with encrypted password) should exist and be same on both Content Servers.
+aek.key files same on both Content Server should be same.
+
+
+WORK ARUND 2;
+
+Can they add an env variable DM_CRYPTO_FILE and point to the same aek.key in different location if they don't already have one(this will override the default location dba/secure), see esg74875 for more info.

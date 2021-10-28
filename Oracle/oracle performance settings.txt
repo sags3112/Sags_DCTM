@@ -1,0 +1,53 @@
+ 
+
+DBA changes in ‘INIT.ORA’ file on the database server ‘prodora’:
+
+ 
+
+sort_area_size 48MB
+
+open cursors 1000
+
+cursor sharing FORCE
+
+session max 800
+
+sga_max 16GB 
+
+ 
+
+EDM/Documentum Technical Team Changes:
+
+ 
+
+WebTop: 
+
+dmcl.ini  
+
+max_session_count=400 currently 1000
+
+ 
+
+Content Server: 
+
+server.ini 
+
+concurrent_sessions = 400 currently 500
+
+ 
+
+dmcl.ini
+
+max_session_count=400 currently 100
+
+ 
+
+Please let me know if I missed any and we will implement them at the earliest available time.
+
+
+*************
+Change the following init.ora parameters to the new values.
+
+pga_aggregate_target = 300 MB
+sga_max_size = 5 GB
+sga_target = 5 GB

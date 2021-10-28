@@ -1,0 +1,46 @@
+esg110005
+
+Bad performance after an upgrade from 5.3 (any SP) to 6.5 (any SP). Missing database indexes compared to a fresh 6.5 repository. 
+ 
+
+
+Symptoms
+
+The performance seen from a standard client (Webtop/DA) has deteriorated after upgrading from version 5.3 to version 6.5.
+
+ 
+
+
+
+
+
+Cause
+
+Content Server upgrades are not creating the indexes required by the newer versions. 
+
+A fresh repository will contain new indexes that an upgrade does not create.
+
+ 
+
+Resolution
+
+Use the commands from the attached file to destroy and recreate the necessary indexes.
+
+ 
+
+Some indexes name must be identified to drop them. Use the following SQL commands to identify the name to use (adapt <TABLE NAME IN UPPERCASE (_S or _R)>):
+
+col column_position format 99 heading "POS"
+col index_name format a24
+col column_name format a24
+break on index_name
+select index_name, column_name, column_position
+from user_ind_columns
+where table_name = '<TABLE NAME IN UPPERCASE (_S or _R)>'
+order by index_name, column_position;
+clear col
+clear break
+
+The index_name will be returned back in UPPER CASE. 
+
+Lower case should be used in the API DROP_INDEX command.

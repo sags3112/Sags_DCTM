@@ -1,0 +1,2494 @@
+<html><head>
+
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta name="ROBOTS" content="NOARCHIVE">
+<title>Installing Oracle 10g R1,R2 on RHEL 4, 3, 2.1, FC 4, 3, 1, RH 9 
+(x86 and x86-64 (AMD64/EM64T) - Oracle10g Installation on Red Hat 
+Enterprise Linux AS, Red Hat Fedora Core 4, 3, 1, RedHat 9, install 
+linux 10g oracle</title>
+</head><body bgcolor="#ffffff" text="#000000">
+
+
+
+<br>
+
+
+<div align="center"><h2><font color="#ff0000">
+Installing Oracle Database 10g Release 1 and 2 (32-bit/64-bit) on Red 
+Hat Enterprise Linux AS 4, 3, 2.1, Red Hat Fedora Core 4, 3, 1, RH 9 on 
+x86 and x86-64 (AMD64/EM64T) Architecture
+</font></h2></div>
+
+<center><i>Written by Werner Puschitz</i></center>
+
+<br>
+
+<center><b><font size="+1"><a href="http://www.puschitz.com/">www.puschitz.com</a></font></b></center>
+
+<br>
+<br>
+<br>
+
+
+
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle10g%20step%20by%20step_files/show_ads.js">
+</script><script src="InstallingOracle10g%20step%20by%20step_files/expansion_embed.js"></script><script src="InstallingOracle10g%20step%20by%20step_files/test_domain.js"></script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display: inline-table; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><ins id="google_ads_frame1_anchor" style="display: block; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame1" marginheight="0" marginwidth="0" name="google_ads_frame" src="InstallingOracle10g%20step%20by%20step_files/ads.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="728" frameborder="0" height="90" scrolling="no"></iframe></ins></ins>
+
+<br>
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle10g%20step%20by%20step_files/show_ads.js">
+</script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display: inline-table; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><ins id="google_ads_frame2_anchor" style="display: block; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame2" marginheight="0" marginwidth="0" name="google_ads_frame" src="InstallingOracle10g%20step%20by%20step_files/ads_002.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="728" frameborder="0" height="90" scrolling="no"></iframe></ins></ins>
+
+<br>
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle10g%20step%20by%20step_files/show_ads.js">
+</script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display: inline-table; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><ins id="google_ads_frame3_anchor" style="display: block; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame3" marginheight="0" marginwidth="0" name="google_ads_frame" src="InstallingOracle10g%20step%20by%20step_files/ads_003.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="728" frameborder="0" height="90" scrolling="no"></iframe></ins></ins>
+
+<br>
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 200;
+google_ad_height = 90;
+google_ad_format = "200x90_0ads_al";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle10g%20step%20by%20step_files/show_ads.js">
+</script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><iframe name="google_ads_frame" src="InstallingOracle10g%20step%20by%20step_files/ads_004.htm" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" width="200" frameborder="0" height="90" scrolling="no"></iframe>
+
+<br>
+<br>
+<br>
+
+
+
+The following procedure is a step-by-step guide (Cookbook) with tips and information for installing
+Oracle Database 10g on Red Hat Linux. 
+<br>
+<br>
+This guide shows how I installed 10g Database on the following Red Hat systems: <br>
+<br>
+<br>
+
+<table border="1">
+<tbody><tr>
+<th>Oracle Database Version</th>
+<th>Red Hat OS Version</th>
+<th>Architecture</th>
+<th>Comments</th>
+</tr>
+
+<tr>
+<td>Oracle 10g R2 <br>(10.2.0.1.0)</td>
+<td>Red Hat Enterprise Linux Advanced Server 4 Update 2 <br>(RHEL AS 4 U2)</td>
+<td><b>x86-64</b></td>
+<td>See also <a href="http://download-east.oracle.com/docs/cd/B19306_01/install.102/b15667/toc.htm">
+Oracle Database Installation Guide 10g Release 2 (10.2) for Linux x86-64</a></td>
+</tr>
+
+<tr>
+<td>Oracle 10g R2 <br>(10.2.0.1.0)</td>
+<td>Red Hat Enterprise Linux Advanced Server 4 Update 2 <br>(RHEL AS 4 U2)</td>
+<td>x86</td>
+<td>See also <a href="http://download-east.oracle.com/docs/html/B15659_03/toc.htm">
+Oracle Database Release Notes 10g Release 2 (10.2) for Linux x86
+</a></td></tr>
+
+<tr>
+<td>Oracle 10g R2 <br>(10.2.0.1.0)</td>
+<td>Red Hat Enterprise Linux Advanced Server 3 Update 5 <br>(RHEL AS 3 U5)</td>
+<td>x86</td>
+<td>See also <a href="http://download-east.oracle.com/docs/cd/B19306_01/install.102/b15660/toc.htm">
+Oracle Database Installation Guide 10g Release 2 (10.2) for Linux x86</a></td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.3)</td>
+<td>Red Hat Enterprise Linux Advanced Server 4 Update 1 <br>(RHEL AS 4 U1)</td>
+<td><b>x86-64</b></td>
+<td>No certification projected for 10g R1 64-bit on RHEL AS 4 x86_64 at the time of this writing</td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.3)</td>
+<td>Red Hat Enterprise Linux Advanced Server 4<br>(RHEL AS 4)</td>
+<td>x86</td>
+<td>See also <a href="http://download-east.oracle.com/docs/html/B14145_04/toc.htm">
+Oracle Database Release Notes 10g Release 1 (10.1.0.3.0) for Linux x86</a></td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.3)</td>
+<td>Red Hat Enterprise Linux Advanced Server 3 Update 5 <br>(RHEL AS 3 U5)</td>
+<td><b>x86-64</b></td>
+<td>See also <a href="http://download-east.oracle.com/docs/html/B14399_01/toc.htm">
+Oracle Database Installation Guide 10g Release 1 (10.1.0.3) for Linux x86-64</a></td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.3)</td>
+<td>Red Hat Enterprise Linux Advanced Server 3 Update 5 <br>(RHEL AS 3 U5)</td>
+<td>x86</td>
+<td>See also <a href="http://download-east.oracle.com/docs/html/B10811_05/toc.htm">
+Oracle Database Installation Guide 10g Release 1 (10.1) for UNIX Systems</a></td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.2)</td>
+<td>Red Hat Enterprise Linux Advanced Server 2.1 <br>(RHEL AS 2.1)</td>
+<td>x86</td>
+<td>See also <a href="http://download-east.oracle.com/docs/html/B10811_05/toc.htm">
+Oracle Database Installation Guide 10g Release 1 (10.1) for UNIX Systems</a></td>
+</tr>
+
+<tr>
+<td>Oracle 10g R2 <br>(10.2.0.1.0)</td>
+<td>Red Hat Fedora Core 4 <br>(FC 4)</td>
+<td>x86</td>
+<td>Not supported</td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.3)</td>
+<td>Red Hat Fedora Core 3 <br>(FC 3)</td>
+<td>x86</td>
+<td>Not supported</td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.2)</td>
+<td>Red Hat Fedora Core 3 <br>(FC 3)</td>
+<td>x86</td>
+<td>Not supported</td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.2)</td>
+<td>Red Hat Fedora Core 1 <br>(FC 1)</td>
+<td>x86</td>
+<td>Not supported</td>
+</tr>
+
+<tr>
+<td>Oracle 10g R1 <br>(10.1.0.2)</td>
+<td>Red Hat 9 <br>(RH 9)</td>
+<td>x86</td>
+<td>Not supported</td>
+</tr>
+</tbody></table>
+
+<br>
+
+These instructions will also work for Red Hat Enterprise Linux ES 2.1, 3, and 4.
+<br>
+<br>
+<br>
+
+
+<b>Oracle Database 10g on other Linux Distributions</b><br>
+<br>
+People recommended this installation guide for:
+<br><br>
+<u>WhiteBox Linux 3</u>
+<br>
+<ul>
+Works exactly like on RHEL AS 3.
+</ul>
+
+<u>Mandrake 10.0 Community Edition</u>
+<br>
+<ul>
+Some files/packages were not included with Mandrake 10 which can be downloaded from:<br>
+ftp://ftp.rediris.es/sites/carroll.cac.psu.edu/mandrake-devel/cooker/i586/Mandrake/RPMS/setarch-1.3-1mdk.i586.rpm
+<br>
+ftp://194.199.20.114/linux/contrib/openmotif/linux-rpm/openmotif-2.1.30-1_ICS.i386.rpm
+</ul>
+<br>
+
+
+
+<b>Validation/Certification</b><br><br>
+
+For Validations/Certifications, go to
+<a href="http://metalink.oracle.com/metalink/certify/certify.welcome">
+Oracle's Certification Matrices</a>.
+
+<br>
+<br>
+<br>
+
+<b>Table of Contents:</b>
+<br>
+<br>
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#DownloadingOracle10gSoftwareAndBurningOracle10gCDs">
+Downloading Oracle10g Software and Burning Oracle10g CDs</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingMemoryAndSwapSpace">Checking Memory and Swap Space</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingTmpSpace">Checking /tmp Space</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingSoftwarePackages">Checking Software Packages (RPMs)</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingKernelParameters">Checking Kernel Parameters</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#SizingDiskSpaceForOracle10g">Sizing Disk Space for Oracle10g</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#CreatingOracleUserAccounts">Creating Oracle User Accounts</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#SettingShellLimitsForTheOracleUser">Setting Shell Limits for the Oracle User</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#CreatingOracleDirectories">Creating Oracle Directories</a><br></b>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#OptimalFlexibleArchitecture">Optimal Flexible Architecture (OFA) for 10g (10.1.0.2)</a><br>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#SettingOracleEnvironments">Setting Oracle Environments</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#InstallingOracle10g">Installing Oracle10g</a><br></b>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#InstallingOracle10gOnARemoteLinuxServer">Installing Oracle10g on a Remote Linux Server</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#StartingOracleUniversalInstaller">Starting Oracle Universal Installer</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#UsingOracleUniversalInstaller">Using Oracle Universal Installer</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#UpdatesAfterRunningOracleUniversalInstaller">Updates after Running Oracle Universal Installer</a><br>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#OraclePostInstallationTasks">Oracle Post-installation Tasks</a><br></b>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#StartupAndShutdownOfTheOracle10gDatabase">Startup and Shutdown of the Oracle10g Database</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle10g.shtml#ShutdownOfOtherOracle10gBackgroundProcesses">Shutdown of other Oracle 10g Background Processes</a><br>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#TipsAndHintsForOracle10gOnLinux">Tips and Hints for Oracle10g on Linux</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g/Linux Errors and Problems</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle10g.shtml#References">References</a><br></b>
+
+<br>
+<br>
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="DownloadingOracle10gSoftwareAndBurningOracle10gCDs">
+Downloading Oracle10g Software and Burning Oracle10g CDs</a></u></font><u><a name="DownloadingOracle10gSoftwareAndBurningOracle10gCDs"></a></u><p></p>
+<u><a name="DownloadingOracle10gSoftwareAndBurningOracle10gCDs"></a></u><a name="DownloadingOracle10gSoftwareAndBurningOracle10gCDs"></a></h2>
+
+<a name="DownloadingOracle10gSoftwareAndBurningOracle10gCDs">Download Oracle 10g (32-bit and 64-bit) for Linux from OTN to install linux 10g oracle:<br>
+</a><a href="http://otn.oracle.com/software/products/database/oracle10g/index.html">
+http://otn.oracle.com/software/products/database/oracle10g/index.html</a>
+<br>
+<br>
+NOTE: <i>To install a Oracle Database 10g (without RAC) you only need to download the database file <tt>ship.db.lnx32.cpio.gz</tt>,
+or <tt>10201_database_linux_x86_64.cpio</tt> etc.</i>
+<br>
+<br>
+Compute a cyclic redundancy check (CRC) checksum for the downloaded files and
+compare the checksum numbers against the numbers posted on OTN's website. For example:
+<pre><font color="#0000ff">cksum ship.db.lnx32.cpio.gz</font></pre>
+
+Uncompress the downloaded file(s):
+<pre><font color="#0000ff">gunzip ship.db.lnx32.cpio.gz</font></pre>
+
+Unpack <tt>ship.db.lnx32.cpio</tt>:
+<pre>$ <font color="#0000ff">cpio -idmv &lt; ship.db.lnx32.cpio</font>
+Disk1/stage/Components/oracle.server/10.1.0.3.0/1
+Disk1/stage/Components/oracle.server/10.1.0.3.0
+Disk1/stage/Components/oracle.server
+Disk1/stage/Components/oracle.tg/10.1.0.3.0/1/DataFiles
+Disk1/stage/Components/oracle.tg/10.1.0.3.0/1
+Disk1/stage/Components/oracle.tg/10.1.0.3.0
+Disk1/stage/Components/oracle.tg
+Disk1/stage/Components/oracle.assistants.dbca/10.1.0.3.0/1/DataFiles/doc.3.1.jar
+Disk1/stage/Components/oracle.assistants.dbca/10.1.0.3.0/1/DataFiles/class.jar
+...</pre>
+
+I executed the following command to burn the <tt>Disk1</tt> directory on a CD:
+<pre># <font color="#0000ff">mkisofs -r Disk1 | cdrecord -v dev=0,0,0 speed=20 -</font></pre>
+(Drives' speed varies; you can get the dev numbers when you execute cdrecord -scanbus).
+<br>
+<br>
+Note that 10g R2 won't fit on a single CD since it has over 780MB. 
+<br>
+<br>
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="CheckingMemoryAndSwapSpace">
+Checking Memory and Swap Space</a></u></font><u><a name="CheckingMemoryAndSwapSpace"></a></u><p></p>
+<u><a name="CheckingMemoryAndSwapSpace"></a></u><a name="CheckingMemoryAndSwapSpace"></a></h2>
+
+<a name="CheckingMemoryAndSwapSpace">Oracle says that the system must have at least 512MB of RAM and 1GB of swap space or twice the size of RAM. 
+And for systems with more than 2 GB of RAM, the swap space can be between one and two times the size of RAM.
+You might also want to check out
+</a><a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SizingSwapSpace">
+Sizing Swap Space</a>.
+<br>
+For test sake I tried to install an Oracle Database 10g (Type: General Purpose Database) on a little PC with 
+256MB of RAM and 1 GB of swap space. I was able to get a 10g database up and running on this little PC without
+a problem.
+<br>
+<br>
+To check the size of physical memory, execute:
+<pre><font color="#0000ff">grep MemTotal /proc/meminfo</font></pre>
+
+To check the size of swap space, execute:
+<pre><font color="#0000ff">grep SwapTotal /proc/meminfo</font></pre>
+
+<br>
+You also can add temporary swap space to your system by creating a temporary swap file
+instead of using a raw device. Here is the procedure:
+
+<pre><font color="#0000ff">su - root
+dd if=/dev/zero of=tmpswap bs=1k count=900000
+chmod 600 tmpswap
+mkswap tmpswap
+swapon tmpswap</font></pre>
+
+To disable the temporary swap space execute the following commands:
+<pre><font color="#0000ff">su - root
+swapoff tmpswap
+rm tmpswap</font></pre>
+<br>
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="CheckingTmpSpace">
+Checking /tmp Space</a></u></font><u><a name="CheckingTmpSpace"></a></u><p></p>
+<u><a name="CheckingTmpSpace"></a></u><a name="CheckingTmpSpace"></a></h2>
+
+<a name="CheckingTmpSpace">According to Oracle's documentation, the Oracle Universal Installer (OUI) requires up to
+400 MB of free space in the <tt>/tmp</tt> directory. But OUI
+checks if <tt>/tmp</tt> is only greater than 80 MB.
+<br>
+<br>
+To check the space in <tt>/tmp</tt>, run:
+</a><pre><a name="CheckingTmpSpace">$ <font color="#0000ff">df /tmp</font></a></pre>
+
+<a name="CheckingTmpSpace">If you do not have enough space in the <tt>/tmp</tt> filesystem,
+you can temporarily create a <tt>tmp</tt> directory in another filesystem. Here is how
+you can do this:
+
+</a><pre><a name="CheckingTmpSpace"><font color="#0000ff">su - root
+mkdir /&lt;AnotherFilesystem&gt;/tmp
+chown root.root /&lt;AnotherFilesystem&gt;/tmp
+chmod 1777 /&lt;AnotherFilesystem&gt;/tmp
+export TEMP=/&lt;AnotherFilesystem&gt;           </font># used by Oracle<font color="#0000ff">
+export TMPDIR=/&lt;AnotherFilesystem&gt;         </font># used by Linux programs like the linker "ld"</a></pre>
+
+<a name="CheckingTmpSpace">When you are done with the Oracle installation, shutdown Oracle and remove the temporary <tt>/tmp</tt> directory:
+</a><pre><a name="CheckingTmpSpace"><font color="#0000ff">su - root
+rmdir /&lt;AnotherFilesystem&gt;/tmp
+unset TEMP
+unset TMPDIR</font></a></pre>
+<a name="CheckingTmpSpace"><br>
+
+
+
+
+
+
+</a><h2><a name="CheckingTmpSpace"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="CheckingSoftwarePackages">
+Checking Software Packages (RPMs)</a></u></font><u><a name="CheckingSoftwarePackages"></a></u><p></p>
+<u><a name="CheckingSoftwarePackages"></a></u><a name="CheckingSoftwarePackages"></a></h2>
+
+<a name="CheckingSoftwarePackages"><b></b></a><b><a name="CheckingSoftwarePackagesGeneral"></a>General</b><br><br>
+
+Before you install an Oracle Database 10g you need to check the system for required RPMs.
+On my systems I usually install a minimum list of RPMs which usually requires the installation of additional
+packages for Oracle databases. <i>Always ensure to use the latest RPMs and kernels!</i>
+<br>
+<br>
+
+For <b>10g R2 (64-bit) on RHEL 4 x86_64</b>, the document 
+<a href="http://download-east.oracle.com/docs/cd/B19306_01/install.102/b15667/toc.htm">
+Oracle Database Installation Guide 10g Release 2 (10.2) for Linux x86-64</a>
+lists the following required package versions or higher:
+<br>
+<pre>  binutils-2.15.92.0.2-10.EL4
+  compat-db-4.1.25-9
+  control-center-2.8.0-12
+  gcc-3.4.3-9.EL4
+  gcc-c++-3.4.3-9.EL4
+  glibc-2.3.4-2
+  glibc-common-2.3.4-2
+  gnome-libs-1.4.1.2.90-44.1
+  libstdc++-3.4.3-9.EL4
+  libstdc++-devel-3.4.3-9.EL4
+  make-3.80-5
+  pdksh-5.2.14-30
+  sysstat-5.0.5-1
+  xscreensaver-4.18-5.rhel4.2
+</pre>
+
+Also ensure to install the <tt>libaio-0.3.96</tt> RPM or a newer version! Otherwise the OUI prerequisite check will fail.
+<br>
+<br>
+
+To check if you are running the x86_64 kernel on a x86_64 platform, run:
+<pre>  #<font color="#0000ff"> uname -mi
+  x86_64 x86_64
+</font></pre>
+
+To check the RPMs, run:
+<pre><font color="#0000ff">  rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}  (%{ARCH})\n' \
+              binutils compat-db control-center gcc gcc-c++ glibc glibc-common gnome-libs \
+              libstdc++ libstdc++-devel make pdksh sysstat xscreensaver libaio
+</font></pre>
+
+It is important to have these x86_64 RPMs installed. The above command will list the architecture of each binary package.
+You will see that some RPMs are installed twice when you run this command (x86 RPM and x86_64 RPM).
+You need to ensure that all required x86-64 RPMs listed here are installed.
+<br>
+<br>
+<br>
+
+
+
+For <b>10g R2 (32-bit) on RHEL 4 x86</b>, the document <a href="http://download-east.oracle.com/docs/html/B15659_03/toc.htm">
+Oracle Database Release Notes 10g Release 2 (10.2) for Linux x86</a>
+lists the following required package versions or higher:
+<br>
+<pre>  binutils-2.15.92.0.2-10.EL4
+  compat-db-4.1.25-9
+  control-center-2.8.0-12
+  gcc-3.4.3-9.EL4
+  gcc-c++-3.4.3-9.EL4
+  glibc-2.3.4-2
+  glibc-common-2.3.4-2
+  gnome-libs-1.4.1.2.90-44.1
+  libstdc++-3.4.3-9.EL4
+  libstdc++-devel-3.4.3-9.EL4
+  make-3.80-5
+  pdksh-5.2.14-30
+  sysstat-5.0.5-1
+  xscreensaver-4.18-5.rhel4.2
+</pre>
+
+Also ensure to install the <tt>libaio-0.3.96</tt> RPM or a newer version! Otherwise the OUI prerequisite check will fail.
+<br>
+<br>
+To check the RPMs, run:
+<pre><font color="#0000ff">  rpm -q binutils compat-db control-center gcc gcc-c++ glibc glibc-common gnome-libs \
+         libstdc++ libstdc++-devel make pdksh sysstat xscreensaver libaio
+</font></pre>
+
+<br>
+<br>
+
+
+
+For <b>10g R2 (32-bit) on RHEL 3 x86</b>, the document <a href="http://download-east.oracle.com/docs/cd/B19306_01/install.102/b15660/toc.htm">
+Oracle Database Installation Guide 10g Release 2 (10.2) for Linux x86</a>
+lists the following required package versions or higher:
+<br>
+<pre>  make-3.79.1
+  gcc-3.2.3-34
+  glibc-2.3.2-95.20
+  compat-db-4.0.14-5
+  compat-gcc-7.3-2.96.128
+  compat-gcc-c++-7.3-2.96.128
+  compat-libstdc++-7.3-2.96.128
+  compat-libstdc++-devel-7.3-2.96.128
+  openmotif21-2.1.30-8
+  setarch-1.3-1
+</pre>
+
+Also ensure to install the <tt>libaio-0.3.96-5</tt> RPM or a newer version! Otherwise the OUI prerequisite check will fail.
+<br>
+<br>
+To check the RPMs, run:
+<pre><font color="#0000ff">  rpm -q make gcc glibc compat-db compat-gcc compat-gcc-c++ compat-libstdc++ compat-libstdc++-devel openmotif21 setarch libaio
+</font></pre>
+<br>
+
+
+
+For <b>10g R1 (64-bit) on RHEL 3 x86_64</b>, the document <a href="http://download-east.oracle.com/docs/html/B14399_01/toc.htm">
+Oracle Database Installation Guide 10g Release 1 (10.1.0.3) for Linux x86-64</a>
+lists the following required package versions or higher:
+<br>
+<pre>  make-3.79.1
+  gcc-3.2.3-34
+  glibc-2.3.2-95.20
+  glibc-devel-2.3.2-95.20
+  glibc-devel-2.3.2-95.20   (32 bit)
+  compat-db-4.0.14-5
+  compat-gcc-7.3-2.96.128
+  compat-gcc-c++-7.3-2.96.128
+  compat-libstdc++-7.3-2.96.128
+  compat-libstdc++-devel-7.3-2.96.128
+  gnome-libs-1.4.1.2.90-34.1   (32 bit)
+  openmotif21-2.1.30-8
+  setarch-1.3-1
+  libaio-0.3.96-3
+  libaio-devel-0.3.96-3
+</pre>
+
+To check if you are running the x86_64 kernel on a x86_64 platform, run:
+<pre>  #<font color="#0000ff"> uname -mi
+  x86_64 x86_64
+</font></pre>
+
+To check the RPMs, run:
+<pre><font color="#0000ff">  rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}  (%{ARCH})\n' \
+              make gcc glibc glibc-devel compat-db compat-gcc compat-gcc-c++ compat-libstdc++ \
+              compat-libstdc++-devel gnome-libs openmotif21 setarch libaio libaio-devel
+</font></pre>
+
+It is important to have the right x86 and x86_64 RPMs installed. The 
+above command will list the architecture of each binary package.
+And as you can see in the above list, <tt>glibc-devel</tt> and other RPMs are listed twice. This means that you have to install
+packages for both architectures, x86 and x86_64.
+<br>
+<br>
+<br>
+
+
+For <b>10g R1 (32-bit) on RHEL 3 x86</b>, the document <a href="http://download-east.oracle.com/docs/html/B10811_05/toc.htm">
+Oracle Database Installation Guide 10g Release 1 (10.1) for UNIX Systems</a>
+lists the following required package versions or higher:
+<br>
+<pre>  make-3.79.1
+  gcc-3.2.3-34
+  glibc-2.3.2-95.20
+  compat-db-4.0.14-5
+  compat-gcc-7.3-2.96.128
+  compat-gcc-c++-7.3-2.96.128
+  compat-libstdc++-7.3-2.96.128
+  compat-libstdc++-devel-7.3-2.96.128
+  openmotif21-2.1.30-8
+  setarch-1.3-1
+</pre>
+
+To check the RPMs, run:
+<pre><font color="#0000ff">  rpm -q make gcc glibc compat-db compat-gcc compat-gcc-c++ compat-libstdc++ compat-libstdc++-devel openmotif21 setarch
+</font></pre>
+<br>
+
+
+
+
+For <b>10g R1 (32-bit) on RHEL 2.1</b>, the document <a href="http://download-east.oracle.com/docs/html/B10811_05/toc.htm">
+Oracle Database Installation Guide 10g Release 1 (10.1) for UNIX Systems</a>
+lists the following required package versions or higher:
+<br>
+<pre>  make-3.79.1
+  glibc-2.2.4-32
+  gcc-2.96-128
+  gcc-c++-2.96-128
+  libstdc++-2.96-128
+  openmotif-2.1.30-11
+</pre>
+
+To check these RPMs, run:
+<pre><font color="#0000ff">  rpm -q make glibc gcc gcc-c++ libstdc++ openmotif
+</font></pre>
+<br>
+
+
+<i>The installation of an Oracle 10g Database worked fine without installing any compatibility RPMs (e.g.
+<tt>compat-gcc</tt>, <tt>compat-libstdc++</tt>). However, since it's listed as a requirement for RHEL 3 I'd recommend
+to install it on RHEL3 and on newer releases as well. It's not a requirement for RHEL 2.1 though.</i>
+<br>
+<br>
+
+For RHEL 3 and RHEL 2.1 it is also important to have <tt>binutils-2.11.90.0.8-12</tt> or a newer version installed.
+Make sure you have the <tt>binutils</tt> RPM installed on other releases as well like Fedora Core:
+<pre><font color="#0000ff">rpm -q binutils
+
+</font></pre>
+
+NOTE: <i>OUI for x86 will also complain if the <tt>openmotif</tt> package is missing</i> (don't confuse it with the
+<tt>openmotif21</tt> package).
+Also, Red Hat changed the version naming schema from
+<tt>openmotif-2.2.2-16</tt> in the original release to <tt>openmotif-2.2.3-5.RHEL3.2</tt> in RHEL3 Update 5.
+This seems to confuse OUI in RHEL3 U5 since it complaining that it can't find the right <tt>openmotif</tt> version.
+I ignored this. The <tt>openmotif-2.2.3-5.RHEL3.2</tt> is just a newer version of <tt>openmotif-2.2.2-16</tt> which
+worked fine and I didn't have any problems.
+To check the RPM, run:
+<pre><font color="#0000ff">rpm -q openmotif
+
+</font></pre>
+
+
+Also, make sure the <tt>redhat-release</tt> package is installed. Earlier versions of e.g. RHEL 3 didn't install
+it by default when you selected a minimum system installation:
+<pre><font color="#0000ff">rpm -q redhat-release
+
+</font></pre>
+
+
+The <tt>setarch</tt> utility is new in RHEL4, RHEL3 and Fedora Core. It is used to tell the kernel to report a different architecture than
+the current one. It is also used to emulate a 3GB virtual address space for applications that don't run properly
+with a larger virtual address space. To check the RPM, run:
+<pre><font color="#0000ff">rpm -q setarch
+</font></pre>
+<br>
+<br>
+
+
+<b><a name="InstallingTheRPMs"></a>Installing the RPMs</b><br>
+
+<br>
+
+
+<br><b><a name="CheckingSoftwarePackagesRHELAS4x86_64"></a>10g R2 on RHEL AS 4 (x86_64)</b><br><br>
+
+On my <u>RHEL AS 4 x86_64</u> system I installed the following RPMs and dependencies:
+
+<pre><font color="#0000ff">  rpm -Uvh gcc-3.4.4-2.<b>x86_64</b>.rpm \
+           gcc-c++-3.4.4-2.<b>x86_64</b>.rpm \
+           libstdc++-devel-3.4.4-2.<b>x86_64</b>.rpm \
+           cpp-3.4.4-2.<b>x86_64</b>.rpm \
+           glibc-devel-2.3.4-2.13.<b>x86_64</b>.rpm \
+           glibc-headers-2.3.4-2.13.<b>x86_64</b>.rpm \
+           glibc-kernheaders-2.4-9.1.98.EL.<b>x86_64</b>.rpm
+
+  rpm -Uvh gnome-libs-1.4.1.2.90-44.1.<b>x86_64</b>.rpm \
+           compat-db-4.1.25-9.<b>x86_64</b>.rpm \
+           ORBit-0.5.17-14.<b>x86_64</b>.rpm \
+           gtk+-1.2.10-33.<b>x86_64</b>.rpm \
+           imlib-1.9.13-23.<b>x86_64</b>.rpm \
+           libpng10-1.0.16-1.<b>x86_64</b>.rpm \
+           gdk-pixbuf-0.22.0-16.el4.<b>x86_64</b>.rpm \
+           libungif-4.1.3-1.<b>x86_64</b>.rpm
+
+  rpm -Uvh sysstat-5.0.5-1.<b>x86_64</b>.rpm
+
+</font></pre>
+
+
+Note that you also need to install the following <b>i386</b> and <b>x86_64</b> RPMs if not
+already installed, otherwise you will get various different error messages. 
+<br>
+For a detailed list of error messages, see 
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g/Linux Errors and Problems</a>.
+
+<pre><font color="#0000ff">  rpm -Uvh xorg-x11-deprecated-libs-6.8.2-1.EL.13.20.<b>i386</b>.rpm \
+           xorg-x11-libs-6.8.2-1.EL.13.20.<b>i386</b>.rpm \
+           xorg-x11-Mesa-libGL-6.8.2-1.EL.13.20.<b>i386</b>.rpm \
+           expat-1.95.7-4.<b>i386</b>.rpm \
+           fontconfig-2.2.3-7.<b>i386</b>.rpm \
+           freetype-2.1.9-1.<b>i386</b>.rpm \
+           zlib-1.2.1.2-1.2.<b>i386</b>.rpm
+</font></pre>
+
+
+<pre><font color="#0000ff">  rpm -Uvh libaio-0.3.103-3.<b>x86_64</b>.rpm
+
+  rpm -Uvh compat-libstdc++-33-3.2.3-47.3.<b>x86_64</b>.rpm
+
+  rpm -Uvh glibc-devel-2.3.4-2.13.<b>i386</b>.rpm \
+           libgcc-3.4.4-2.<b>i386</b>.rpm
+
+</font></pre>
+
+If you haven't installed Update 3 or later, don't forget to install an updated <tt>binutils</tt> RPM from
+<a href="https://rhn.redhat.com/">https://rhn.redhat.com/</a>
+or from
+<a href="http://oss.oracle.com/projects/compat-oracle/files/RedHat/">
+http://oss.oracle.com/projects/compat-oracle/files/RedHat/</a>:
+
+<pre><font color="#0000ff">   rpm -Uvh --force binutils-2.15.92.0.2-13.0.0.0.2.<b>x86_64</b>.rpm</font></pre>
+
+If you don't install a newer <tt>binutil</tt> RPM from Oracle or RHN, then you will get the following error message:
+<pre><font color="#ff0000">/usr/bin/ld: /u01/app/oracle/oracle/product/10.2.0/db_1/lib//libirc.a(fast_memcpy.o): 
+    relocation R_X86_64_PC32 against `_memcpy_mem_ops_method' can not be usedwhen making a shared object; recompile with -fPIC
+/usr/bin/ld: final link failed: Bad value
+collect2: ld returned 1 exit status
+</font></pre>
+For more information on this bug, see
+<a href="http://sources.redhat.com/bugzilla/show_bug.cgi?id=679">Bugzilla Bug 679</a>.
+<br>
+<br>
+<br>
+
+
+I don't know why the <tt>control-center</tt> RPM and the <tt>xscreensaver</tt>
+RPM are listed as requirements. On my system I did not install these 
+RPMs since I'm against installing 
+desktop stuff on servers, see list below. When I installed 10g R2 I did 
+not experience any problems when these RPMs were missing.
+But just for completeness I've listed all the RPMs you may have to 
+install
+if you want to install the <tt>control-center</tt> and <tt>xscreensaver</tt> RPMs unless you ignore dependencies:
+
+<pre><font color="#0000ff">   rpm -Uvh control-center-2.8.0-12.rhel4.2.x86_64.rpm \
+            xscreensaver-4.18-5.rhel4.9.x86_64.rpm \
+            eel2-2.8.1-2.x86_64.rpm \
+            gail-1.8.0-2.x86_64.rpm \
+            gnome-desktop-2.8.0-5.x86_64.rpm \
+            gnome-icon-theme-2.8.0-1.el4.1.3.noarch.rpm \
+            libgail-gnome-1.1.0-1.x86_64.rpm \
+            libxklavier-1.02-3.x86_64.rpm \
+            metacity-2.8.6-2.8.x86_64.rpm \
+            nautilus-2.8.1-4.x86_64.rpm \
+            startup-notification-0.7-1.x86_64.rpm \
+            xloadimage-4.1-34.RHEL4.x86_64.rpm \
+            xorg-x11-Mesa-libGLU-6.8.2-1.EL.13.20.x86_64.rpm \
+            at-spi-1.6.0-3.x86_64.rpm \
+            desktop-backgrounds-basic-2.0-26.2.1E.noarch.rpm \
+            eog-2.8.1-2.x86_64.rpm \
+            gnome-panel-2.8.1-3.3E.x86_64.rpm \
+            gnome-vfs2-smb-2.8.2-8.2.x86_64.rpm \
+            hicolor-icon-theme-0.3-3.noarch.rpm \
+            libexif-0.5.12-5.1.x86_64.rpm \
+            librsvg2-2.8.1-1.x86_64.rpm \
+            nautilus-cd-burner-2.8.3-6.x86_64.rpm \
+            redhat-artwork-0.120.1-1.2E.x86_64.rpm \
+            scrollkeeper-0.3.14-3.x86_64.rpm \
+            cdrecord-2.01.1-5.x86_64.rpm \
+            docbook-dtds-1.0-25.noarch.rpm \
+            evolution-data-server-1.0.2-9.x86_64.rpm \
+            intltool-0.31.2-1.x86_64.rpm \
+            libcroco-0.6.0-4.x86_64.rpm \
+            libgnomeprint22-2.8.0-3.x86_64.rpm \
+            libgnomeprintui22-2.8.0-1.x86_64.rpm \
+            libgsf-1.10.1-1.x86_64.rpm \
+            libwnck-2.8.1-1.rhel4.1.x86_64.rpm \
+            mkisofs-2.01.1-5.x86_64.rpm \
+            samba-common-3.0.10-1.4E.2.x86_64.rpm \
+            ghostscript-7.07-33.x86_64.rpm \
+            ghostscript-fonts-5.50-13.noarch.rpm \
+            gnutls-1.0.20-3.2.1.x86_64.rpm \
+            libgnomecups-0.1.12-5.x86_64.rpm \
+            libsoup-2.2.1-2.x86_64.rpm \
+            openjade-1.3.2-14.x86_64.rpm \
+            perl-XML-Parser-2.34-5.x86_64.rpm \
+            sgml-common-0.6.3-17.noarch.rpm \
+            urw-fonts-2.2-6.1.noarch.rpm \
+            xml-common-0.6.3-17.noarch.rpm \
+            VFlib2-2.25.6-25.x86_64.rpm \
+            chkfontpath-1.10.0-2.x86_64.rpm \
+            perl-URI-1.30-4.noarch.rpm \
+            perl-libwww-perl-5.79-5.noarch.rpm \
+            xorg-x11-font-utils-6.8.2-1.EL.13.20.x86_64.rpm \
+            perl-HTML-Parser-3.35-6.x86_64.rpm \
+            xorg-x11-xfs-6.8.2-1.EL.13.20.x86_64.rpm \
+            perl-HTML-Tagset-3.03-30.noarch.rpm \
+            ttmkfdir-3.0.9-14.1.EL.x86_64.rpm
+</font></pre>
+
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesRHELAS3x86"></a>10g R2 on RHEL AS 4 (x86)</b><br><br>
+On my <u>RHEL AS 4 x86</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">   rpm -Uvh gcc-3.4.4-2.i386.rpm \
+            gcc-c++-3.4.4-2.i386.rpm \
+            libstdc++-devel-3.4.4-2.i386.rpm \
+            glibc-devel-2.3.4-2.13.i386.rpm \
+            glibc-headers-2.3.4-2.13.i386.rpm \
+            glibc-kernheaders-2.4-9.1.98.EL.i386.rpm
+
+   rpm -Uvh gnome-libs-1.4.1.2.90-44.1.i386.rpm \
+            compat-db-4.1.25-9.i386.rpm \
+            ORBit-0.5.17-14.i386.rpm \
+            gtk+-1.2.10-33.i386.rpm \
+            imlib-1.9.13-23.i386.rpm \
+            libpng10-1.0.16-1.i386.rpm \
+            gdk-pixbuf-0.22.0-16.el4.i386.rpm \
+            libungif-4.1.3-1.i386.rpm \
+            alsa-lib-1.0.6-5.RHEL4.i386.rpm \
+            audiofile-0.2.6-1.i386.rpm \
+            esound-0.2.35-2.i386.rpm
+
+   rpm -Uvh sysstat-5.0.5-1.i386.rpm
+
+   rpm -Uvh libaio-0.3.103-3.i386.rpm
+
+   rpm -Uvh xorg-x11-deprecated-libs-6.8.2-1.EL.13.20.i386.rpm
+
+   rpm -Uvh compat-libstdc++-33-3.2.3-47.3.i386.rpm
+
+</font></pre>
+
+I don't know why the <tt>control-center</tt> RPM and the <tt>xscreensaver</tt>
+RPM are listed as requirements. On my system I did not install these RPMs since I'm against installing
+desktop stuff on servers. When I installed 10g R2 I did not experience any problems when these RPMs were missing.
+When you want to install <tt>control-center</tt> RPM and the <tt>xscreensaver</tt>, then have fun. The list
+can be very long with all the dependencies like <tt>gnome-desktop</tt>, <tt>cdrecord</tt> etc..
+<br>
+<br>
+<br>
+
+
+
+
+
+<br><b><a name="CheckingSoftwarePackagesRHELAS4x86_64"></a>10g R1 on RHEL AS 4 (x86_64)</b><br><br>
+
+<i><b>NOTE:</b> No certification has been projected for 10g R1 64-bit on RHEL AS 4 (x86_64) at the time of this writing.</i>
+<br>
+<br>
+
+On my <u>RHEL AS 4 x86_64</u> system I installed the following RPMs and dependencies:
+<pre><font color="#0000ff">  rpm -Uvh gcc-3.4.3-22.1.<b>x86_64</b>.rpm \
+           cpp-3.4.3-22.1.<b>x86_64</b>.rpm \
+           glibc-devel-2.3.4-2.9.<b>x86_64</b>.rpm \
+           glibc-headers-2.3.4-2.9.<b>x86_64</b>.rpm \
+           glibc-kernheaders-2.4-9.1.87.<b>x86_64</b>.rpm
+
+  rpm -Uvh glibc-devel-2.3.4-2.9.<b>i386</b>.rpm
+
+  rpm -Uvh openmotif-2.2.3-9.RHEL4.1.<b>x86_64</b>.rpm \
+           xorg-x11-deprecated-libs-6.8.2-1.EL.13.6.<b>x86_64</b>.rpm
+
+  rpm -Uvh xorg-x11-deprecated-libs-6.8.2-1.EL.13.6.<b>i386</b>.rpm \
+           xorg-x11-libs-6.8.2-1.EL.13.6.<b>i386</b>.rpm \
+           xorg-x11-Mesa-libGL-6.8.2-1.EL.13.6.<b>i386</b>.rpm \
+           expat-1.95.7-4.i386.rpm fontconfig-2.2.3-7.<b>i386</b>.rpm \
+           freetype-2.1.9-1.i386.rpm zlib-1.2.1.2-1.<b>i386</b>.rpm
+
+   rpm -Uvh libgcc-3.4.3-22.1.<b>i386</b>.rpm
+</font></pre>
+
+<font color="#ff0000">You will get various different error messages during the installation if not all of these RPMs are
+installed on your system for 10g R1 64-bit.</font>
+<br>
+For more information, see
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">
+Oracle10g/Linux Errors and Problems</a>.
+<br>
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesRHELAS4x86"></a>10g R1 on RHEL AS 4 (x86)</b><br><br>
+
+On my <u>RHEL AS 4 x86</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+
+<pre><font color="#0000ff">  rpm -Uvh gcc-3.4.3-9.EL4.i386.rpm          \
+            glibc-devel-2.3.4-2.i386.rpm     \
+            glibc-headers-2.3.4-2.i386.rpm   \
+            glibc-kernheaders-2.4-9.1.87.i386.rpm
+
+  rpm -Uvh openmotif-2.2.3-6.RHEL4.2.i386.rpm \
+           xorg-x11-deprecated-libs-6.8.1-23.EL.i386.rpm
+
+</font></pre>
+
+Note that the 10g 10.1.0.3 OUI Product-specific Prerequisite check will fail for the <tt>gcc</tt>, <tt>binutils</tt>, and
+<tt>openmotif</tt> versions. You can ignore these failed checks and proceed.
+<br>
+The <tt>redhat-release</tt> RPM should already be installed by default.
+But note that 10.1.0.3.0 OUI does not recognize RHEL AS 4
+as a supported release yet. This means you will have to edit the <tt>/etc/redhat-release</tt> file, see below, or you
+apply the 4153257 patch for 10g R1 on RHEL 4. 10g R2 does recognise RHEL AS 4 as a supported platform.
+<br>
+<br>
+
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesRHELAS3x86"></a>10g R1 and R2 on RHEL AS 3 (x86)</b><br><br>
+On my <u>RHEL AS 3 x86</u> system I had to install the following RPMs and dependencies to meet the software requirements: 
+<pre><font color="#0000ff">   rpm -Uvh gcc-3.2.3-52.i386.rpm \
+           cpp-3.2.3-52.i386.rpm \
+           glibc-devel-2.3.2-95.33.i386.rpm \
+           glibc-headers-2.3.2-95.33.i386.rpm \
+           glibc-kernheaders-2.4-8.34.1.i386.rpm
+
+  rpm -Uvh compat-db-4.0.14-5.1.i386.rpm \
+           compat-gcc-7.3-2.96.128.i386.rpm \
+           compat-gcc-c++-7.3-2.96.128.i386.rpm \
+           compat-libstdc++-7.3-2.96.128.i386.rpm \
+           compat-libstdc++-devel-7.3-2.96.128.i386.rpm \
+           tcl-8.3.5-92.2.i386.rpm
+
+  rpm -Uvh libaio-0.3.96-5.i386.rpm
+
+  rpm -Uvh openmotif21-2.1.30-9.RHEL3.6.i386.rpm
+
+  rpm -Uvh openmotif-2.2.3-5.RHEL3.2.i386.rpm
+
+</font></pre>
+
+
+
+
+<br><b><a name="CheckingSoftwarePackagesRHELAS3x86_64"></a>10g R1 on RHEL AS 3 (x86_64)</b><br><br>
+
+On my <u>RHEL AS 3 x86_64</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">  rpm -Uvh gcc-3.2.3-52.<b>x86_64</b>.rpm \
+  cpp-3.2.3-52.<b>x86_64</b>.rpm \
+  glibc-devel-2.3.2-95.33.<b>x86_64</b>.rpm \
+  glibc-headers-2.3.2-95.33.<b>x86_64</b>.rpm \
+  glibc-kernheaders-2.4-8.34.1.<b>x86_64</b>.rpm
+
+  rpm -Uvh glibc-devel-2.3.2-95.33.i386.rpm
+
+  rpm -Uvh compat-db-4.0.14-5.1.<b>x86_64</b>.rpm \
+           compat-gcc-7.3-2.96.128.<b>i386.</b>rpm \
+           compat-gcc-c++-7.3-2.96.128.<b>i386</b>.rpm \
+           compat-libstdc++-7.3-2.96.128.<b>i386</b>.rpm \
+           compat-libstdc++-devel-7.3-2.96.128.<b>i386</b>.rpm \
+           tcl-8.3.5-92.2.<b>x86_64</b>.rpm \
+           libgcc-3.2.3-52.<b>i386</b>.rpm
+
+  rpm -Uvh libaio-0.3.96-5.<b>x86_64</b>.rpm \
+           libaio-devel-0.3.96-5.<b>x86_64</b>.rpm
+
+  </font># RHEL AS 3 x86_64 U5 does not come with a i386 gnome-libs RPM <font color="#0000ff">
+  rpm -Uvh gnome-libs-1.4.1.2.90-34.2.<b>x86_64</b>.rpm \
+           ORBit-0.5.17-10.4.<b>x86_64</b>.rpm \
+           audiofile-0.2.3-7.1.<b>x86_64</b>.rpm \
+           esound-0.2.28-6.<b>x86_64</b>.rpm \
+           gtk+-1.2.10-31.<b>x86_64</b>.rpm \
+           imlib-1.9.13-13.4.<b>x86_64</b>.rpm \
+           gdk-pixbuf-0.22.0-12.el3.<b>x86_64</b>.rpm \
+           libpng10-1.0.13-15.<b>x86_64</b>.rpm \
+           libungif-4.1.0-15.<b>x86_64</b>.rpm
+
+  </font># RHEL AS 3 x86_64 U5 does not come with a x86_64 openmotif21 RPM <font color="#0000ff">
+  rpm -Uvh openmotif21-2.1.30-9.RHEL3.6.<b>i386</b>.rpm \
+           XFree86-libs-4.3.0-81.EL.<b>i386</b>.rpm \
+           XFree86-Mesa-libGL-4.3.0-81.EL.<b>i386</b>.rpm \
+           expat-1.95.5-6.<b>i386</b>.rpm \
+           fontconfig-2.2.1-13.<b>i386</b>.rpm \
+           freetype-2.1.4-4.0.<b>i386</b>.rpm \
+           zlib-1.1.4-8.1.<b>i386</b>.rpm
+</font></pre>
+
+Make sure to use the right <tt>i386</tt> and <tt>x86_64</tt> RPMs as listed above!
+<br>
+<br>
+Note, if you don't install the i386 <tt>XFree86-libs</tt> RPM, you will get an error message similar to this one:
+<pre><font color="#ff0000">/tmp/OraInstall2005-06-15_07-36-25AM/jre/1.4.2/lib/i386/libawt.so: libXp.so.6: cannot open shared object file: No such file or directory
+</font></pre>
+For more information, see
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g/Linux Errors and Problems</a>.
+<br>
+
+
+
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesRHELAS2.1x86"></a>10g R1 on RHEL AS 2.1 (x86)</b><br><br>
+
+On my <u>RHEL AS 2.1 x86</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">  rpm -Uvh glibc-2.2.4-32.11.i686.rpm \
+           glibc-common-2.2.4-32.11.i386.rpm
+
+  rpm -Uvh gcc-2.96-108.1.i386.rpm \
+           binutils-2.11.90.0.8-12.i386.rpm \
+           cpp-2.96-108.1.i386.rpm \
+           glibc-devel-2.2.4-32.11.i386.rpm \
+           kernel-headers-2.4.9-e.3.i386.rpm
+
+  rpm -Uvh openmotif-2.1.30-11.i386.rpm
+
+  rpm -Uvh redhat-release-as-2.1AS-4.noarch.rpm
+
+</font></pre>
+
+I had to upgrade <tt>glibc</tt> in order to pass Oracle's "Product-specific Prerequisite" checks.
+Oracle's recommended <tt>glibc</tt> version is 2.2.4.31.7 or higher.
+<br>
+There is no <tt>setarch</tt> RPM for RHEL AS 2.1.
+<br>
+Also, it's important to install a newer kernel version for RHEL AS 2.1. Definitely don't use a kernel older than 2.4.9-e.25. 
+To check the kernel version run <tt>uname -r</tt>.
+For more information on upgrading the kernel, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#UpgradingTheLinuxKernel">
+Upgrading the Linux Kernel</a>.
+<br>
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesFC4x86"></a>10g R2 on Fedora Core 4 (x86)</b><br><br>
+
+On my <u>FC4</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">  rpm -Uvh gcc-4.0.0-8.i386.rpm \
+           cpp-4.0.0-8.i386.rpm \
+           glibc-devel-2.3.5-10.i386.rpm \
+           glibc-headers-2.3.5-10.i386.rpm \
+           glibc-kernheaders-2.4-9.1.94.i386.rpm
+
+  rpm -Uvh compat-libstdc++-33-3.2.3-47.fc4.i386.rpm
+
+  rpm -Uvh openmotif-2.2.3-10.i386.rpm \
+           xorg-x11-deprecated-libs-6.8.2-31.i386.rpm
+
+  rpm -Uvh openmotif21-2.1.30-14.i386.rpm
+
+  rpm -Uvh libaio-0.3.104-2.i386.rpm
+
+  rpm -Uvh selinux-policy-targeted-1.25.2-4.noarch.rpm
+
+</font></pre>
+
+NOTE: I also had to patch the SELinux policy by upgrading the <tt>selinux-policy-targeted</tt> RPM. You 
+can download the latest version from
+<a href="http://download.fedora.redhat.com/pub/fedora/linux/core/updates/4/i386/">
+http://download.fedora.redhat.com/pub/fedora/linux/core/updates/4/i386/</a>.
+If you don't upgrade to a newer version you will
+get the following error:
+<pre><font color="#ff0000">Exception in thread "main" java.lang.UnsatisfiedLinkError: /tmp/OraInstall2005-07-24_09-03-19AM/jre/1.4.2/lib/i386/libawt.so: 
+/tmp/OraInstall2005-07-24_09-03-19AM/jre/1.4.2/lib/i386/libawt.so: cannot restore segment prot after reloc: Permission denied
+</font></pre>
+
+You could also disable SELinux which I don't recommend. For more information, see
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g/Linux Errors and Problems</a>.
+<br>
+
+
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesFC3x86"></a>10g R1 on Fedora Core 3 (x86)</b><br><br>
+
+On my <u>FC3</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">  rpm -Uvh gcc-3.4.2-6.fc3.i386.rpm \
+           cpp-3.4.2-6.fc3.i386.rpm \
+           glibc-devel-2.3.3-74.i386.rpm \
+           glibc-headers-2.3.3-74.i386.rpm \
+           glibc-kernheaders-2.4-9.1.87.i386.rpm
+
+  rpm -Uvh openmotif-2.2.3-6.i386.rpm \
+           xorg-x11-deprecated-libs-6.8.1-12.i386.rpm
+
+  rpm -Uvh openmotif21-2.1.30-11.i386.rpm
+
+  rpm -Uvh setarch-1.6-1.i386.rpm
+
+</font></pre>
+
+The <tt>gcc</tt> version that comes with FC3 will not pass
+Oracle's "Product-specific Prerequisite" checks. I ignored this warning on FC3.
+<br>
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesFC1x86"></a>10g R1 on Fedora Core 1 (x86)</b><br><br>
+
+On my <u>FC1</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">  rpm -Uvh gcc-3.3.2-1.i386.rpm                \
+           glibc-devel-2.3.2-101.i386.rpm      \
+           cpp-3.3.2-1.i386.rpm                \
+           glibc-headers-2.3.2-101.i386.rpm    \
+           glibc-kernheaders-2.4-8.36.i386.rpm \
+           binutils-2.14.90.0.6-3.i386.rpm
+
+  rpm -Uvh openmotif-2.2.2-16.1.i386.rpm
+
+  rpm -Uvh setarch-1.0-1.i386.rpm
+
+</font></pre>
+
+FC1 is not supported by Oracle and you will have a hard time to find the right RPM version for
+Oracle10g. I tried to use the RPMs that came with the FC1 CDs which are easily available to everyone. I did
+not had any problems installing an Oracle Database 10g (General Purpose Database) on FC1 with these RPMs.
+<br>
+
+
+
+<br><br><b><a name="CheckingSoftwarePackagesRH9x86"></a>10g R1 on Red Hat 9 (x86)</b><br><br>
+On my <u>RH9</u> system I had to install the following RPMs and dependencies to meet the software requirements:
+<pre><font color="#0000ff">  rpm -Uvh openmotif-2.2.2-14.i386.rpm
+
+  rpm -Uvh gcc-3.2.2-5.i386.rpm                \
+           glibc-devel-2.3.2-5.i386.rpm        \
+           cpp-3.2.2-5.i386.rpm                \
+           glibc-kernheaders-2.4-8.10.i386.rpm \
+           binutils-2.13.90.0.18-9.i386.rpm
+
+</font></pre>
+
+There is no <tt>setarch</tt> RPM for RH9. RH9 is not supported by Oracle.
+<br>
+
+
+
+<br><br><b><a name="CheckingRedhatReleaseFile">Checking/Updating the <tt>redhat-release</tt> File</a></b><a name="CheckingRedhatReleaseFile"><br><br>
+
+Verify that the <tt>redhat-release</tt> RPM is installed on your Red Hat system:
+</a><pre><a name="CheckingRedhatReleaseFile"><font color="#0000ff">rpm -q redhat-release</font></a></pre>
+
+<a name="CheckingRedhatReleaseFile">This RPM is important for RHEL since <u>RHEL AS 4</u>, <u>RHEL AS 3</u>, and <u>RHEL AS 2.1</u>
+ are Linux releases supported by Oracle.
+Without this RPM, Oracle 10g OUI won't be able to recognize it as a 
+supported OS. However, the installer of 10g 10.1.0.3 does not recognize 
+RHEL AS 4
+as a supported release yet. This means that you will have to edit the <tt>/etc/redhat-release</tt> file. You also have to change 
+<tt>/etc/redhat-release</tt> for unsupported releases like <u>Fedora Core</u> and <u>RH9</u>.
+<br>
+<br>
+<font color="#ff0000"><i>I do not recommend to execute "<tt>runInstaller -ignoreSysPrereqs</tt>" since this will disable other checks you probably don't want to.</i></font>
+<br>
+<br>
+
+On <u>RHEL AS 4</u> (for 10g R1), <u>RH9</u>, and <u>FC 1</u> you have to change the
+<tt>/etc/redhat-release</tt> file to make Oracle 10g believe it's running on a supported release. <br>
+Regarding <u>RHEL AS 4</u>, the installer for 10g 10.1.0.3 does not recognize RHEL AS 4 as a supported release but 10g R2 OUI does. <br>
+<br>
+To change the <tt>/etc/redhat-release</tt> file, you
+can simply copy/paste the following commands:
+</a><pre><a name="CheckingRedhatReleaseFile"><font color="#0000ff">su - root
+cp /etc/redhat-release /etc/redhat-release.orig
+cat &gt; /etc/redhat-release &lt;&lt; EOF
+Red Hat Enterprise Linux AS release 3 (Taroon)
+EOF
+</font></a></pre>
+
+<a name="CheckingRedhatReleaseFile">After you are done with the Oracle10g installation, undo the changes you made to <tt>/etc/redhat-release</tt>:
+</a><pre><a name="CheckingRedhatReleaseFile"><font color="#0000ff">su - root
+cp /etc/redhat-release.orig /etc/redhat-release
+
+</font></a></pre>
+
+<a name="CheckingRedhatReleaseFile"><b>NOTE:</b> On <u>FC3</u> you don't have to edit <tt> /etc/redhat-release</tt> since the OUI is not very clever. If OUI finds
+e.g. digit number "3" in the <tt>/etc/redhat-release</tt> file, you pass the "operating system version" check since it believes
+it's a RHEL3 system.
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</a><h2><a name="CheckingRedhatReleaseFile"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="CheckingKernelParameters">
+Checking Kernel Parameters</a></u></font><u><a name="CheckingKernelParameters"></a></u><p></p>
+<u><a name="CheckingKernelParameters"></a></u><a name="CheckingKernelParameters"></a></h2>
+
+<a name="CheckingKernelParameters">To see all kernel parameters, execute:
+</a><pre><a name="CheckingKernelParameters"><font color="#0000ff">su - root
+sysctl -a</font></a></pre>
+<a name="CheckingKernelParameters"><br>
+
+For Oracle10g, the following kernel parameters have to be set to values greater than or equal to the recommended values which
+can be changed in the <tt>proc</tt> filesystem:
+</a><pre><a name="CheckingKernelParameters">shmmax  = 2147483648     (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/shmmax</font>)
+shmmni  = 4096           (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/shmmni</font>)
+shmall  = 2097152        (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/shmall</font>)   (for 10g R1)
+shmmin  = 1              (To verify, execute: <font color="#0000ff">ipcs -lm |grep "min seg size"</font>)
+shmseg  = 10             (It's hardcoded in the kernel - the default is much higher)
+
+semmsl  = 250            (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/sem | awk '{print $1}'</font>)
+semmns  = 32000          (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/sem | awk '{print $2}'</font>)
+semopm  = 100            (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/sem | awk '{print $3}'</font>)
+semmni  = 128            (To verify, execute: <font color="#0000ff">cat /proc/sys/kernel/sem | awk '{print $4}'</font>)
+
+file-max = 65536         (To verify, execute: <font color="#0000ff">cat /proc/sys/fs/file-max</font>)
+
+ip_local_port_range = 1024 65000 
+                         (To verify, execute: <font color="#0000ff">cat /proc/sys/net/ipv4/ip_local_port_range</font>)
+
+</a></pre>
+
+
+<a name="CheckingKernelParameters">NOTE: Do not change the value of any kernel parameter on a system where it is already higher than listed as minimum requirement.
+<br><br>
+On <u>RHEL AS 4 x86</u>, <u>RHEL AS 3 U5 x86</u>, <u>RHEL AS 3 U5 x86_64</u>, <u>RHEL AS 2.1</u>, <u>RH9</u>, <u>FC1</u>, <u>FC3</u>, and <u>FC4</u> I had to increase the kernel parameters <tt>shmmax</tt>,
+<tt>semopm</tt>, and <tt>filemax</tt> to meet the minimum requirement. On <u>RHEL AS 4 x86_64</u> I had to increase <tt>shmmax</tt> and <tt>semopm</tt>.
+<br><br>
+Oracle also recommends to set the local port range <tt>ip_local_port_range</tt>
+ for outgoing messages
+to "1024 65000" which is needed for high-usage systems. This kernel 
+parameter defines the local port range for TCP and UDP traffic
+to choose from.
+<br><br>
+I added the following lines to the <tt><font color="#0000ff">/etc/sysctl.conf</font></tt>
+file which is used during the boot process:
+</a><pre><a name="CheckingKernelParameters"><font color="#0000ff">kernel.shmmax=2147483648
+kernel.sem=250 32000 100 128
+fs.file-max=65536
+net.ipv4.ip_local_port_range=1024 65000</font></a></pre>
+
+<a name="CheckingKernelParameters">Adding these lines to the <tt>/etc/sysctl.conf</tt> file will cause the system to change these kernel parameters after each boot using the 
+<tt>/etc/rc.d/rc.sysinit</tt> script which is invoked by <tt>/etc/inittab</tt>.
+But in order that these new added lines or settings in <tt>/etc/sysctl.conf</tt> become effective immediately, execute the following command:
+</a><pre><a name="CheckingKernelParameters"><font color="#0000ff">su - root
+sysctl -p
+
+</font></a></pre>
+
+
+
+<a name="CheckingKernelParameters"><b>Starting with 10g R2 some network settings must be adjusted as well which is checked by OUI. For more
+information on setting these parameters, see
+</b></a><b><a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#ChangingNetworkKernelSettings">
+Changing Network Kernel Settings</a></b>.
+<br>
+
+
+<br>
+For more information on shmmax, shmmni, shmmin, shmseg, and shmall, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingSharedMemory">
+Setting Shared Memory</a>.
+
+<br>
+For more information on semmsl, semmni, semmns, and semopm, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingSemaphores">
+Setting Semaphores</a>.
+
+<br>
+For more information on filemax, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingFileHandles">
+Setting File Handles</a>.
+<br>
+
+
+
+
+
+<br>
+<h2><font color="#0000ff"><u><a name="SizingDiskSpaceForOracle10g">
+Sizing Disk Space for Oracle10g</a></u></font><u><a name="SizingDiskSpaceForOracle10g"></a></u><p></p>
+<u><a name="SizingDiskSpaceForOracle10g"></a></u><a name="SizingDiskSpaceForOracle10g"></a></h2>
+
+<a name="SizingDiskSpaceForOracle10g">Oracle says that about 2.5 GB of disk space should be reserved for the <u>Oracle software</u> on Linux.
+<br>
+<br>
+When I did an Oracle 10g Release 1 (10.1.0.3.0) "General Purpose Database" installation
+(not including any software from the Oracle Database 10g Companion CD),
+the <u>Oracle software</u> used about 1.3 GB of disk space, and the preconfigured "General Purpose Database"
+(datafiles, etc.) used about 710 MB of disk space.
+</a><pre><a name="SizingDiskSpaceForOracle10g">$ <font color="#0000ff">du -m -s /u01</font>
+1963    /u01
+$ <font color="#0000ff">du -m -s /u01/app/oracle/oradata</font>
+720     /u01/app/oracle/oradata</a></pre>
+
+<a name="SizingDiskSpaceForOracle10g">If you also install additional software from the Oracle Database 10g Companion CD, then add at least
+1 GB of free disk space.
+<br><br>
+So if you install Oracle10g Enterprise Edition and additional software from the Oracle Database 10g Companion CD,
+then you need about 2.5 GB of disk for the Oracle software. And if you also want to add a preconfigured database
+on the same filesystem, make sure to add another 1 GB of disk space.
+<br>
+<br>
+NOTE: If you don't put Oracle10g on a separate filesystems, then make sure the root filesystem
+"<tt>/</tt>" has enough disk space.
+You can check the free space of the root filesystem with the following command:
+</a><pre><a name="SizingDiskSpaceForOracle10g"><font color="#0000ff">df -h /</font></a></pre>
+<a name="SizingDiskSpaceForOracle10g"><br>
+
+
+
+
+
+</a><h2><a name="SizingDiskSpaceForOracle10g"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="UsingAutomaticStorageManagement">
+Using Automatic Storage Management (ASM)</a></u></font><u><a name="UsingAutomaticStorageManagement"></a></u><p></p>
+<u><a name="UsingAutomaticStorageManagement"></a></u><a name="UsingAutomaticStorageManagement"></a></h2>
+
+<a name="UsingAutomaticStorageManagement">For more information on installing and configuring ASM, see
+</a><a href="http://www.puschitz.com/InstallingOracle10gRAC.shtml#InstallingAndConfiguringAutomaticStorageManagementAndDisks">Installing and Configuring Automatic Storage Management (ASM) and Disks</a>. 
+And for information on how to make use of ASM disk groups when running OUI, see
+<a href="http://www.puschitz.com/InstallingOracle10gRAC.shtml#InstallingOracleDatabase10gWithRACDBCA">Installing Oracle Database 10g with Real Application Cluster (RAC)</a>.
+<br>
+<br>
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="CreatingOracleUserAccounts">
+Creating Oracle User Accounts</a></u></font><u><a name="CreatingOracleUserAccounts"></a></u><p></p>
+<u><a name="CreatingOracleUserAccounts"></a></u><a name="CreatingOracleUserAccounts"></a></h2>
+
+<a name="CreatingOracleUserAccounts">To create the <tt>oracle</tt> account and groups, execute the following commands:
+</a><pre><a name="CreatingOracleUserAccounts"><font color="#0000ff">su - root
+groupadd dba          </font># group of users to be granted SYSDBA system privilege<font color="#0000ff">
+groupadd oinstall     </font># group owner of Oracle files<font color="#0000ff">
+useradd -c "Oracle software owner" -g oinstall -G dba oracle
+passwd oracle</font></a></pre>
+
+<a name="CreatingOracleUserAccounts">For more information on the <tt>"oinstall"</tt> group account, see
+</a><a href="http://metalink.oracle.com/oracleinstall/oracle8i/genericunix.html#Uoui">
+When to use "OINSTALL" group during install of oracle</a>.
+<br>
+<br>
+
+
+
+
+<h2><font color="#0000ff"><u><a name="SettingShellLimitsForTheOracleUser">
+Setting Shell Limits for the Oracle User</a></u></font><u><a name="SettingShellLimitsForTheOracleUser"></a></u><p></p>
+<u><a name="SettingShellLimitsForTheOracleUser"></a></u><a name="SettingShellLimitsForTheOracleUser"></a></h2>
+
+<a name="SettingShellLimitsForTheOracleUser">Most shells like Bash provide control over various resources like the maximum allowable number of open
+file descriptors or the maximum number of processes available to a user.
+For more information on <tt>ulimit</tt> for the Bash shell, see <tt>man bash</tt> and search for <tt>ulimit</tt>.
+<br>
+<br>
+
+If you just install a small test database, then you might be ok with the current settings (note
+that the limits very often vary).
+But for (larger) production databases, you should increase the following shell limits to
+the following values recommended by Oracle:
+
+</a><pre><a name="SettingShellLimitsForTheOracleUser">nofile = 65536     (To verify, execute: <font color="#0000ff">ulimit -n</font>)
+nproc  = 16384     (To verify, execute: <font color="#0000ff">ulimit -u</font>)
+</a></pre>
+
+<a name="SettingShellLimitsForTheOracleUser">The <tt>nofile</tt> option denotes the maximum number of open file descriptors, and
+<tt>nproc</tt> denotes the maximum number of processes available to a single user.
+<br><br>
+To see all shell limits, execute:
+</a><pre><a name="SettingShellLimitsForTheOracleUser"><font color="#0000ff">ulimit -a
+
+</font></a></pre>
+
+<a name="SettingShellLimitsForTheOracleUser">The following procedures/links show how to increase these parameters for the <tt>oracle</tt> user account:
+<br><br>
+For more information on <tt><font color="#0000ff">nofile</font></tt> and how to increase the limit, see
+</a><a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingLimitsForTheMaximumNumberOfOpenFileDescriptorsForTheOracleUser">
+Setting Limits for the Maximum Number of Open File Descriptors for the Oracle User</a>.
+Even though this procedure was written for Oracle9i on RHAS 2.1,
+it also applies to Oracle10g on RHEL AS 2.1, RHEL AS 3, and other versions.
+<br><br>
+
+For more information on <tt><font color="#0000ff">nproc</font></tt> and how to increase the limit, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingLimitsForTheMaximumNumberOfProcessesForTheOracleUser">
+Setting Limits for the Maximum Number of Processes for the Oracle User</a>.
+Even though this procedure was written for Oracle9i on RHAS 2.1,
+it also applies to Oracle10g on RHEL AS 2.1, RHEL AS 3, and other versions.
+
+
+
+
+
+
+
+
+<br><br>
+<h2><font color="#0000ff"><u><a name="CreatingOracleDirectories">
+Creating Oracle Directories</a></u></font><u><a name="CreatingOracleDirectories"></a></u><p></p>
+<u><a name="CreatingOracleDirectories"></a></u><a name="CreatingOracleDirectories"></a></h2>
+
+
+<a name="CreatingOracleDirectories">For Oracle10g you only need to create the directory for <tt>$ORACLE_BASE</tt>:
+</a><pre><a name="CreatingOracleDirectories"><font color="#0000ff">su - root
+mkdir -p /u01/app/oracle
+chown oracle.oinstall /u01/app/oracle
+
+</font></a></pre>
+
+<a name="CreatingOracleDirectories">But if you want to comply with 
+Oracle's Optimal Flexible Architecture (OFA), then you don't want to 
+place the database files in the <tt>/u01</tt> directory
+but in another directory/filesystem/disk like <tt>/u02</tt>. This is not a requirement but if you want to comply
+with OFA, then you might want to create the following directories as well:
+</a><pre><a name="CreatingOracleDirectories"><font color="#0000ff">su - root
+mkdir -p /u02/oradata/<i>orcl</i>
+chown oracle.oinstall /u02/oradata/orcl</font></a></pre>
+
+<a name="CreatingOracleDirectories">In this example, "orcl" stands for the name of the database which will also be the name of the instance.
+This is typically the case for single instance databases.
+<br>
+
+
+<br><br><b></b></a><b><a name="OptimalFlexibleArchitecture"></a>Optimal Flexible Architecture (OFA) for 10g R1 (10.1.0.2)</b><br><br>
+
+The OFA standard is a guideline created by Oracle to ensure reliable Oracle installations.
+For Oracle 10g Database, the OFA recommended Oracle home path has changed.
+
+<br><br>
+The home path for the first 10g (10.1.0) database installation on a system would be:
+<pre>  /u01/app/oracle/product/10.1.0/<b>db_1</b></pre>
+
+If you would install a second Oracle 10g Database 10g (10.1.0) on the same system,
+the Oracle home directory would be as follows:
+<pre>  /u01/app/oracle/product/10.1.0/db_<b>2</b></pre>
+
+If the Oracle10g software is not owned by the user <tt>oracle</tt> but by the user "oraowner", then the path
+of the Oracle home directory would be:
+<pre>  /u01/app/<b>oraowner</b>/product/10.1.0/db_1
+  /u01/app/<b>oraowner</b>/product/10.1.0/db_2
+</pre>
+
+The standard directory name for Oracle10g is "app":
+<pre>  /u01/<b>app</b>/oracle/product/10.1.0/db_1
+
+</pre>
+
+Oracle recommends to use mount points such as <tt>/u01</tt>, <tt>/u02</tt>, etc. which complies with the OFA
+guidelines. But others can be used, for example:
+<pre>  /<b>disk_1</b>/app/oracle/product/10.1.0/db_1
+
+</pre>
+
+The subtree for database files not stored in ASM disk groups should be named as follows:
+<pre>  <b>/u02</b>/oradata/&lt;<i>db_name_1</i>&gt;
+  <b>/u02</b>/oradata/&lt;<i>db_name_2</i>&gt;
+  <b>/u03</b>/oradata/&lt;<i>db_name_1</i>&gt;
+  <b>/u03</b>/oradata/&lt;<i>db_name_2</i>&gt;</pre>
+
+The mount point <tt>/u01</tt> should be used for the Oracle software only. <tt>/u02</tt>, <tt>/u03</tt>,
+<tt>/u04</tt> etc. should be used for the database files.
+The <tt>db_name</tt> stands for the <tt>DB_NAME</tt> initialization parameter which is typically the
+same as the SID name for single instance databases.
+<br>
+<br>
+
+
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="SettingOracleEnvironments">
+Setting Oracle Environments</a></u></font><u><a name="SettingOracleEnvironments"></a></u><p></p>
+<u><a name="SettingOracleEnvironments"></a></u><a name="SettingOracleEnvironments"></a></h2>
+
+<a name="SettingOracleEnvironments">Since the Oracle Universal Installer (OUI) "<tt>runInstaller</tt>" is run from the <tt>oracle</tt> account,
+some environment variables must be configured for this account before OUI is started.
+<br>
+<br>
+Execute the following commands for the Bash shell which is the default shell on Red Hat Linux (to verify your shell run: <tt><font color="#0000ff">echo $SHELL</font></tt>):
+
+</a><pre><a name="SettingOracleEnvironments"><font color="#0000ff">su - oracle
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_SID=orcl
+
+</font></a></pre>
+
+<a name="SettingOracleEnvironments"><b>NOTE</b>: If <tt>ORACLE_BASE</tt> is used, then Oracle recommends that you
+don't set the <tt>ORACLE_HOME</tt> environment variable but that you choose the default path suggested
+by the OUI. You can set and use <tt>ORACLE_HOME</tt> after you finished running OUI.
+<br><br>
+Also, the environment variables <tt>ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt>
+should not be set. If you've already set these environment variables, you can unset them by running the following commands:
+</a><pre><a name="SettingOracleEnvironments"><font color="#0000ff">unset ORACLE_HOME
+unset TNS_ADMIN</font></a></pre>
+<a name="SettingOracleEnvironments"><br>
+
+To have these environment variables set automatically each time you login as <tt>oracle</tt>, you can add these
+environment variables to the <tt><font color="#0000ff">~oracle/.bash_profile</font></tt> file which is the user startup file 
+for the Bash shell on Red Hat Linux.
+To do this you could simply copy/paste the following commands to make these settings permanent for your <tt>oracle</tt>'s Bash shell:
+</a><pre><a name="SettingOracleEnvironments"><font color="#0000ff">su - oracle
+cat &gt;&gt; ~oracle/.bash_profile &lt;&lt; EOF
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_SID=orcl
+EOF</font></a></pre>
+<a name="SettingOracleEnvironments"><br>
+
+
+
+
+</a><h2><a name="SettingOracleEnvironments"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="InstallingOracle10g">
+Installing Oracle10g</a></u></font><u><a name="InstallingOracle10g"></a></u><p></p>
+<u><a name="InstallingOracle10g"></a></u><a name="InstallingOracle10g"></a></h2>
+
+<a name="InstallingOracle10g"><b></b></a><b><a name="InstallingOracle10gOnARemoteLinuxServer">Installing Oracle10g on a Remote Linux Server</a></b><a name="InstallingOracle10gOnARemoteLinuxServer"><br><br>
+
+If you don't install Oracle on your local system but on a remote server, then you need to relink X to your local desktop.
+The easiest way to do this is to use the "X11 forwarding" feature of ssh. This means that you don't have to run 
+<tt>xhost</tt> and set the <tt>DISPLAY</tt> environment variable.
+<br><br>
+Here is an example how to make use of the "X11 forward" feature of ssh. Simply run the following command from your <u>local desktop</u>:
+</a><pre><a name="InstallingOracle10gOnARemoteLinuxServer">$ <font color="#0000ff">ssh -X oracle@oracle_remote_server_name</font></a></pre>
+
+<a name="InstallingOracle10gOnARemoteLinuxServer">Now when you try to run any GUI tool on the remote server, it will automatically be relinked to your local desktop.
+If this is not working, verify that the <tt>ForwardX11</tt> setting is not set to "<tt>no</tt>" in <tt>/etc/ssh/ssh_config</tt>
+on the remote server:
+</a><pre><a name="InstallingOracle10gOnARemoteLinuxServer"><font color="#0000ff">su - root</font>
+# <font color="#0000ff">grep ForwardX11 /etc/ssh/ssh_config | grep -v "^#"</font>
+        ForwardX11 yes
+#</a></pre>
+
+<a name="InstallingOracle10gOnARemoteLinuxServer">If you are using <tt>telnet</tt>, however, you will have to set <tt>DISPLAY</tt> manually, see my other article
+</a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#StartingrunInstaller">
+Starting runInstaller</a> for more information.
+<br>
+
+
+<br><br><b><a name="StartingOracleUniversalInstaller">Starting Oracle Universal Installer</a></b><a name="StartingOracleUniversalInstaller"><br><br>
+
+Insert the Oracle CD that contains the image of the downloaded file <tt>ship.db.lnx32.cpio</tt>, or change to the directory
+that contains the image directory <tt>Disk1</tt>.
+<br><br>
+If you install Oracle10g from a CD, mount the CD by running the following commands in another terminal:
+</a><pre><a name="StartingOracleUniversalInstaller"><font color="#0000ff">su - root
+mount /mnt/cdrom
+</font></a></pre>
+
+<a name="StartingOracleUniversalInstaller">For <u>RHEL AS 4</u>, <u>RHEL AS 3</u>, and <u>FC3</u> you have to execute:
+</a><pre><a name="StartingOracleUniversalInstaller"><font color="#0000ff">su - root
+mount /media/cdrom
+
+</font></a></pre>
+
+
+<a name="StartingOracleUniversalInstaller">Before you execute <tt><font color="#0000ff">runInstaller</font></tt>, make sure the Oracle environment variables are
+set, see 
+</a><a href="http://www.puschitz.com/InstallingOracle10g.shtml#SettingOracleEnvironments">
+Setting Oracle Environments</a>.
+You can verify the settings by running the <tt>set</tt> command:
+<pre><font color="#0000ff">su - oracle</font>
+oracle$ <font color="#0000ff">set
+
+</font></pre>
+
+To execute <tt>runInstaller</tt> from the mounted CD, run the following command as the <tt>oracle</tt> user:
+<pre>oracle$ <font color="#0000ff">/mnt/cdrom/runInstaller
+</font></pre>
+
+On <u>RHEL AS 4</u>, <u>RHEL AS 3</u>, and <u>FC3</u> run the following command:
+<pre>oracle$ <font color="#0000ff">/media/cdrom/runInstaller
+
+</font></pre>
+
+
+<br><b><a name="UsingOracleUniversalInstaller">Using Oracle Universal Installer (OUI)</a></b><a name="UsingOracleUniversalInstaller"><br><br>
+
+The following example shows how to install x86 Oracle 10g Release 1 Database Software and a "General Purpose" database:<br>
+(<i>Note, the screens and questions will look different if you install 10g R2 or 64-bit 10g R1 database</i>)
+
+</a><pre>
+<a name="UsingOracleUniversalInstaller"> - Welcome Screen:
+                     - Basic Installation:       <font color="#0000ff">Checked it which is the default</font>
+                     - Oracle Home Location:     <font color="#0000ff">Use default: /u01/app/oracle/product/10.1.0/db_1</font>
+                     - Installation Type:        <font color="#0000ff">I used the default: Enterprise Edition</font>
+                     - UNIX DBA Group:           <font color="#0000ff">Use default: <b>dba</b></font>
+                     - Create Starter Databases: <font color="#0000ff">I checked it for this example which is the default</font>
+                       - Global Database Name:     <font color="#0000ff">orcl</font>
+                       - Database password:        <font color="#0000ff">Type in the password for SYS, SYSTEM, SYSMAN, and DBSNMP accounts</font>
+                     - Advanced Installation:    <font color="#0000ff">For this article I did not check it</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Specify Inventory directory and credentials:
+                     - Full path of the inventory directory: <font color="#0000ff">Use default: /u01/app/oracle/oraInventory</font>
+                     - Specify Operating System group name: <font color="#0000ff"> Use default: oinstall</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - A window pops up to run the orainstRoot.sh script:
+                     <font color="#0000ff">Run the script in another terminal:
+                       su - root</font>
+                       # <font color="#0000ff">/u01/app/oracle/oraInventory/orainstRoot.sh</font>
+                       Creating the Oracle inventory pointer file (/etc/oraInst.loc)
+                       Changing groupname of /u01/app/oracle/oraInventory to oinstall.
+                       #
+                     <font color="#0000ff">Click Continue</font>
+
+ - Product-specific Prerequisite Checks:
+                     <font color="#0000ff">Verify that all checks have been passed.
+                     <b>Make sure that the status of each Check is set to "Succeeded".
+                     On RHEL AS 4 ignore the warnings for binutils, gcc, and openmotif and proceed.</b>
+                     If a check failed, see </font></a><font color="#0000ff"><a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g Installation Errors on Linux</a>.</font>
+                     <font color="#ff0000">Note that the "Retry" button doesn't work after you fixed one of the failed checks.</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Select Database Configuration:
+                     <font color="#0000ff">I selected "General Purpose".
+                     Click Next</font>
+
+ - Specify Database Configuration Options:
+                     - Global Database Name: <font color="#0000ff">I used "orcl".</font>
+                     - SID: <font color="#0000ff">I used "orcl".</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Select Database Management Option:
+                     <font color="#0000ff">I selected "Use Database Control for Database Management".</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Specify Database File Storage Option:
+                     <font color="#0000ff">I selected "File System".</font>
+                     - File System
+                       - Specify Database file location: <font color="#0000ff">/u01/app/oracle/oradata/
+                           If you want to comply with OFA, you might want to select another mount point
+                           than '/u01', e.g. /u02/oradata.</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Specify Backup and Recovery Options:
+                     <font color="#0000ff">For my test installation I selected "Do no enable Automated Backups".</font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Specify Database Schema Passwords:<font color="#0000ff">
+                     <font color="#ff0000"><i>Make sure that the password(s) don't start with a digit number! Otherwise you
+                     will later get error message(s) like "ORA-00988 missing or invalid password".</i></font></font>
+                     <font color="#0000ff">Click Next</font>
+
+ - Summary:          <font color="#0000ff">Click Install</font>
+
+                     <font color="#ff0000">If Enterprise manager configuration fails due to port allocation problems,
+                     check out <a href="http://www.puschitz.com/InstallingOracle10g.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g/Linux Errors and Problems</a>.</font>
+
+
+                     <font color="#0000ff">When a window pops up to run the root.sh script, execute the script
+                     in another terminal as root:
+
+                       su - root</font>
+                       # <font color="#0000ff">/u01/app/oracle/product/10.1.0/db_1/root.sh</font>
+                       Running Oracle10 root.sh script...
+                       \nThe following environment variables are set as:
+                           ORACLE_OWNER= oracle
+                           ORACLE_HOME=  /u01/app/oracle/product/10.1.0/db_1
+
+                       Enter the full pathname of the local bin directory: [/usr/local/bin]:
+                          Copying dbhome to /usr/local/bin ...
+                          Copying oraenv to /usr/local/bin ...
+                          Copying coraenv to /usr/local/bin ...
+
+                       \nCreating /etc/oratab file...
+                       Adding entry to /etc/oratab file...
+                       Entries will be added to the /etc/oratab file as needed by
+                       Database Configuration Assistant when a database is created
+                       Finished running generic part of root.sh script.
+                       Now product-specific root actions will be performed.
+                       /var/opt/oracle does not exist. Creating it now.
+                       /etc/oracle does not exist. Creating it now.
+                       Successfully accumulated necessary OCR keys.
+                       Creating OCR keys for user 'root', privgrp 'root'..
+                       Operation successful.
+                       Oracle Cluster Registry for cluster has been initialized
+
+                       Adding to inittab
+                       Checking the status of Oracle init process...
+                       Expecting the CRS daemons to be up within 600 seconds.
+                       CSS is active on these nodes.
+                               mars
+                       CSS is active on all nodes.
+                       Oracle CSS service is installed and running under init(1M)
+                       #
+
+                     <font color="#0000ff">Click OK</font>
+
+ - End of Installation:
+                     <font color="#0000ff">Click Exit</font>
+
+</pre>
+
+
+<br><b><a name="UpdatesAfterRunningOracleUniversalInstaller">Updates after Running Oracle Universal Installer</a></b><a name="UpdatesAfterRunningOracleUniversalInstaller"><br><br>
+
+After Oracle10g has been installed, make sure that <tt>ORACLE_HOME</tt>, <tt>PATH</tt>, and <tt>LD_LIBRARY_PATH</tt> are set for the <tt>oracle</tt> account.
+<br><br>
+<i> Note that the path for <tt>ORACLE_HOME</tt> might be different on your system!</i><br>
+<i> Also note that <tt>LD_LIBRARY_PATH</tt> is needed for some Oracle binaries such as </i><tt>sysresv</tt>!
+<br>
+<br>
+For 10g R1 (10.1.0.3) I added the following lines to the <tt><font color="#0000ff">~oracle/.bash_profile</font></tt> file:
+</a><pre><a name="UpdatesAfterRunningOracleUniversalInstaller"><font color="#0000ff">export ORACLE_HOME=$ORACLE_BASE/product/10.1.0/db_1
+export PATH=$PATH:$ORACLE_HOME/bin 
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib
+</font></a></pre>
+
+<a name="UpdatesAfterRunningOracleUniversalInstaller">For 10g R2 (10.2.0.1.0) I added the following lines to the <tt><font color="#0000ff">~oracle/.bash_profile</font></tt> file:
+</a><pre><a name="UpdatesAfterRunningOracleUniversalInstaller"><font color="#0000ff">export ORACLE_HOME=$ORACLE_BASE/oracle/product/10.2.0/db_1
+export PATH=$PATH:$ORACLE_HOME/bin
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib
+</font></a></pre>
+
+<a name="UpdatesAfterRunningOracleUniversalInstaller">After that run the following command to set all environment variables in <tt>~oracle/.bash_profile</tt>:
+</a><pre><a name="UpdatesAfterRunningOracleUniversalInstaller">$ <font color="#0000ff">. ~oracle/.bash_profile</font></a></pre>
+
+<a name="UpdatesAfterRunningOracleUniversalInstaller">This commmand will add the environment variables to the <tt>~oracle/.profile</tt> and source in the file for
+the current shell by executing "<tt>. ~oracle/.bash_profile</tt>".
+<br>
+<br>
+NOTE: <font color="#ff0000">Do not add a trailing "/" on the <tt>ORACLE_HOME</tt> environment variable.</font> Otherwise you will
+get the error "<tt>ORACLE not available</tt>" when you try to connect to sys, see
+</a><a href="http://www.puschitz.com/InstallingOracle10gOnSUSE.shtml#Oracle10gLinuxErrorsAndProblems">Oracle10g/Linux Errors and Problems</a>
+for more information.
+<br>
+<br>
+
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="OraclePostInstallationTasks">
+Oracle Post-installation Tasks</a></u></font><u><a name="OraclePostInstallationTasks"></a></u><p></p>
+<u><a name="OraclePostInstallationTasks"></a></u><a name="OraclePostInstallationTasks"></a></h2>
+
+<a name="OraclePostInstallationTasks"><i>Before you continue, make sure you followed the steps at 
+</i></a><i><a href="http://www.puschitz.com/InstallingOracle10g.shtml#UpdatesAfterRunningOracleUniversalInstaller">
+Updates after Running Oracle Universal Installer</a>.</i>
+<br>
+<br>
+<br>
+
+<b><a name="StartupAndShutdownOfTheOracle10gDatabase">Startup and Shutdown of the Oracle10g Database</a></b><a name="StartupAndShutdownOfTheOracle10gDatabase"><br><br>
+
+To startup the database:
+</a><pre><a name="StartupAndShutdownOfTheOracle10gDatabase">oracle$ <font color="#0000ff">sqlplus /nolog</font>
+SQL&gt; <font color="#0000ff">connect / as sysdba</font>
+SQL&gt; <font color="#0000ff">startup</font></a></pre>
+
+<a name="StartupAndShutdownOfTheOracle10gDatabase">To shutdown the database:
+</a><pre><a name="StartupAndShutdownOfTheOracle10gDatabase">oracle$ <font color="#0000ff">sqlplus /nolog</font>
+SQL&gt; <font color="#0000ff">connect / as sysdba</font>
+SQL&gt; <font color="#0000ff">shutdown</font></a></pre>
+
+<a name="StartupAndShutdownOfTheOracle10gDatabase">The slash connects you to the schema owned by SYS. In the above example you will be
+connected to the schema owned by SYS with the privilege SYSDBA.
+SYSDBA gives you the following privileges:
+<br>
+&nbsp; - sysoper privileges WITH ADMIN OPTION<br>
+&nbsp; - create database<br>
+&nbsp; - recover database until<br>
+
+
+
+<br><br><b></b></a><b><a name="ShutdownOfOtherOracle10gBackgroundProcesses">Shutdown of other Oracle 10g Background Processes</a></b><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><br><br>
+
+If you installed a preconfigured database using OUI, then several Oracle background processes
+are now running on your server. Execute the following command to see the background processes:
+</a><pre><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff">ps -ef
+
+</font></a></pre>
+
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses">To shutdown the Oracle background processes after an Oracle Database 10g installation, you
+can execute the following commands:
+<br>
+<br>
+</a><li><a name="ShutdownOfOtherOracle10gBackgroundProcesses">iSQL*Plus</a></li>
+<ul>
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses">To stop iSQL*Plus, run:
+</a><pre><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff">su - oracle
+isqlplusctl stop</font></a></pre>
+</ul>
+
+<li><a name="ShutdownOfOtherOracle10gBackgroundProcesses">Database Management Processes</a></li>
+<ul>
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses">During the installation of Oracle 10g, OUI offered two Database Management Options:
+<br><br>
+If you selected "Database Control for Database Management", then the
+Oracle Enterprise Manager Database Control (Database Control) can be shutdown
+with the following command which stops both the agent and the Oracle Containers 
+for Java (OC4J) management service:
+</a><pre><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff">su - oracle
+emctl stop dbconsole</font></a></pre>
+
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses">If you selected "Grid Control for Database Management" which is used for full "Grid Control" installations, 
+then the Oracle Management Agent (standalone agent) for the Oracle Enterprise Manager Grid Control 
+(Grid Control) can be stopped with the following command:
+</a><pre><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff">su - oracle
+emctl stop agent</font></a></pre>
+</ul>
+
+<li><a name="ShutdownOfOtherOracle10gBackgroundProcesses">Oracle Net Listener</a></li>
+<ul>
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses">To stop the listener, run:
+</a><pre><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff">su - oracle
+lsnrctl stop</font></a></pre>
+</ul>
+
+<li><a name="ShutdownOfOtherOracle10gBackgroundProcesses">Cluster Synchronization Services (CSS)</a></li>
+<ul>
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses">To shutdown Oracle CSS daemon, run:
+</a><pre><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff">su - root
+/etc/rc.d/init.d/init.cssd stop</font></a></pre>
+</ul>
+<a name="ShutdownOfOtherOracle10gBackgroundProcesses"><br>
+
+
+
+
+
+
+
+</a><h2><a name="ShutdownOfOtherOracle10gBackgroundProcesses"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="TipsAndHintsForOracle10gOnLinux">
+Tips and Hints for Oracle10g on Linux</a></u></font><u><a name="TipsAndHintsForOracle10gOnLinux"></a></u><p></p>
+<u><a name="TipsAndHintsForOracle10gOnLinux"></a></u><a name="TipsAndHintsForOracle10gOnLinux"></a></h2>
+
+
+<li>
+<a name="TipsAndHintsForOracle10gOnLinux">To reinstall Oracle10g after a failed installation attempt, you might want to execute the following commands. 
+</a><ul>
+<a name="TipsAndHintsForOracle10gOnLinux">Make sure you first used the De-installation option in OUI.
+
+</a><pre><a name="TipsAndHintsForOracle10gOnLinux"><font color="#0000ff">su - root
+
+export ORACLE_HOME=/u01/app/oracle/product/10.1.0/db_1
+. $ORACLE_HOME/bin/localconfig delete    </font># stops the Oracle CSS daemon and deletes configuration<font color="#0000ff">
+
+rm -rf /u01/app/oracle/*
+
+rm -f /etc/oraInst.loc /etc/oratab
+rm -rf /etc/oracle
+rm -f /etc/inittab.cssd
+rm -f /usr/local/bin/coraenv /usr/local/bin/dbhome /usr/local/bin/oraenv
+</font></a></pre>
+
+<a name="TipsAndHintsForOracle10gOnLinux">Make also sure to <tt><font color="#0000ff">unset</font></tt> and uncomment <tt><font color="#0000ff">ORACLE_HOME</font></tt> from
+<tt><font color="#0000ff">~oracle/.bash_profile</font></tt>.
+
+</a></ul>
+</li>
+
+<a name="TipsAndHintsForOracle10gOnLinux"><br>
+
+
+
+
+
+
+</a><h2><a name="TipsAndHintsForOracle10gOnLinux"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="Oracle10gLinuxErrorsAndProblems">
+Oracle10g/Linux Errors and Problems</a></u></font><u><a name="Oracle10gLinuxErrorsAndProblems"></a></u><p></p>
+<u><a name="Oracle10gLinuxErrorsAndProblems"></a></u><a name="Oracle10gLinuxErrorsAndProblems"></a></h2>
+
+
+<a name="Oracle10gLinuxErrorsAndProblems">Here is a list of common Oracle10g installation problems and other issues. 
+<br>
+<br>
+<i>Note that most of the issues are due to not following
+correctly the installation procedure. And some errors are due to not using an Oracle supported Linux OS.</i>
+<br><br>
+The Installation log file can be found in <tt>$ORACLE_BASE/oraInventory/logs</tt>.
+<br>
+The Database Creation log file can be found in <tt>$ORACLE_BASE/admin/$ORACLE_SID/create</tt>.
+<br><br>
+
+
+</a><pre><a name="Oracle10gLinuxErrorsAndProblems"><font color="#ff0000">
+<li>Starting Oracle Universal Installer...
+
+  Checking installer requirements...
+
+  Checking operating system version: must be redhat-2.1, UnitedLinux-1.0 or redhat-3
+                                        <b>Failed</b> &lt;&lt;&lt;&lt;
+
+  Exiting Oracle Universal Installer, log for this session can be found at ...
+</li></font></a></pre>
+<ul>
+<a name="Oracle10gLinuxErrorsAndProblems">See
+
+</a><a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingRedhatReleaseFile">
+Checking/Updating the redhat-release File</a>
+for more information.
+
+</ul>
+
+
+
+
+
+<pre><font color="#ff0000">
+<li>Checking for gcc-2.96; found Not found. Failed &lt;&lt;&lt;&lt;
+</li></font></pre>
+<ul>
+
+See 
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingSoftwarePackages">
+Checking Software Packages (RPMs)</a> for more information.
+<br><br>
+Note that "Retry" in the "Product-specific Prerequisite Checks" window does not work. So you either set it
+manually to Passed or you restart OUI.
+</ul>
+
+
+
+
+<pre><font color="#ff0000">
+<li>Checking for openmotif-2.1.30-11; found Not found.      Failed &lt;&lt;
+</li></font></pre>
+<ul>
+See
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingSoftwarePackages">
+Checking Software Packages (RPMs)</a> for more information.
+<br><br>
+Note that "Retry" in the "Product-specific Prerequisite Checks" window does not work. So you either set it
+manually to Passed or you restart OUI.
+</ul>
+
+
+
+
+<pre><font color="#ff0000">
+<li>Checking for shmmax=2147483648; found shmmax=33554432.  Failed &lt;&lt;&lt;&lt;
+</li></font></pre>
+<ul>
+Increase the <tt>shmmax</tt> kernel parameter. 
+<br><br>
+For more information on <tt>shmmax</tt>, see
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingKernelParameters">
+Checking Kernel Parameters</a>.
+<br><br>
+Note that "Retry" in the "Product-specific Prerequisite Checks" window does not work. So you either set it
+manually to Passed or you restart OUI.
+</ul>
+
+
+
+
+<pre><font color="#ff0000">
+<li>Checking for semopm=100; found semopm=32.       Failed &lt;&lt;&lt;&lt;
+</li></font></pre>
+<ul>
+Increase the <tt>semopm</tt> kernel parameter. 
+<br><br>
+For more information on <tt>semopm</tt>, see
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingKernelParameters">
+Checking Kernel Parameters</a>.
+<br><br>
+Note that "Retry" in the "Product-specific Prerequisite Checks" window does not work. So you either set it
+manually to Passed or you restart OUI.
+</ul>
+
+
+
+
+<pre><font color="#ff0000">
+<li>Checking for filemax=65536; found filemax=26163.        Failed &lt;&lt;&lt;&lt;
+</li></font></pre>
+<ul>
+Increase the <tt>file-max</tt> kernel parameter:
+<br><br>
+For more information on <tt>file-max</tt>, see
+<a href="http://www.puschitz.com/InstallingOracle10g.shtml#CheckingKernelParameters">
+Checking Kernel Parameters</a>.
+<br><br>
+Note that "Retry" in the "Product-specific Prerequisite Checks" window does not work. So you either set it
+manually to Passed or you restart OUI.
+</ul>
+
+
+
+
+
+<pre><font color="#ff0000">
+<li>ORA-01034: ORACLE not available
+  ORA-27101: shared memory realm does not exist
+  Linux Error: 2: No such file or directory</li></font>  or
+<font color="#ff0000">  ORA-01034: ORACLE not available</font>
+</pre>
+<ul>
+First check if <tt>ORACLE_SID</tt> is set correctly.
+<br>
+If <tt>ORACLE_SID</tt> is set correctly, then you probably have a trailing slash "/" on the
+<tt>ORACLE_HOME</tt> environment variable. Remove it and try again to connect to sys
+(e.g from <tt>ORACLE_HOME=/u01/app/oracle/product/10.1.0/db_1<b><font color="#ff0000">/</font></b> <tt>to</tt> ORACLE_HOME=/u01/app/oracle/product/10.1.0/db_1</tt>).
+</ul>
+
+
+
+
+<pre><font color="#ff0000">
+<li>ORA-00988 missing or invalid password(s).
+</li></font></pre>
+<ul>
+During the Oracle10g installation you probably provided a password for the Oracle database accounts 
+that started with a digit number. Ignore this error message and change the password when you are done with 
+the Oracle10g installation.
+<br>
+<br>
+</ul>
+
+
+
+<pre><li>$ sysresv -i<font color="#ff0000">
+  sysresv: error while loading shared libraries: libclntsh.so.10.1: cannot open shared object file: No such file or directory
+</font></li></pre>
+<ul>
+Make sure <tt>LD_LIBRARY_PATH</tt> is set to <tt>$ORACLE_HOME/lib</tt>:
+<pre>oracle$ <font color="#0000ff">export LD_LIBRARY_PATH=$ORACLE_HOME/lib</font></pre>
+<br>
+</ul>
+
+
+
+
+
+<pre><font color="#ff0000">
+<li>X11 connection rejected because of wrong authentication.
+  X connection to localhost:10.0 broken (explicit kill or server shutdown).
+</li></font></pre>
+<ul>
+To rectify this problem, try to login to the remote Oracle server again by using the "X11 forward" feature of ssh.
+Execute the following command from your <u>local desktop</u>:
+<pre>$ <font color="#0000ff">ssh -X oracle@oracle_remote_server_name</font></pre>
+
+Now when you try to run any GUI tool on the remote server, it will automatically be relinked to your local desktop.
+If this is not working, verify that the <tt>ForwardX11</tt> setting is not set to "<tt>no</tt>" in <tt>/etc/ssh/ssh_config</tt>
+on your remote server:
+<pre><font color="#0000ff">su - root</font>
+# <font color="#0000ff">grep ForwardX11 /etc/ssh/ssh_config | grep -v "^#"</font>
+        ForwardX11 yes
+#</pre>
+
+
+NOTE: If you use for example Red Hat Fedora Core 3 as your desktop and you want to install the database on another machine,
+then you need to set the <tt><font color="#0000ff">DisallowTCP</font></tt> entry in
+<tt><font color="#0000ff">/etc/X11/gdm/gdm.conf</font></tt> for the GNOME Display Manager to read:
+<pre><font color="#0000ff">DisallowTCP=false</font></pre>
+
+After that you need to restart your X server. I usually do this with the <tt>init</tt> command:
+<pre><font color="#0000ff">su - root
+init 3
+init 5
+</font></pre>
+
+If you are using <tt>telnet</tt>, however, you will have to set <tt>DISPLAY</tt> manually, see my other article
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#StartingrunInstaller">
+Starting runInstaller</a> for more information.
+<br>
+<br>
+</ul>
+
+
+
+<font color="#ff0000">
+<li>
+Recovery Manager <tt>rman</tt> hangs
+</li></font>
+<ul>
+You are probably running the wrong <tt>rman</tt> binary which belongs to the
+<tt>XFree86-devel</tt> RPM:
+<pre>$ <font color="#0000ff">which rman</font>
+/usr/X11R6/bin/rman</pre>
+</ul>
+
+
+
+
+<pre><font color="#ff0000">
+<li>ORA-00988 missing or invalid password(s).
+</li></font></pre>
+<ul>
+During the Oracle10g installation you probably provided a password for the Oracle database accounts
+that started with a digit number. Ignore this error message and change the password when you are done with
+the Oracle10g installation.
+<br>
+<br>
+</ul>
+
+
+
+
+<pre><li>$ ./runInstaller
+  ...
+  <font color="#ff0000">
+  Exception java.lang.UnsatisfiedLinkError: /tmp/OraInstall2005-06-15_07-36-25AM/jre/1.4.2/lib/i386/libawt.so: 
+    libXp.so.6: cannot open shared object file: No such file or directory occurred..
+  java.lang.UnsatisfiedLinkError: /tmp/OraInstall2005-06-15_07-36-25AM/jre/1.4.2/lib/i386/libawt.so: 
+    libXp.so.6: cannot open shared object file: No such file or directory
+        at java.lang.ClassLoader$NativeLibrary.load(Native Method)
+        at java.lang.ClassLoader.loadLibrary0(ClassLoader.java:1560)
+        at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1477)
+        ...
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+You may get this error message on RHEL3 x86_64, RHEL4 x86_64, and on other systems. Even though you most probably have
+<tt>/usr/X11R6/lib64/libXp.so.6</tt> installed on your system, this error messages is complaining that
+it can't find the <tt>libXp.so.6</tt> shared library for i386:
+<pre> /tmp/OraInstall2005-06-15_07-36-25AM/jre/1.4.2/lib/<b>i386</b>/libawt.so: libXp.so.6: cannot open shared object file: No such file or directory
+
+</pre>
+
+On my <u>RHEL3 x86_64</u> system for 10g (10.1.0.3) I had to install the i386 <tt>XFree86-libs</tt> package 
+(<tt>XFree86-libs-4.3.0-81.EL.<b>i386</b>.rpm</tt>).
+In order to satisfy dependencies for this i386 package, I had to install a few other i386 RPMs as well:
+<pre># <font color="#0000ff">rpm -ivh XFree86-libs-4.3.0-81.EL.i386.rpm \
+      XFree86-Mesa-libGL-4.3.0-81.EL.i386.rpm \
+      expat-1.95.5-6.i386.rpm \
+      fontconfig-2.2.1-13.i386.rpm \
+      freetype-2.1.4-4.0.i386.rpm \
+      zlib-1.1.4-8.1.i386.rpm
+
+</font></pre>
+
+On my <u>RHEL4 x86_64 U1</u> system for 10g (10.1.0.3) I had to install the i386 <tt>xorg-x11-deprecated-libs</tt> package 
+(<tt>xorg-x11-deprecated-libs-6.8.2-1.EL.13.6.<b>i386</b>.rpm</tt>).
+In order to satisfy dependencies for this i386 package, I had to install a few other i386 RPMs as well:
+<pre># <font color="#0000ff">rpm -Uvh xorg-x11-deprecated-libs-6.8.2-1.EL.13.6.i386.rpm \
+      xorg-x11-libs-6.8.2-1.EL.13.6.i386.rpm \
+      xorg-x11-Mesa-libGL-6.8.2-1.EL.13.6.i386.rpm \
+      expat-1.95.7-4.i386.rpm \
+      fontconfig-2.2.3-7.i386.rpm \
+      freetype-2.1.9-1.i386.rpm \
+      zlib-1.2.1.2-1.i386.rpm
+
+</font></pre>
+
+On my <u>RHEL4 x86_64 U2</u> system for 10g R2 (10.2.0.1.0) I had to install the i386 <tt>xorg-x11-deprecated-libs</tt> package
+(<tt>xorg-x11-deprecated-libs-6.8.2-1.EL.13.20.<b>i386</b>.rpm</tt>).
+In order to satisfy dependencies for this i386 package, I had to install a few other i386 RPMs as well:
+
+<pre><font color="#0000ff">rpm -Uvh xorg-x11-deprecated-libs-6.8.2-1.EL.13.20.<b>i386</b>.rpm \
+      xorg-x11-libs-6.8.2-1.EL.13.20.<b>i386</b>.rpm \
+      xorg-x11-Mesa-libGL-6.8.2-1.EL.13.20.<b>i386</b>.rpm \
+      expat-1.95.7-4.<b>i386</b>.rpm \
+      fontconfig-2.2.3-7.<b>i386</b>.rpm \
+      freetype-2.1.9-1.<b>i386</b>.rpm \
+      zlib-1.2.1.2-1.2.<b>i386</b>.rpm
+
+</font></pre>
+
+On my <u>RHEL4 x86 U2</u> system for 10g R2 (10.2.0.1.0) I had to install the following RPM:
+<pre><font color="#0000ff">rpm -Uvh xorg-x11-deprecated-libs-6.8.2-1.EL.13.20.i386.rpm
+
+</font></pre>
+
+
+
+If you get this error message on Fedora Core 3 x86, install the <tt>xorg-x11-deprecated-libs</tt> RPM. For example:
+<pre># <font color="#0000ff">rpm -Uvh xorg-x11-deprecated-libs-6.8.1-12.FC3.21
+
+</font></pre>
+
+After I installed these RPMs I had to restart the installation. If you 
+know a more elegant way to continue, please drop me an email.
+<br>
+<br>
+</ul>
+
+
+
+
+
+
+<pre><li>make -f /u01/app/oracle/OraHome_1/sysman/lib/ins_sysman.mk relink_sharedobj SHAREDOBJ=libnmemso
+  make[1]: Entering directory `/u01/app/oracle/OraHome_1/sysman/lib'
+  gcc -o /u01/app/oracle/OraHome_1/sysman/lib/libnmemso.so -m32 ...
+  ...
+  <font color="#ff0000">
+
+  /usr/bin/ld: crti.o: No such file: No such file or directory
+  collect2: ld returned 1 exit status
+  make[1]: *** [/u01/app/oracle/OraHome_1/sysman/lib/libnmemso.so] Error 1
+
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+You may get this error message or a similar one when installing 64-bit 10g on RHEL4 x86_64.
+<br><br>
+On my <u>RHEL4 U1 x86_64</u> system for 10g (10.1.0.3) I installed the following <b>i386</b> RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh glibc-devel-2.3.4-2.9.<b>i386</b>.rpm</font></pre>
+
+On my <u>RHEL4 U2 x86-64</u> system for 10g R2 (10.2.0.1.0) I installed the following <b>i386</b> RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh glibc-devel-2.3.4-2.13.<b>i386</b>.rpm</font></pre>
+
+<br>
+</ul>
+
+
+
+
+
+<pre><li>make -f /u01/app/oracle/OraHome_1/sysman/lib/ins_sysman.mk relink_sharedobj SHAREDOBJ=libnmemso
+  make[1]: Entering directory `/u01/app/oracle/OraHome_1/sysman/lib'
+  gcc -o /u01/app/oracle/OraHome_1/sysman/lib/libnmemso.so -m32 ...
+  ...
+  <font color="#ff0000">
+
+  /usr/bin/ld: cannot find -lgcc_s_32
+  collect2: ld returned 1 exit status
+  make[1]: Leaving directory `/u01/app/oracle/OraHome_1/sysman/lib'
+  make[1]: *** [/u01/app/oracle/OraHome_1/sysman/lib/libnmemso.so] Error 1
+
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+You may get this error message or a similar one when installing 64-bit 10g on RHEL4 x86_64.
+<br><br>
+On my <u>RHEL4 U1 x86_64</u> system for 10g (10.1.0.3) I installed the following <b>i386</b> RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh libgcc-3.4.3-22.1.<b>i386</b>.rpm</font></pre>
+
+On my <u>RHEL4 U2 x86_64</u> system for 10g R2 (10.2.0.1.0) I installed the following <b>i386</b> RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh libgcc-3.4.4-2.<b>i386</b>.rpm</font></pre>
+
+<br>
+</ul>
+
+
+
+
+
+
+<pre><li><font color="#ff0000">error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+Make sure the <tt>libaio</tt> RPM is installed. 
+<br>
+<br>
+For example in RHEL 3 x86:
+<pre># <font color="#0000ff">rpm -Uvh libaio-0.3.96-5.i386.rpm</font></pre>
+For example in RHEL 4 U2 x86_64:
+<pre># <font color="#0000ff">rpm -Uvh libaio-0.3.103-3.<b>x86_64</b>.rpm</font></pre>
+<br>
+</ul>
+
+
+
+
+
+
+<pre><li>$ ./runInstaller
+  ...
+  <font color="#ff0000">
+  Exception in thread "main" java.lang.UnsatisfiedLinkError: /tmp/OraInstall2005-07-24_09-03-19AM/jre/1.4.2/lib/i386/libawt.so: 
+  /tmp/OraInstall2005-07-24_09-03-19AM/jre/1.4.2/lib/i386/libawt.so: cannot restore segment prot after reloc: Permission denied
+        at java.lang.ClassLoader$NativeLibrary.load(Native Method)
+        at java.lang.ClassLoader.loadLibrary0(Unknown Source)
+        at java.lang.ClassLoader.loadLibrary(Unknown Source)
+        ...
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+I saw this error when I installed 10g R2 on Fedora Core 4. I fixed it by patchting/upgrading the SELinux policy:
+<pre># <font color="#0000ff">rpm -Uvh selinux-policy-targeted-1.25.2-4.noarch.rpm
+</font></pre>
+
+You can download the latest <tt>selinux-policy-targeted</tt> RPM from
+<a href="http://download.fedora.redhat.com/pub/fedora/linux/core/updates/4/i386/">
+http://download.fedora.redhat.com/pub/fedora/linux/core/updates/4/i386/</a>.
+<br>
+<br>
+You could also disable SELinux which I DO NOT recommend:
+<pre># <font color="#0000ff">/usr/sbin/setenforce 0
+</font></pre>
+<br>
+</ul>
+
+
+
+
+<pre><li><font color="#ff0000">Error in invoking target 'all_no_orcl' of makefile '/u01/app/oracle/oracle/product/10.2.0/db_1/rdbms/lib/ins_rdbms.mk'. 
+See '/u01/app/oracle/oraInventory/logs/installActions2005-11-13_01-07-04AM.log' for details.
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+
+The log file showed the following error:
+<pre><font color="#ff0000">INFO: gcc:
+INFO: /usr/lib64/libstdc++.so.5: No such file or directory
+INFO:
+
+INFO: /u01/app/oracle/oracle/product/10.2.0/db_1/bin/genorasdksh: Failed to link liborasdkbase.so.10.2
+
+INFO: make: *** [liborasdkbase] Error 1
+
+</font></pre>
+
+
+On my <u>RHEL4 U2 x86_64</u> system for 10g R2 (10.2.0.1.0) I installed the following <b>x86_64</b> RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh compat-libstdc++-33-3.2.3-47.3.<b>x86_64</b>.rpm</font></pre>
+
+Note that you may already have the "i386" <tt>compat-libstdc++-33</tt> RPM installed on your systems but you need the
+"x86_64" RPM to fix this problem. To verify
+which <tt>compat-libstdc++-33</tt> RPM you have installed on your system, run:
+<pre># <font color="#0000ff">rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}  (%{ARCH})\n' compat-libstdc++-33</font></pre>
+<br>
+</ul>
+
+
+
+<pre><li><font color="#ff0000">Error in invoking target 'all_no_orcl ihsodbc' of makefile '/u01/app/oracle/oracle/product/10.2.0/db_1/rdbms/lib/ins_rdbms.mk'. 
+  See '/u01/app/oracle/oraInventory/logs/installActions2005-07-24_09-25-22AM.log' for details.
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+
+The log file showed the following error:
+<pre><font color="#ff0000">INFO: Creating /u01/app/oracle/oracle/product/10.2.0/db_1/lib/liborasdkbase.so.10.2
+
+INFO: gcc:
+INFO: /usr/lib/libstdc++.so.5: No such file or directory
+INFO:
+
+INFO: /u01/app/oracle/oracle/product/10.2.0/db_1/bin/genorasdksh: Failed to link liborasdkbase.so.10.2
+
+</font></pre>
+
+This means that the "33" version of the <tt>compat-libstdc++</tt> RPM is missing. 
+<br>
+<br>
+On my <u>RHEL 4 U2 x86</u> system for 10g R2 (10.2.0.1.0) I installed the following RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh compat-libstdc++-33-3.2.3-47.3.i386.rpm
+</font></pre>
+
+NOTE: You need the "33" version of the <tt>compat-libstdc++</tt> RPM. For i386 there is also a
+"296" version of the <tt>compat-libstdc++</tt> RPM. Here are the two <tt>compat-libstdc++</tt> RPMs
+that come with RHEL 4 U2:
+<pre>compat-libstdc++-<b>296</b>-2.96-132.7.2.i386.rpm
+compat-libstdc++-<b>33</b>-3.2.3-47.3.i386.rpm
+
+</pre>
+
+
+
+In Fedora Core 4 x86 I installed the following RPM to fix this problem:
+<pre># <font color="#0000ff">rpm -Uvh compat-libstdc++-33-3.2.3-47.fc4.i386.rpm
+</font></pre>
+
+NOTE: You need the "33" version of the <tt>compat-libstdc++</tt> RPM. For i386 there is also a
+"296" version of the <tt>compat-libstdc++</tt> RPM. Here are the two <tt>compat-libstdc++</tt> RPMs
+that come with FC4:
+<pre>compat-libstdc++-<b>296</b>-2.96-132.fc4.i386.rpm
+compat-libstdc++-<b>33</b>-3.2.3-47.fc4.i386.rpm
+
+</pre>
+
+
+After that hit Retry in the error dialog window.
+<br>
+<br>
+</ul>
+
+
+
+
+<pre><li><font color="#ff0000">Error in invoking target 'all_no_orcl' of makefile '/u01/app/oracle/oracle/product/10.2.0/db_1/rdbms/lib/ins_rdbms.mk'. 
+  See '/u01/app/oracle/oraInventory/logs/installActions2005-11-13_01-25-49AM.log' for details.
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+
+The log file showed the following error:
+<pre><font color="#ff0000">INFO: /usr/bin/ld: /u01/app/oracle/oracle/product/10.2.0/db_1/lib/libirc.a(fast_memcpy.o): 
+    relocation R_X86_64_PC32 against `_memcpy_mem_ops_method' can not be used when making a shared object; recompile with -fPIC
+/usr/bin/ld: final link failed: Bad value
+collect2: ld returned 1 exit status
+
+INFO: /u01/app/oracle/oracle/product/10.2.0/db_1/bin/genorasdksh: Failed to link liborasdkbase.so.10.2
+
+</font></pre>
+
+This error comes up when installing 10g R2 (10.2.0.1.0) on RHEL4 x86_64. Make sure to upgrade to RHEL4 U3 or
+to download the <tt>binutils</tt> RPM from
+<a href="https://rhn.redhat.com/">https://rhn.redhat.com/</a>
+or from
+<a href="http://oss.oracle.com/projects/compat-oracle/files/RedHat/">
+http://oss.oracle.com/projects/compat-oracle/files/RedHat/</a>:
+
+<pre># <font color="#0000ff">rpm -Uvh --force binutils-2.15.92.0.2-13.0.0.0.2.<b>x86_64</b>.rpm</font></pre>
+
+For more information on this bug, see
+<a href="http://sources.redhat.com/bugzilla/show_bug.cgi?id=679">Bugzilla Bug 679</a>.
+
+<br>
+<br>
+</ul>
+
+
+
+
+<pre><li><font color="#ff0000">ORA-12547: TNS:lost contact</font>
+</li></pre>
+<ul>
+
+There can be many reasons for this error. For example, this can happen during ASM instance startup
+when the <tt>libaio</tt> RPM is not installed on the system.
+<br>
+<br>
+</ul>
+
+
+
+
+
+
+
+<pre><li>$ lsnrctl start
+  ...
+  <font color="#ff0000">
+  Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC)))
+  TNS-12547: TNS:lost contact
+   TNS-12560: TNS:protocol adapter error
+    TNS-00517: Lost contact
+     Linux Error: 104: Connection reset by peer
+  Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=centauri)(PORT=1521)))
+  TNS-12547: TNS:lost contact
+   TNS-12560: TNS:protocol adapter error
+    TNS-00517: Lost contact
+     Linux Error: 104: Connection reset by peer
+</font></li></pre><font color="#ff0000"></font>
+<ul>
+Make sure the loopback entry in <tt><font color="#0000ff">/etc/hosts</font></tt> is not missing when 
+you start the listener:
+<pre><font color="#0000ff">127.0.0.1       localhost.localdomain   localhost</font></pre>
+
+Now try to run <tt>lsnrctl start</tt> as <tt>oracle</tt> again.
+<br>
+<br>
+</ul>
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="References">
+References</a></u></font><u><a name="References"></a></u><p></p>
+<u><a name="References"></a></u><a name="References"></a></h2>
+
+
+<a href="http://www.oracle.com/pls/db102/portal.portal_demo3?selected=1">
+Oracle Database Documentation Library</a>
+
+<br>
+<a href="http://www.puschitz.com/OracleOnLinux.shtml">
+Werner's Oracle Linux Page</a>
+
+
+<br>
+<br>
+<br>
+
+<center><b>Copyright © 2007 puschitz.com</b></center>
+<br>
+<center><small>
+The information provided on this website comes without warranty of any kind and is distributed AS IS.
+Every effort has been made to provide the information as accurate as possible, but no warranty or fitness is implied.
+The information may be incomplete, may contain errors or may have become out of date.
+The use of this information described herein is your responsibility, and to use it in your own
+environments do so at your own risk.
+</small></center>
+<small></small>
+<br>
+<br>
+
+
+<script src="InstallingOracle10g%20step%20by%20step_files/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2487276-1";
+urchinTracker();
+</script>
+
+
+</body></html>

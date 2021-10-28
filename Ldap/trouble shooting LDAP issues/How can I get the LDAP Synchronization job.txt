@@ -1,0 +1,39 @@
+How can I get the LDAP Synchronization job to run a full refresh against a docbase where I have already deleted docbase  users from a previous  LDAP job 
+
+The LDAP Sychronization job keeps a record of its last run. The time is recorded in the a_last_run attribute for the LDAP Config Object. If you modify the a_last_run attribute of your LDAP config object to "NULL" and clear the time stamp and rerun the job it will fully populate the docbase with all the users from LDAP. 
+
+Note when you set the value to NULL you do not enter the word NULL simply do not enter any value. In addition when you use IAPI in Documentum Administrator a data field is presented. When you use IAPI in the command line there is no Date field , after you do a SET comand the next line becomes the data field 
+
+See both examples below. 
+
+To change the a_last_run to NULL/Blank. 
+
+From API on command line: 
+API>retrieve,c,dm_ldap_config 
+API>set,c,l,a_last_run 
+SET> *NOTE: leave this field blank 
+SET>save,c,l 
+
+Or 
+
+From API on DA 
+Command:retrieve,c,dm_ldap_config 
+Select Execute 
+Command: set,c,l,a_last_run 
+Data: *NOTE: leave this field blank 
+Select Execute 
+Command:save,c,l 
+
+Or 
+
+Run the LDAPSync from command line on server system in the $DM_HOME/bin or %DM_HOME%\bin 
+Fill in your own values for the options and ensure your paths are correct. 
+
+CS 5.1 and lower: 
+java -classpath 
+"../classes:../classes/com/documentum/ldap/ldapfilt.jar:../classes/com/documentum/ldap/ldapjdk.jar:$DOCUMENTUM_SHARED/dctm.jar" com.documentum.ldap.LDAPSync -bDocbaseName -uDocbaseAdminUser -pPassword -t10 -ntrue 
+
+CS 5.2 and higher: 
+java com.documentum.ldap.LDAPSync -bDocbaseName -uDocbaseAdminUser -pPassword -t10 -ntrue 
+
+The last entry -ntrue will disregard the the a_last_runr

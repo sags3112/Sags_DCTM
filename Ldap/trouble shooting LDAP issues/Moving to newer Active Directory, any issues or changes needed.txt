@@ -1,0 +1,11 @@
+Moving to newer Active Directory, any issues or changes needed
+
+
+
+1. Users have to exist in new domain with same user_name and user_login_name values.
+For example if cn=Naman Ranjan and that maps to user_name, then it has to be the same in the new directory server. So basically user_name and user_login_name must match.
+
+2. If the name of the ldap config is changing, then each user_global_unique_id and user_login_domain will have to be updated (mass) using DQL.
+for user_global_unique_id, must set it to the name of the config followed by a colon.
+
+Also, you will need the latest dmldap.jar for 6.5 SP3 as this will allow for users to be updated accordingly. I will attach that to the SR which you can download from powerlink. I would suggest you to test this out in your dev environment before implementing in your production environment.

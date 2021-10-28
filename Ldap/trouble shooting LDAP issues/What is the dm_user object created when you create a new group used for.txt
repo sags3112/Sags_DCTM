@@ -1,0 +1,32 @@
+esg104564 
+Content Server 
+
+What is the dm_user object created when you create a new group used for?
+
+
+Every time you create a group object the server will create a corresponding dm_user object 
+
+
+The dm_user has an attribute called r_is_group Boolean which ndicates if the user represents a group or an individual user.
+
+
+It also it has the attribute: 
+
+    client_capability
+    globally_ managed
+    home_docbase
+    restricted_folder_ids
+
+
+and some other attributes that dm_group object by it self won't have
+
+
+those attributes help the system to set the security and some other functionallities for the group as well.
+
+
+
+For example, federation it will populate users, groups and ACL's, so this is used to convey the user-like permission / behavior of a group.  
+
+
+
+So without that mechanism we will not be able to populate the groups so it saves when calculating permissions etc from querying on two objects or set the permissions of the default group associated to the object.

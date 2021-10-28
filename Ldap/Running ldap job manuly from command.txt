@@ -1,0 +1,51 @@
+1) syntax for how do we run ldapsynch command with non-ssl protocol from commadn prompt
+
+
+
+java com.documentum.ldap.LDAPSync -docbase_name repositoryname
+-user_name superuser_login -method_trace_level integer -full_sync true
+
+where repositoryname is the name of the repository, superuser_login is the login for a
+Superuser, and integer is the required trace level for the method.
+
+ie.
+
+java com.documentum.ldap.LDAPSync -docbase_name csd6sp1 -user_name tsadmin -method_trace_level 10 -full_sync true >ldap.log
+
+
+
+2) Running ldap synch job from command prompt syntax:
+
+
+
+java com.documentum.ldap.LDAPSync -docbase_name <tor_mrbean_d6sp1>-user_name dmadmin -password r1ng3r -full_sync true -method_trace_level 10 -group_save_limit 1000 -rename_user_option true -rename_group_option true -deactivate_user_option true
+
+
+ Note: Run it from DM_HOME/bin
+
+
+
+log saves in local directory ie c:\document and Settings\user_directory
+
+
+
+
+*********************
+
+
+
+To run the LDAP Synchronization from a command line, use the following syntax based. These should be launched from the DM_HOME/bin directory.
+
+Content Server 5.3:
+java com.documentum.ldap.LDAPSync -docbase_name repositoryname
+-user_name superuser_login -method_trace_level integer -full_sync true
+
+Content Server 5.2 and 5.2.5: 
+java com.documentum.ldap.LDAPSync -bDocbaseName -uDocbaseAdminUser -pPassword -t10 -ntrue 
+
+Content Server 5.1 and lower: 
+java -classpath 
+"../classes:../classes/com/documentum/ldap/ldapfilt.jar:../classes/com/documentum/ldap/ldapjdk.jar:$DOCUMENTUM_SHARED/dctm.jar" com.documentum.ldap.LDAPSync -bDocbaseName -uDocbaseAdminUser -pPassword -t10 -ntrue 
+
+
+java com.documentum.ldap.LDAPSync -docbase_name <docbase_name> -user_name dmadmin -password <password> -full_sync true -method_trace_level 10 >ldap.log

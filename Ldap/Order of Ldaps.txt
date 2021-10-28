@@ -1,0 +1,14 @@
+
+order mnetioning in DA-LDAP object :cn=,ou=,dc=,dc=com
+
+1)cn=dmadmin or * if u have one user..then mentin user name
+- many users then mention like cn=*
+2) ou-India
+
+3) dc= media.com
+
+*************
+
+order creating in AD;
+
+1) dc 2) ou 3) cn=users list.. (1 user or many users)

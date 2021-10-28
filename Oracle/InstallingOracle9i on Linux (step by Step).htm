@@ -1,0 +1,2517 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+
+
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+                                                                        
+<meta name="ROBOTS" content="NOARCHIVE">
+<title>Installing Oracle 9i on Red Hat Linux (RHEL 4, 3, 2.1, RH 9, 8.0,
+ 7.3, 7.2, 7.1) x86 (Red Hat Enterprise Linux Advanced Server, RHEL AS, 
+Oracle9i Database Installation)</title>
+</head><body bgcolor="#ffffff" text="#000000">
+
+
+<br>
+
+<div align="center">
+<p><b><font color="#ff0000"><font size="+2">Installing Oracle<i>9i</i> 32-bit on
+Red Hat Enterprise Linux Advanced Server 4, 3, 2.1, and on Red Hat 9, 8.0, 7.3, 7.2, 7.1 (x86)
+</font></font></b></p>
+</div>
+
+<center><i>Written by Werner Puschitz</i></center>
+
+<br>
+
+<center><b><font size="+1"><a href="http://www.puschitz.com/">www.puschitz.com</a></font></b></center>
+
+
+<br>
+<br>
+<br>
+
+
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/show_ads.js">
+</script><script src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/expansion_embed.js"></script><script src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/test_domain.js"></script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display: inline-table; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><ins id="google_ads_frame1_anchor" style="display: block; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame1" marginheight="0" marginwidth="0" name="google_ads_frame" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/ads.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="728" frameborder="0" height="90" scrolling="no"></iframe></ins></ins>
+
+<br>
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/show_ads.js">
+</script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display: inline-table; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><ins id="google_ads_frame2_anchor" style="display: block; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame2" marginheight="0" marginwidth="0" name="google_ads_frame" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/ads_002.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="728" frameborder="0" height="90" scrolling="no"></iframe></ins></ins>
+
+<br>
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF";
+google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/show_ads.js">
+</script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="display: inline-table; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><ins id="google_ads_frame3_anchor" style="display: block; border: medium none; height: 90px; margin: 0pt; padding: 0pt; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame3" marginheight="0" marginwidth="0" name="google_ads_frame" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/ads_003.htm" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" width="728" frameborder="0" height="90" scrolling="no"></iframe></ins></ins>
+
+<br>
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-2436085322378069";
+google_ad_width = 200;
+google_ad_height = 90;
+google_ad_format = "200x90_0ads_al";
+google_ad_channel ="";
+google_color_border = "FFFFFF";
+google_color_bg = "FFFFFF"; google_color_link = "0000FF";
+google_color_url = "008000";
+google_color_text = "000000";
+//--></script>
+<script type="text/javascript" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/show_ads.js">
+</script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><iframe name="google_ads_frame" src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/ads_004.htm" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" width="200" frameborder="0" height="90" scrolling="no"></iframe>
+
+
+
+<br>
+<br>
+
+
+
+<p><i>Here is a summary (HOWTO) how I installed: <br>
+<br>
+
+Oracle 9iR2 (9.2.0.6.0) 32-bit Database on Red Hat Advanced Server 4 (x86, kernel 2.6.9-5.EL, glibc-2.3.4-2) <br>
+Oracle 9iR2 (9.2.0) 32-bit Database on Red Hat Advanced Server 3 (x86, kernel 2.4.21-4.EL, glibc 2.3.2-95.3) <br>
+Oracle 9iR2 (9.2.0) 32-bit Database on Red Hat Advanced Server 2.1 (x86, kernel 2.4.9-e.3, glibc 2.2.4-26) <br>
+Oracle 9iR2 (9.2.0) 32-bit Database on Red Hat 9 (x86, kernel kernel-2.4.20-6, glibc 2.3.2-5) <br>
+Oracle 9iR2 (9.2.0) 32-bit Database on Red Hat 8.0 (x86, kernel 2.4.18-18.8.0, glibc 2.2.93-5) <br>
+Oracle 9iR2 (9.2.0) 32-bit Database on Red Hat 7.3 (x86, kernel 2.4.18-3, glibc 2.2.5-34) <br>
+Oracle 9iR1 (9.0.1) 32-bit Database on Red Hat 7.3 (x86, kernel 2.4.18-3, glibc 2.2.5-34) <br>
+Oracle 9iR1 (9.0.1) 32-bit Database on Red Hat 7.2 (x86, kernel 2.4.7-10, glibc 2.2.4-13) <br>
+Oracle 9iR1 (9.0.1) 32-bit Database on Red Hat 7.1 (x86, kernel 2.4.2-2, glibc 2.2.2-10) <br>
+</i>
+
+<br>
+People recommended this installation guide also for Red Hat Fedora Core 2.
+<br>
+<br>
+<a name="ValidationCertification"></a><b>Validation/Certification:</b>
+<br><br>
+For Validations/Certifications, check the following links:
+<br>
+<a href="http://metalink.oracle.com/metalink/certify/certify.welcome">
+Oracle's Certification Matrices</a>
+<br>
+<br>
+<br>
+
+<a name="ErrorsAndProblems"></a><b>Errors and Problems:</b>
+<br>
+Some of the Oracle errors and problems covered here were only experienced in connection with 9i (9.0.1)
+and some only with 9iR2 (9.2.0).
+But since I cannot say for sure that a 9i (9.0.1) installation error will never show up
+during 9iR2 (9.2.0) installation, I simply kept all errors and problems listed together, see
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a>
+and <a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationProblemsTipsAndHints">
+Oracle Installation Problems, Important Tips and Hints</a>.
+
+<br>
+<br>
+<a name="RedHat9"></a><b>Red Hat Enterprise Linux Advanced Server 3 (RHEL AS 3)</b>
+<br>
+In order to install an Oracle9iR2 database on RH AS 3, the "Oracle9iR2 Patch Set 3 9.2.0.4.0"
+patchset and some other patches must be applied. Some errors can only be fixed by applying
+the 9.2.0.4 patchset. For more information, see
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#RunningOracleInstallationOnRHELAS3">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 3</a>.
+<br>
+<br>
+<a name="RedHat9"></a><b>Red Hat 9:</b>
+<br>
+Red Hat 9 includes the Native POSIX Thread Library (NPTL) which is an improved
+implementation of POSIX threads for Linux. But using NPTL will cause several problems for Oracle
+applications. Note that Oracle9i has not been certified on Red Hat 9!
+<br>
+So to fix this problem, you can set the environment variable <tt>LD_ASSUME_KERNEL</tt> to 2.4.1,
+which means that the old "Linuxthreads with floating stacks" implementation will be used. Otherwise
+the Oracle installer <tt>runInstaller</tt> will hang, the Database Configuration Assistant <tt>dbca</tt> won't start etc.; see
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a> for more information.
+To see where this environment variable can be set, see
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#SetOracleEnvironments">
+Set Oracle Environments</a>.
+For more information on <tt>LD_ASSUME_KERNEL</tt>, see
+<a href="http://ftp.redhat.com/pub/redhat/linux/9/en/os/i386/RELEASE-NOTES">
+Red Hat Linux 9 Release Notes</a>.
+<br>
+<i>NOTE: Before you install Oracle9iR2, make sure that you first read the information about the error message
+"<tt><font color="#ff0000">Error in invoking target install of make file /u01/app/oracle/product/9.2.0/network/lib/ins_oemagent.mk</font></tt>"
+in the 
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a> section!</i>
+
+
+<br>
+<br>
+<a name="RedHat8.0"></a><b>Red Hat 8.0:</b>
+<br>
+The only problem I experienced with Oracle 9iR2 (9.2.0) on Red Hat 8.0 was:
+<br>
+<tt>"Error in invoking target install of makefile /u01/app/oracle/product/9.2.0/ctx/lib/ins_ctx.mk"</tt>
+<br>
+But this does not necessarily mean that you won't see other problems described here.
+See <a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a> for more information.
+<br>
+&nbsp;</p>
+
+<br>
+
+<b>This article covers the following subjects and steps:</b>
+<br>
+<br>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#Documentations">
+Documentations</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#InstallingRedHat">
+Downloading and Installing Red Hat Linux 7.1, 7.2, 7.3, 8.0, 9</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#DownloadingOracle9i">
+Unpacking Downloaded Oracle9i Installation Files and Burning Oracle9i CDs</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#SettingSwapSpace">
+Setting Swap Space</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#SettingSharedMemory">
+Setting Shared Memory</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#CheckingTmpSpace">
+Checking /tmp Space</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#SizingOracleDiskSpace">
+Sizing Oracle Disk Space</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#binutileIssue">
+The "binutils" Issue</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#CheckingPackages">
+Checking Packages (RPMs)</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#JDK">
+JDK</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#CreatingOracleUserAccounts">
+Creating Oracle User Accounts</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#CreatingOracleDirectories">
+Creating Oracle Directories</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#SettingOracleEnvironments">
+Setting Oracle Environments</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#StartingrunInstaller">
+Starting runInstaller</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#RunningOracleInstallation">
+Running Oracle Installation on RH 7.1, 7.2, 7.3, 8.0, 9, and on RH AS 2.1</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#RunningOracleInstallationOnRHELAS3">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 3</a><br></b>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle9i.shtml#InstallingOracle9iR2OnRHAS3">
+Installing Oracle9iR2 on RH AS 3</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle9i.shtml#PatchingOracle9iR2OnRHAS3">
+Patching Oracle9iR2 on RH AS 3</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle9i.shtml#PatchingOracleIntelligentAgentOnRHAS3">
+Patching Oracle Intelligent Agent on RH AS 3</a><br>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#RunningOracleInstallationOnRHELAS4">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 4</a><br></b>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle9i.shtml#InstallingOracle9iR2OnRHAS4">
+Installing Oracle9iR2 on RH AS 4</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.puschitz.com/InstallingOracle9i.shtml#PatchingOracle9iR2OnRHAS4">
+Patching Oracle9iR2 on RH AS 4</a><br>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#StartupAndShutdownOfTheOracle9iDatabase">
+Startup and Shutdown of the Oracle 9i Database</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationProblemsTipsAndHints">
+Oracle Installation Problems, Tips and Hints</a><br></b>
+
+<b>* <a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a><br></b>
+<br>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="Documentations">Documentations</a></u><a name="Documentations"></a></font></h2>
+
+
+<a href="http://otn.oracle.com/docs/products/oracle9i/content.html">
+Oracle9i Database Documentation for Linux</a>
+<br>
+
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml">
+Tuning and Optimizing Red Hat Linux Advanced Server for Oracle9i Database </a>
+<br>
+
+<a href="http://otn.oracle.com/tech/linux/pdf/9iR2-on-Linux-Tech-WP-Final.PDF">
+Oracle9iR2 on Linux: Performance, Reliability and
+Manageability Enhancements on Red Hat Linux Advanced Server 2.1</a>
+<br>
+
+<a href="http://redhat.rsc03.net/servlet/cc5?joQSYWAVimkJoOxiruQJhuV2VR">
+An Overview of Red Hat Advanced Server V2.1 Reliability, Availability,
+Scalability, and Manageability (RASM) Features </a>
+<br>
+<br>
+
+
+
+<h2><font color="#0000ff"><u><a name="InstallingRedHat">
+Downloading and Installing Red Hat Linux 7.1, 7.2, 7.3, 8.0, 9
+</a></u><a name="InstallingRedHat"></a></font></h2>
+
+
+<a name="InstallingRedHat">To download Red Hat Linux 7.x, 8.0, 9, check the links at </a><a href="http://www.puschitz.com/LinuxDownload.shtml"> 
+http://www.puschitz.com/LinuxDownload.shtml</a>.<br>
+You can find the installation guides for installing Red Hat Linux under <a href="http://www.redhat.com/docs/manuals/linux/">
+Red Hat Linux Manuals</a>. 
+<br>
+<br>
+NOTE: You cannot download Red Hat Linux Advanced Server 2.1,
+you can only download the source code. If you want to get the binary CDs, 
+you will have to buy it at 
+<a href="http://www.redhat.com/software/linux/advanced/">
+http://www.redhat.com/software/linux/advanced/</a>. 
+<br>
+<br>
+<b>Installing Software Packages (RPMs)</b><br>
+<br>
+You don't have to install all RPMs when you want to run an Oracle9i database on Red Hat Linux.
+<br><br>
+For instance, if you install Red Hat Advanced Server, you are fine when you select the 
+Installation Type "Advanced Server" and when you don't select the 
+Package Group "Software Development". There are only a few other RPMs that are
+required for installing Oracle9i. These other RPMs are covered in this article.
+<br><br>
+Or when you install Oracle9i on Red Hat Linux 7.x, 8.0, or 9, you are fine when you select
+the installation type "Server".
+<br>
+<br>
+
+
+                                           
+
+<h2><font color="#0000ff"><u><a name="DownloadingOracle9i">
+Unpacking Downloaded Oracle9i Installation Files and Burning Oracle9i CDs</a></u></font><u><a name="DownloadingOracle9i"></a></u><p></p>
+<u><a name="DownloadingOracle9i"></a></u><a name="DownloadingOracle9i"></a></h2>
+
+<a name="DownloadingOracle9i">Download Oracle9i for Linux from the following web site:
+<br>
+</a><a href="http://otn.oracle.com/software/products/oracle9i/htdocs/linuxsoft.html">
+http://otn.oracle.com/software/products/oracle9i/htdocs/linuxsoft.html</a>
+<br>
+<br>
+
+Uncompress and unpack downloaded files:
+<br>
+<br>
+<b>For Oracle9i (9.2.0):</b>
+<br>
+<br>
+One step procedure (uses less disk space and is faster):<br>
+<font color="#0000ff"><pre>&nbsp; zcat lnx_920_disk1.cpio.gz | cpio -idmv
+&nbsp; zcat lnx_920_disk2.cpio.gz | cpio -idmv
+&nbsp; zcat lnx_920_disk3.cpio.gz | cpio -idmv</pre></font>
+
+Two step procedure:<br>
+<pre>&nbsp; # Uncompress
+&nbsp; <font color="#0000ff">gunzip lnx_920_disk1.cpio.gz lnx_920_disk2.cpio.gz lnx_920_disk3.cpio.gz Linux9i_Disk3.cpio.gz
+
+&nbsp; </font># Unpack the downloaded files:
+<font color="#0000ff">&nbsp; cpio -idmv &lt; lnx_920_disk1.cpio
+&nbsp; cpio -idmv &lt; lnx_920_disk2.cpio
+&nbsp; cpio -idmv &lt; lnx_920_disk3.cpio</font></pre><font color="#0000ff"></font>
+<br>
+<b>For Oracle9i (9.0.1):</b>
+<br>
+<br>
+One step procedure (uses less disk space and is faster):<br>
+<pre><font color="#0000ff">&nbsp; zcat Linux9i_Disk1.cpio.gz | cpio -idmv
+&nbsp; zcat Linux9i_Disk2.cpio.gz | cpio -idmv
+&nbsp; zcat Linux9i_Disk3.cpio.gz | cpio -idmv</font></pre>
+
+Two step procedure:<br>
+<pre>&nbsp; # Uncompress
+&nbsp; <font color="#0000ff">gunzip Linux9i_Disk1.cpio.gz Linux9i_Disk2.cpio.gz Linux9i_Disk3.cpio.gz</font>
+
+&nbsp; # Unpack the downloaded files:
+&nbsp; <font color="#0000ff">cpio -idmv &lt; Linux9i_Disk1.cpio
+&nbsp; cpio -idmv &lt; Linux9i_Disk2.cpio
+&nbsp; cpio -idmv &lt; Linux9i_Disk3.cpio</font></pre>
+<br>
+Now you should have 3 directories containing installation files: <br>
+<pre>Disk1
+Disk2
+Disk3</pre>
+
+I executed the following commands when I burned the 3 CDs:
+<pre><font color="#0000ff">mkisofs -r Disk1 | cdrecord -v --eject dev=0,0,0 speed=15 -
+mkisofs -r Disk2 | cdrecord -v --eject dev=0,0,0 speed=15 -
+mkisofs -r Disk3 | cdrecord -v --eject dev=0,0,0 speed=15 -</font></pre>
+                                           
+(You can get the dev numbers when you execute <tt>cdrecord -scanbus</tt>).
+<br>
+<br>
+
+<h2><font color="#0000ff"><u><a name="SettingSwapSpace">
+Setting Swap Space</a></u></font><u><a name="SettingSwapSpace"></a></u><p></p>
+<u><a name="SettingSwapSpace"></a></u><a name="SettingSwapSpace"></a></h2>
+
+
+<a name="SettingSwapSpace">In order to perform a typical Oracle 9i installation and to create a simple
+prototype database, Oracle says that you need a minimum of 512MB of RAM for the 
+Oracle9i (9.0.1) Server, and the amount of disk space (swap space) should be 
+equal to twice the amount of RAM or at least 400 MB, whichever is greater.
+<br>
+I tried to test the limits on an older PC with 256 MB of RAM and with 600 MB of 
+swap space. I was able to install Oracle 9i (9.0.1 &amp; 9.2.0) and Oracle's default
+database without any problems. But
+when I used less swap space on this PC (256MB RAM), I was runnig out of memory. 
+So I definitely recommend to use more RAM and/or more swap space as specified in 
+the Oracle installation guide. 
+<br>
+<br>
+<i> NOTE: If you do not have enough swap space or RAM during the Oracle installation, 
+in particular during the database creation, your Oracle server (Linux) will
+temporarily become unresponsive to any events for several minutes.</i>
+<br>
+<br>
+For more information on correctly sizing the swap space for your database, see
+</a><a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SizingSwapSpace">
+Sizing Swap Space</a>.
+
+<br>
+<br>
+                                           
+To check the memory, run:
+<pre><font color="#0000ff">grep MemTotal /proc/meminfo</font></pre>
+
+To check the swap space, run:
+<pre><font color="#0000ff">cat /proc/swaps</font></pre>
+
+<br>
+You can also add temporary swap space by creating a temporary swap file
+instead of using a raw device. Here is the procedure:
+                                           
+
+<pre><font color="#0000ff">su - root
+dd if=/dev/zero of=tmpswap bs=1k count=900000
+chmod 600 tmpswap
+mkswap tmpswap
+swapon tmpswap</font></pre>
+
+                                           
+To disable the temporary swap space execute the following commands:
+<pre><font color="#0000ff">su - root
+swapoff tmpswap
+rm tmpswap</font></pre>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="SettingSharedMemory">
+Setting Shared Memory</a></u></font><u><a name="SettingSharedMemory"></a></u><p></p>
+<u><a name="SettingSharedMemory"></a></u><a name="SettingSharedMemory"></a></h2>
+
+<a name="SettingSharedMemory">For Oracle 9i (<b>9.2.0</b>) installation I had to increase the maximum shared 
+memory size on my Linux server for all Red Hat versions. 
+The Oracle Database Configuration Assistant displayed the following error message on my server:<br>
+
+<font color="#ff0000"></font></a><pre><a name="SettingSharedMemory"><font color="#ff0000">ORA-27123: unable to attach to shared memory segment.</font></a></pre>
+
+<a name="SettingSharedMemory">I temporarely increased the shmmax setting for the kernel by executing the
+following command:
+</a><pre><a name="SettingSharedMemory">$ <font color="#0000ff">su - root</font>
+# <font color="#0000ff">cat /proc/sys/kernel/shmmax</font>
+33554432
+# <font color="#0000ff">echo `expr 1024 \* 1024 \* 1024` &gt; /proc/sys/kernel/shmmax</font>
+# <font color="#0000ff">cat /proc/sys/kernel/shmmax</font>
+1073741824</a></pre>
+
+<a name="SettingSharedMemory">It is recommended to increase the shmmax setting permanently for Oracle. For more 
+information, see 
+</a><a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingSharedMemory">
+Setting Shared Memory</a>.
+<br>
+<br>
+For more information on optimizing shared memory settings for Oracle databases on Linux, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingSharedMemory">
+Setting Shared Memory</a>. These parameters apply to all Red Hat Linux versions.
+But note that except for the <tt>shmmax</tt> parameter, these parameter do not need to be changed 
+for installing Oracle on Linux.
+But you might want to adjust all shared memory settings later to optimize the server for Oracle.
+<br>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="CheckingTmpSpace">
+Checking /tmp Space</a></u></font><u><a name="CheckingTmpSpace"></a></u><p></p>
+<u><a name="CheckingTmpSpace"></a></u><a name="CheckingTmpSpace"></a></h2>
+
+<a name="CheckingTmpSpace">                                           
+The Oracle Universal Installer requires up to 400 MB of free space in
+the <tt>/tmp</tt> directory. 
+<br>
+<br>
+To check the space in <tt>/tmp</tt>, run:
+</a><pre><a name="CheckingTmpSpace">$ <font color="#0000ff">df /tmp</font></a></pre>
+
+<a name="CheckingTmpSpace">If you do not have enough space in the <tt>/tmp</tt> directory,
+you can temporarily create a <tt>tmp</tt> directory in another filesystem. Here is how
+you can do this:
+
+</a><pre><a name="CheckingTmpSpace"><font color="#0000ff">su - root
+mkdir /&lt;AnotherFilesystem&gt;/tmp
+chown root.root /&lt;AnotherFilesystem&gt;/tmp
+chmod 1777 /&lt;AnotherFilesystem&gt;/tmp
+export TEMP=/&lt;AnotherFilesystem&gt;           </font># used by Oracle<font color="#0000ff">
+export TMPDIR=/&lt;AnotherFilesystem&gt;         </font># used by Linux programs like the linker "ld"</a></pre>
+
+<a name="CheckingTmpSpace">When you are done with your Oracle installation, shutdown Oracle and remove the temporary directory:
+</a><pre><a name="CheckingTmpSpace"><font color="#0000ff">su - root
+rmdir /&lt;AnotherFilesystem&gt;/tmp
+unset TEMP
+unset TMPDIR</font></a></pre>
+<a name="CheckingTmpSpace"><br>
+                                           
+
+
+</a><h2><a name="CheckingTmpSpace"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="SizingOracleDiskSpace">
+Sizing Oracle Disk Space</a></u></font><u><a name="SizingOracleDiskSpace"></a></u><p></p>
+<u><a name="SizingOracleDiskSpace"></a></u><a name="SizingOracleDiskSpace"></a></h2>
+
+<a name="SizingOracleDiskSpace">                                           
+You will need about 2.5 GB for the database <u>software</u>. If you perform
+a typical database installation and not a customized database installation,
+then you will need about 3.5 GB of disk space.
+<br>
+<br>
+
+
+</a><h2><a name="SizingOracleDiskSpace"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="binutileIssue">
+The "binutils" Issue</a></u></font><u><a name="binutileIssue"></a></u><p></p>
+<u><a name="binutileIssue"></a></u><a name="binutileIssue"></a></h2>
+
+
+<a name="binutileIssue"><b>Skip this step for Oracle9iR2.</b><br><br>
+I did not experience this problem with
+Oracle 9i (9.2.0), but only with Oracle 9i (9.0.1).
+<br>
+<br>
+The <tt>binutils</tt> package that comes with Red Hat 7.1, 7.2, 7.3, and with
+RedHat 2.1 Advanced Server doesn't work with Oracle 9i (<b>9.0.1</b>) Universal Installer.
+Here are the options you have for <b>9.0.1</b>: </a><p></p>
+
+<ul>
+<li>
+<a name="binutileIssue">I recommend the following approach:<br><br>
+Wait for the following Oracle installation error:
+</a></li>
+
+<pre><a name="binutileIssue">"Error invoking target install of makefile /u01/app/oracle/product/9.0.1/plsql/lib/ins_plsql.mk"</a></pre>
+<a name="binutileIssue">And fix this problem as described in 
+</a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a>.
+<br>
+I recommend this approach since it obviates the need to change binutils.
+</ul>
+
+<ul>
+<li>I do not recommend the following approach:<br><br>
+Download the following <tt> binutil</tt> RPM version and downgrade <tt>binutil</tt>
+on the Oracle  server:<br>
+</li>
+<a href="ftp://ftp.redhat.com/pub/redhat/linux/7.0/en/os/i386/RedHat/RPMS/binutils-2.10.0.18-1.i386.rpm">
+ftp://ftp.redhat.com/pub/redhat/linux/7.0/en/os/i386/RedHat/RPMS/binutils-2.10.0.18-1.i386.rpm</a>
+<br>
+<pre>su - root
+rpm -Uvh --force --nodeps binutils-2.10.0.18-1.i386.rpm</pre>
+
+When you are done with the Oracle installation, you upgrade your <tt> binutil</tt> RPM back
+to the version you had before you downgraded. E.g. on the Red Hat 7.2 server I did:
+<pre>rpm -Uvh --force --nodeps binutils-2.11.90.0.8-9.i386.rpm</pre>
+             
+</ul>
+                                           
+<ul>
+<li>
+Here is Oracle's official solution for Oracle 9iR1 or 9iR1 iAS on RedHat 2.1 Advanced Server
+which I don't like:
+<br>
+<a href="http://otn.oracle.com/software/products/oracle9i/files/binutils_readme.html">
+http://otn.oracle.com/software/products/oracle9i/files/binutils_readme.html</a>
+</li></ul>
+
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="CheckingPackages">
+Checking Packages (RPMs)</a></u></font><u><a name="CheckingPackages"></a></u><p></p>
+<u><a name="CheckingPackages"></a></u><a name="CheckingPackages"></a></h2>
+
+<a name="CheckingPackages">You will need some RPM development packages for the Oracle installer to build
+the Oracle modules, otherwise you will get error messages similar to this one:
+</a><pre><a name="CheckingPackages"><font color="#ff0000">Error in invoking target ntcontab.o of makefile 
+/u01/app/oracle/product/9.2.0/network/lib/ins_net_client.mk
+
+</font></a></pre>
+
+<a name="CheckingPackages"><font color="#01af04">NOTE: Always ensure to use the latest RPM versions!</font>
+<br>
+<br>
+
+
+<br><b>Packages (RPMs) for RH 7.1, 7.2, and RH AS 2.1:</b><br>
+<br>
+To see if these development packages are installed on your server, run the following command:
+</a><pre><a name="CheckingPackages"><font color="#0000ff">rpm -q gcc cpp compat-libstdc++ glibc-devel kernel-headers binutils</font></a></pre>
+
+<a name="CheckingPackages">For instance, most of these packages will be missing when you installed <b>RedHat 2.1 Advanced Server</b>
+and if you did not select the "Software Development" package. For the RedHat 2.1 Advanced Server
+I executed the following commands to install the missing RPMs from the two CDs:
+
+</a><pre><a name="CheckingPackages"><font color="#0000ff">su - root
+rpm -ivh cpp-2.96-108.1.i386.rpm \
+glibc-devel-2.2.4-26.i386.rpm \
+kernel-headers-2.4.9-e.3.i386.rpm \
+gcc-2.96-108.1.i386.rpm \
+binutils-2.11.90.0.8-12.i386.rpm</font></a></pre>
+
+
+<a name="CheckingPackages"><br><b>Packages (RPMs) for RH 7.3, 8.0, and 9:</b><br>
+<br>
+To see if these development packages are installed on your server, run the following command:
+</a><pre><a name="CheckingPackages"><font color="#0000ff">rpm -q gcc cpp compat-libstdc++ glibc-devel glibc-kernheaders binutils</font></a></pre>
+
+<a name="CheckingPackages">For instance, when I installed <b>Red Hat 9.0</b> and when I used the default packages for
+the Installation Type "Server", I had to install the following RPMs afterwards:
+
+</a><pre><a name="CheckingPackages"><font color="#0000ff">su - root
+rpm -ivh binutils-2.13.90.0.18-9.i386.rpm \
+cpp-3.2.2-5.i386.rpm \
+gcc-3.2.2-5.i386.rpm \
+glibc-devel-2.3.2-5.i386.rpm \
+glibc-kernheaders-2.4-8.10.i386.rpm </font></a></pre>
+
+<a name="CheckingPackages"><i><b>NOTE</b>: Before you install Oracle9iR2 on Red Hat 9, make sure that you also read the information about the error message
+"<tt><font color="#ff0000">Error in invoking target install of make file /u01/app/oracle/product/9.2.0/network/lib/ins_oemagent.mk</font></tt>"
+in the
+</i></a><i><a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a> section!</i>
+<br>
+<br>
+
+
+<br><b>Packages (RPMs) for Red Hat Enterprise Linux Advanced Server 3 (RHEL AS 3):</b><br>
+<br>
+Ensure the following required packages are installed on your server by running the following command:
+<pre><font color="#0000ff">rpm -q make \
+       binutils \
+       gcc \
+       cpp \
+       glibc-devel \
+       glibc-headers \
+       glibc-kernheaders \
+       compat-db \
+       compat-gcc \
+       compat-gcc-c++ \
+       compat-libstdc++ \
+       compat-libstdc++-devel \
+       gnome-libs \
+       openmotif21 \
+       setarch 
+</font></pre>
+
+
+
+
+<br><b><a name="PackagesForRHELAS4">
+Packages (RPMs) for Red Hat Enterprise Linux Advanced Server 4 (RHEL AS 4):</a></b><br>
+<br>
+
+See also
+<a href="http://download-east.oracle.com/docs/html/B13670_06/toc.htm">
+Oracle9i Release Notes Release 2 (9.2.0.4.0) for Linux x86</a>
+for the list of required RPMs.
+<br>
+<br>
+Ensure the following required packages are installed on your server by running the following command:
+<pre><font color="#0000ff">rpm -q make                           \
+       compat-db                      \
+       compat-gcc-32                  \
+       compat-gcc-32-c++              \
+       compat-oracle-rhel4            \
+       compat-libcwait                \
+       compat-libgcc-296              \
+       compat-libstdc++-296           \
+       compat-libstdc++-33            \
+       gcc                            \
+       gcc-c++                        \
+       gnome-libs                     \
+       gnome-libs-devel               \
+       libaio-devel                   \
+       libaio                         \
+       make                           \
+       openmotif21                    \
+       xorg-x11-deprecated-libs-devel \
+       xorg-x11-deprecated-libs
+
+</font></pre>
+
+Many of these packages depend on other packages. For example, <tt>compat-gcc-32</tt> requires <tt>binutils</tt>, <tt>gcc</tt> etc.
+Since I like to install a system with as few RPMs as possible I had to install the following
+RPMs to satisfy dependencies:
+<pre><font color="#0000ff">rpm -Uvh compat-db-4.1.25-9.i386.rpm                 \
+       compat-gcc-32-3.2.3-47.3.i386.rpm             \
+       glibc-devel-2.3.4-2.i386.rpm                  \
+       glibc-headers-2.3.4-2.i386.rpm                \
+       glibc-kernheaders-2.4-9.1.87.i386.rpm         \
+       cpp-3.4.3-9.EL4.i386.rpm                      \
+       compat-gcc-32-c++-3.2.3-47.3.i386.rpm         \
+       compat-libstdc++-33-3.2.3-47.3.i386.rpm       \
+       gcc-3.4.3-9.EL4.i386.rpm                      \
+       gcc-c++-3.4.3-9.EL4.i386.rpm                  \
+       libstdc++-devel-3.4.3-9.EL4.i386.rpm          \
+       openmotif21-2.1.30-11.RHEL4.2.i386.rpm        \
+       xorg-x11-deprecated-libs-6.8.1-23.EL.i386.rpm \
+       compat-libgcc-296-2.96-132.7.2.i386.rpm       \
+       compat-libstdc++-296-2.96-132.7.2.i386.rpm    \
+       libaio-0.3.102-1.i386.rpm                     \
+       libaio-devel-0.3.102-1.i386.rpm
+
+</font></pre>
+
+For <tt>xorg-x11-deprecated-libs-devel</tt> and <tt>xorg-x11-devel</tt> I had to install the following RPMs.<br>
+<i>Note that these two packages are required for the Oracle patch 4198954 below.</i>
+
+<pre><font color="#0000ff">rpm -Uvh xorg-x11-deprecated-libs-devel-6.8.1-23.EL.i386.rpm \
+       xorg-x11-devel-6.8.1-23.EL.i386.rpm                 \
+       fontconfig-devel-2.2.3-7.i386.rpm                   \
+       pkgconfig-0.15.0-3.i386.rpm                         \
+       freetype-devel-2.1.9-1.i386.rpm                     \
+       zlib-devel-1.2.1.2-1.i386.rpm
+
+</font></pre>
+
+And for <tt>gnome-libs</tt> and <tt>gnome-libs-devel</tt> I had to install the following RPMs:
+<pre><font color="#0000ff">rpm -Uvh <b>gnome-libs-1.4.1.2.90-44.1.i386.rpm</b>     \
+       <b>gnome-libs-devel-1.4.1.2.90-44.1.i386.rpm</b> \
+       ORBit-0.5.17-14.i386.rpm                  \
+       ORBit-devel-0.5.17-14.i386.rpm            \
+       alsa-lib-1.0.6-4.i386.rpm                 \
+       audiofile-0.2.6-1.i386.rpm                \
+       esound-0.2.35-2.i386.rpm                  \
+       esound-devel-0.2.35-2.i386.rpm            \
+       gtk+-1.2.10-33.i386.rpm                   \
+       gtk+-devel-1.2.10-33.i386.rpm             \
+       imlib-1.9.13-23.i386.rpm                  \
+       imlib-devel-1.9.13-23.i386.rpm            \
+       libpng10-1.0.16-1.i386.rpm                \
+       alsa-lib-devel-1.0.6-4.i386.rpm           \
+       audiofile-devel-0.2.6-1.i386.rpm          \
+       gdk-pixbuf-0.22.0-15.1.i386.rpm           \
+       glib-devel-1.2.10-15.i386.rpm             \
+       indent-2.2.9-6.i386.rpm                   \
+       libjpeg-devel-6b-33.i386.rpm              \
+       libtiff-devel-3.6.1-7.i386.rpm            \
+       libungif-4.1.3-1.i386.rpm                 \
+       libungif-devel-4.1.3-1.i386.rpm
+</font></pre>
+
+<i>HINT:</i><br>
+If you are using RHN, you could simply run:
+<pre><font color="#0000ff">up2date gnome-libs gnome-libs-devel</font></pre>
+You can use the <tt>up2date</tt> command for any packages. It
+takes care of dependencies by installing all required packages automatically.
+<br>
+<br>
+
+
+To install the <tt>compat-oracle-rhel4</tt> and <tt>compat-libcwait</tt> packages you have to download
+the patch 4198954 from 
+<a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+Make sure to select the Linux x86 platform for 32bit (for 64bit it would be patch 5386899).
+To unzip the downloaded <tt>p4198954_21_LINUX.zip</tt> file, run:
+<pre>$ <font color="#0000ff">unzip p4198954_21_LINUX.zip</font>
+Archive:  p4198954_21_LINUX.zip
+   creating: 4198954/
+  inflating: 4198954/compat-oracle-rhel4-1.0-5.i386.rpm
+  inflating: 4198954/compat-libcwait-2.0-2.i386.rpm
+  inflating: 4198954/README.txt
+#</pre>
+
+Note that the <tt>compat-oracle-rhel4</tt> and <tt>compat-libcwait</tt> packages require the 
+<tt>xorg-x11-deprecated-libs</tt> and <tt>xorg-x11-deprecated-libs-devel</tt> packages, see above.
+
+To install the two RPMs from the 4198954 patch, run:
+<pre># <font color="#0000ff">rpm -Uvh 4198954/compat-oracle-rhel4-1.0-5.i386.rpm \
+           4198954/compat-libcwait-2.0-2.i386.rpm
+</font></pre>
+<br>
+
+
+
+<h2><font color="#0000ff"><u><a name="JDK">
+JDK</a></u></font><u><a name="JDK"></a></u><p></p>
+<u><a name="JDK"></a></u><a name="JDK"></a></h2>
+
+<a name="JDK"><b>Skip this step for Oracle9iR2.</b><br><br>
+
+I successfully installed Oracle9iR2 without installing JDK on the system.
+Oracle comes now with its own Java. This means that you don't have to execute the following
+steps which were required for older Oracle versions:
+<br>
+<br>
+
+Download JDK 1.3.1 or Blackdown 1.1.8_v3: (I usually used Blackdown)<br>
+</a><a href="http://www.blackdown.org/">http://www.blackdown.org</a><br>
+<a href="http://java.sun.com/">http://java.sun.com</a><br>
+
+<br>
+According to the JDK documentation, install JDK under <tt>/usr/local</tt>.
+Then create a symbolic link to the JDK under <tt>/usr/local/java</tt>:
+
+<pre><font color="#0000ff">su - root
+bzip2 -dc jdk118_v3-glibc-2.1.3.tar.bz2 | tar xf - -C  /usr/local
+ln -s /usr/local/jdk118_v3 /usr/local/java</font></pre>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="CreatingOracleUserAccounts">
+Creating Oracle User Accounts</a></u></font><u><a name="CreatingOracleUserAccounts"></a></u><p></p>
+<u><a name="CreatingOracleUserAccounts"></a></u><a name="CreatingOracleUserAccounts"></a></h2>
+
+
+<pre><a name="CreatingOracleUserAccounts"><font color="#0000ff">su - root
+groupadd dba          </font># group of users to be granted with SYSDBA system privilege<font color="#0000ff">
+groupadd oinstall     </font># group owner of Oracle files<font color="#0000ff">
+useradd -c "Oracle software owner" -g oinstall -G dba oracle
+passwd oracle</font></a></pre>
+
+<a name="CreatingOracleUserAccounts">For more information on the <tt>"oinstall"</tt> group account, see 
+</a><a href="http://metalink.oracle.com/oracleinstall/oracle8i/genericunix.html#Uoui">
+When to use "OINSTALL" group during install of oracle</a>.
+<br>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="CreatingOracleDirectories">
+Creating Oracle Directories</a></u></font><u><a name="CreatingOracleDirectories"></a></u><p></p>
+<u><a name="CreatingOracleDirectories"></a></u><a name="CreatingOracleDirectories"></a></h2>
+
+<a name="CreatingOracleDirectories">In this example, make sure that the <tt>/u01</tt> filesystem is large enough, see
+</a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleDiskSpace">
+Oracle Disk Space</a> for more information.
+
+If <tt>/u01</tt> is not on a separate filesystem, then make sure the root filesystem
+"<tt>/</tt>" has enough space. <p></p>
+
+<pre><font color="#0000ff">su - root
+mkdir -p /u01/app/oracle/product/9.2.0
+chown -R oracle.oinstall /u01
+                                           
+mkdir /var/opt/oracle
+chown oracle.dba /var/opt/oracle
+chmod 755 /var/opt/oracle</font></pre>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="SettingOracleEnvironments">
+Setting Oracle Environments</a></u></font><u><a name="SettingOracleEnvironments"></a></u><p></p>
+<u><a name="SettingOracleEnvironments"></a></u><a name="SettingOracleEnvironments"></a></h2>
+
+<a name="SettingOracleEnvironments">Set the following Oracle environment variables before you start <tt>runInstaller</tt>.
+<br>
+<br>
+<i>As the oracle user execute the following commands:</i>
+
+
+</a><pre><a name="SettingOracleEnvironments">#<font color="#ff0000"> <b>Set the LD_ASSUME_KERNEL environment variable only for Red Hat 9, </b></font>
+#<font color="#ff0000"> <b>RHEL AS 3, and RHEL AS 4 !!</b></font>
+# Use the "Linuxthreads with floating stacks" implementation instead of NPTL:
+<font color="#0000ff">export LD_ASSUME_KERNEL=2.4.1</font>    # <font color="#ff0000">for RH 9 and RHEL AS 3</font>
+<font color="#0000ff">export LD_ASSUME_KERNEL=2.4.19</font>   # <font color="#ff0000">for RHEL AS 4</font>
+
+# Oracle Environment
+<font color="#0000ff">export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/9.2.0
+export ORACLE_SID=test
+export ORACLE_TERM=xterm
+</font># export TNS_ADMIN= Set if sqlnet.ora, tnsnames.ora, etc. are not in $ORACLE_HOME/network/admin
+<font color="#0000ff">export NLS_LANG=AMERICAN;
+export ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data
+LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+export LD_LIBRARY_PATH
+
+</font># Set shell search paths
+<font color="#0000ff">export PATH=$PATH:$ORACLE_HOME/bin</font></a></pre>
+
+<a name="SettingOracleEnvironments"><br>
+I successfully installed Oracle9iR2 without setting the following CLASSPATH environment variable:
+</a><pre><a name="SettingOracleEnvironments"># CLASSPATH=$ORACLE_HOME/JRE:$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+# CLASSPATH=$CLASSPATH:$ORACLE_HOME/network/jlib
+# export CLASSPATH</a></pre>
+
+<a name="SettingOracleEnvironments"><br>
+You can put these environment settings at the end of the 
+<font color="#0000ff"><tt>~oracle/.bash_profile</tt></font> file
+if you use <tt>bash</tt>. By this way you don't have to set the environment variables again when you
+login as "oracle", or when you switch to the user "oracle" by executing "<tt>su - oracle</tt>".
+<br>
+<br>
+
+
+</a><h2><a name="SettingOracleEnvironments"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="StartingrunInstaller">
+Starting runInstaller</a></u></font><u><a name="StartingrunInstaller"></a></u><p></p>
+<u><a name="StartingrunInstaller"></a></u><a name="StartingrunInstaller"></a></h2>
+
+
+<a name="StartingrunInstaller">Before you continue, make sure you have set the Oracle environment variables, see above.
+<br>
+<br>
+Oracle no longer supports a character mode installer. Therefore, in order
+to execute <tt>runInstaller</tt> directly from a console of a machine you are logged into
+(in this example the node name where Oracle is running is called "<tt><b>oracleserver</b>"</tt>), 
+you need to set the <tt> DISPLAY</tt> environment variable. Before you do that, make sure 
+that you also allow <tt> runInstaller</tt> on "<b><font size="-1">oracleserver</font></b>" to
+display X information on your Linux desktop machine (in this example, the PC name where you
+are running X Windows like KDE or GNOME is called "<tt><b>yourdesktop</b>")</tt>,
+because programs running on remote machines cannot display information to your screen unless
+you give them the authority to do so. Note that the X display relink mechanism does not work 
+for NT desktop machines unless you use Exceed.<br>
+<br>
+Before you run <tt>runInstaller</tt>, execute e.g. 'xterm' to see if your X setup is really working!
+<i>If you install Oracle on your desktop PC and not on a remote node, then you can skip step 1
+and 3.<br></i>
+
+<br>Step 1: Allow "<tt>oracleserver</tt>" to display X information to
+your desktop PC "<tt>yourdesktop</tt>":<br>
+</a><pre><a name="StartingrunInstaller">  <b>yourdesktop</b>:user$ <font color="#0000ff">xhost +oracleserver</font></a></pre>
+
+<a name="StartingrunInstaller">Step 2: Open a new window and login to the Oracle server "<tt>oracleserver</tt>" as root.
+This window will be used for mounting and unmounting the Oracle CDs.
+
+</a><pre><a name="StartingrunInstaller">  <b>oracleserver</b>:$ <font color="#0000ff">su - root</font>
+  <b>oracleserver</b>:root# <font color="#0000ff">mount /mnt/cdrom</font>
+</a></pre>
+
+<a name="StartingrunInstaller">Step 3: From the console of your Oracle server "<tt>oracleserver</tt>" where you will run 
+<tt>runInstaller</tt>, execute the following commands:
+</a><pre><a name="StartingrunInstaller">  <b>oracleserver</b>:$ <font color="#0000ff">su - oracle</font>
+  <b>oracleserver</b>:oracle$ <font color="#0000ff">export DISPLAY=yourdesktop:0.0</font></a></pre>
+
+<a name="StartingrunInstaller">Step 4: Now execute <tt>runInstaller</tt> as "oracle". <b>Do not cd to <tt>/mnt/cdrom</tt> !!</b>
+</a><pre><a name="StartingrunInstaller"><b>  oracleserver</b>:oracle$ <font color="#0000ff"><b>/mnt/cdrom/runInstaller</b></font>
+
+</a></pre>
+
+<a name="StartingrunInstaller"><b><font color="#ff0000">NOTE 1</font></b><font color="#ff0000">:</font><br>
+<br>
+If you use for example Red Hat Fedora Core 3 as your desktop and you want to install the database on another machine,
+then you need to set the <tt><font color="#0000ff">DisallowTCP</font></tt> entry in
+<tt><font color="#0000ff">/etc/X11/gdm/gdm.conf</font></tt> for the GNOME Display Manager to read:
+</a><pre><a name="StartingrunInstaller"><font color="#0000ff">DisallowTCP=false</font></a></pre>
+
+<a name="StartingrunInstaller">After that you need to restart your X server. I usually do this with the <tt>init</tt> command:
+</a><pre><a name="StartingrunInstaller"><font color="#0000ff">su - root
+init 3
+init 5
+</font></a></pre>
+<a name="StartingrunInstaller"><br>
+
+<b><font color="#ff0000">NOTE 2</font></b><font color="#ff0000">:</font><br>
+<br>
+Don't run <tt>runInstaller</tt> for Red Hat Enterprise Linux Advanced Server 3 (RHEL AS 3) yet!
+See
+</a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#RunningOracleInstallationOnRHELAS3">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 3</a>
+for more information.
+<br>
+<br>
+
+<h2><font color="#0000ff"><u><a name="RunningOracleInstallation">
+Running Oracle Installation on RH 7.1, 7.2, 7.3, 8.0, 9, and on RH AS 2.1</a></u></font><u><a name="RunningOracleInstallation"></a></u><p></p>
+<u><a name="RunningOracleInstallation"></a></u><a name="RunningOracleInstallation"></a></h2>
+
+
+<a name="RunningOracleInstallation"><b>Keep in mind that you may get one or more errors here during the Oracle installation!
+See
+</b></a><b><a href="http://www.puschitz.com/InstallingOracle9i.shtml#OracleInstallationErrors">
+Oracle Installation Errors</a> for more information.<br></b>
+<br>
+
+
+This is how I answered the questions for the <tt>runInstaller</tt>:<br>
+<br>
+
+- What would you like as the base directory (Inventory Location):<br>
+<pre>  <font color="#0000ff">/u01/app/oracle/oraInventory</font></pre>
+
+- UNIX Group Name (permission for updating Oracle software):<br>
+<pre>  <font color="#0000ff">oinstall</font></pre>
+
+<pre><i>  You could also use "dba" which I do not recommend for security reasons.
+  For more information on the "oinstall" group account, see
+  <a href="http://metalink.oracle.com/oracleinstall/oracle8i/genericunix.html#Uoui">When to use "OINSTALL" group during install of oracle</a>.</i>
+  </pre>
+
+- Full path name for Oracle Home:
+<pre>  <font color="#0000ff">/u01/app/oracle/product/9.2.0</font></pre>
+
+etc.<br>
+<br>
+
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="RunningOracleInstallationOnRHELAS3">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 3</a></u></font><u><a name="RunningOracleInstallationOnRHELAS3"></a></u><p></p>
+<u><a name="RunningOracleInstallationOnRHELAS3"></a></u><a name="RunningOracleInstallationOnRHELAS3"></a></h2>
+
+<a name="RunningOracleInstallationOnRHELAS3">In order to install an Oracle9iR2 database on RH AS 3, the "Oracle9iR2 Patch Set 3 9.2.0.4.0"
+patchset and some other patches must be applied. Some errors can only be fixed by applying
+the 9.2.0.4 patchset.
+<br>
+<br>
+
+
+<br><b></b></a><b><a name="InstallingOracle9iR2OnRHAS3">Installing Oracle9iR2 on RH AS 3</a></b><a name="InstallingOracle9iR2OnRHAS3"><br>
+<br>
+
+Install the following RPMs (see Oracle Note:252217.1 for more information):
+</a><pre><a name="InstallingOracle9iR2OnRHAS3"><font color="#0000ff">su - root
+rpm -ivh \
+compat-db-4.0.14-5.i386.rpm \
+compat-gcc-7.3-2.96.122.i386.rpm \
+compat-gcc-c++-7.3-2.96.122.i386.rpm \
+compat-libstdc++-7.3-2.96.122.i386.rpm \
+compat-libstdc++-devel-7.3-2.96.122.i386.rpm \
+openmotif21-2.1.30-8.i386.rpm \
+setarch-1.3-1.i386.rpm \
+tcl-8.3.5-92.i386.rpm</font></a></pre>
+
+
+<a name="InstallingOracle9iR2OnRHAS3">Relink gcc so that the older gcc will be used during the Oracle installation (see Oracle Note:252217.1 for more information):
+</a><pre><a name="InstallingOracle9iR2OnRHAS3"><font color="#0000ff">su - root
+mv /usr/bin/gcc /usr/bin/gcc323
+ln -s /usr/bin/gcc296 /usr/bin/gcc
+mv /usr/bin/g++ /usr/bin/g++323      </font># if g++ doesn't exist, then gcc-c++ was not installed
+<font color="#0000ff">ln -s /usr/bin/g++296 /usr/bin/g++</font></a></pre>
+<a name="InstallingOracle9iR2OnRHAS3"><br>
+
+When you execute <tt><font color="#0000ff">runInstaller</font></tt> from the Oracle 9iR2 (9.2.0) CD,
+you will get the following error message:
+</a><pre><a name="InstallingOracle9iR2OnRHAS3"><font color="#ff0000">Error occurred during initialization of VM
+Unable to load native library: /tmp/OraInstall2003-10-25_03-14-57PM/jre/lib/i386/libjava.so:
+    symbol __libc_wait, version GLIBC_2.0 not defined in file libc.so.6 with link time reference
+
+</font></a></pre>
+
+<a name="InstallingOracle9iR2OnRHAS3">To resolve the <tt>__libc_wait</tt> symbol issue, download the p3006854_9204 patch <tt>p3006854_9204_LINUX.zip</tt> from
+</a><a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>. See bug 3006854 for more information.
+<br>
+<br>
+To apply the patch, run
+<pre><font color="#0000ff">su - root</font>
+# <font color="#0000ff">unzip p3006854_9204_LINUX.zip</font>
+Archive:  p3006854_9204_LINUX.zip
+   creating: 3006854/
+  inflating: 3006854/rhel3_pre_install.sh
+  inflating: 3006854/README.txt
+
+# <font color="#0000ff">cd 3006854</font>
+# <font color="#0000ff">sh rhel3_pre_install.sh</font>
+Applying patch...
+Patch successfully applied
+# </pre>
+
+NOTE: If you get the following error when you run <tt>rhel3_pre_install.sh</tt>:
+<pre><font color="#ff0000">  rhel3_pre_install.sh: line 36: gcc: command not found</font></pre>
+
+Then you forgot to install or link <tt>gcc</tt>, see above. This means you can't start any binaries any more:
+<pre>#<font color="#0000ff"> ls</font>
+<font color="#ff0000">ls: error while loading shared libraries: /etc/libcwait.so: cannot open shared object file: No such file or directory</font>
+#<font color="#0000ff"> rm /etc/ld.so.preload</font>
+<font color="#ff0000">rm: error while loading shared libraries: /etc/libcwait.so: cannot open shared object file: No such file or directory</font>
+#</pre>
+
+To fix that, run the <tt>echo</tt> command which is a built-in shell command:
+<pre># <font color="#0000ff">echo "" &gt; /etc/ld.so.preload
+rm /etc/ld.so.preload</font></pre>
+
+And start over again.
+<br>
+<br>
+<br>
+Now <tt><font color="#0000ff">runInstaller</font></tt> can be started from the CD:
+<pre><font color="#0000ff"><b>su - oracle</b></font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>    # it is important that this variable is set!
+2.4.1
+$ <font color="#0000ff">/mnt/cdrom/runInstaller</font>
+
+ - Welcome Screen:      <font color="#0000ff"> Click Next</font>
+ - Inventory Location:  <font color="#0000ff"> Click Next</font>
+ - Unix Group Name:     <font color="#0000ff"> Use "oinstall" and click Next
+                         When asked to run /tmp/orainstRoot.sh, run it before you click Continue</font>
+ - File Locations:      <font color="#0000ff"> Use default values</font>
+ - Available Products:  <font color="#0000ff"> Select "Oracle9i Database 9.2.0.1.0"</font>
+ - Installation Types:  <font color="#0000ff"> Select <b>Custom</b> since we only want to install the software for now</font>
+ - Available Products:  <font color="#0000ff"> Click Next or add some more components.</font>
+ - Components Locations:<font color="#0000ff"> Accept default values and click Next</font>
+ - Privileged Operating System Groups:
+                        <font color="#0000ff"> I used the default values: OSDBA Group = dba, OSOPER Group = dba</font>
+ - Oracle Managent Server Repository:
+                        <font color="#0000ff"> I used the default choice</font>
+ - Create database:     <font color="#0000ff"> Select <b>NO</b> since we first have to patch Oracle before a database can be created!</font>
+ - Summary:             <font color="#0000ff"> Start the Install</font>
+ - Configuration tools: <font color="#0000ff"> Tools won't come up. Simply ignore it.</font>
+ - <font color="#0000ff">At the end of the installation, exit runInstaller.</font>
+
+ </pre>
+
+
+
+You may get the following errors:<br>
+<br>
+<font color="#ff0000">Error in invoking target install of makefile /u01/app/oracle/product/9.2.0/network/lib/ins_oemagent.mk.</font>
+<br><br>
+The <tt>/u01/app/oracle/product/9.2.0/install/make.log</tt> file reads:
+<pre><font color="#ff0000">  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcln.o)(.text+0xa4e): In function `Nls_FormatCmd':
+  : undefined reference to `__ctype_b'
+  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcln.o)(.text+0x159d): In function `Nls_ScanCmd':
+  : undefined reference to `__ctype_b'
+  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcln.o)(.text+0x1603): more undefined references to `__ctype_b' follow
+  collect2: ld returned 1 exit status
+  make: *** [dbsnmp] Error 1
+</font></pre>
+
+Click ignore. This will be fixed by applying the patch 3119415 after the 9.2.0.4 patchset has been applied.
+You won't be able to apply the patch 3119415 at this time since the file
+<tt>/u01/app/oracle/oraInventory/ContentsXML/comps.xml</tt> doesn't exist yet.
+
+<br>
+<br>
+<br>
+<font color="#ff0000">Error in invoking target install of makefile /u01/app/oracle/product/9.2.0/ctx/lib/ins_ctx.mk.</font>
+<br><br>
+The <tt>/u01/app/oracle/product/9.2.0/install/make.log</tt> file reads:
+<pre><font color="#ff0000">  /usr/bin/ld: ctxhx: hidden symbol `stat' in /usr/lib/libc_nonshared.a(stat.oS) is referenced by DSO
+  collect2: ld returned 1 exit status
+  make: *** [ctxhx] Error 1
+</font></pre>
+
+Click ignore. This is fixed by applying the 9.2.0.4 patchset.
+<br>
+<br>
+
+
+<br><b><a name="PatchingOracle9iR2OnRHAS3">Patching Oracle9iR2 on RH AS 3</a></b><a name="PatchingOracle9iR2OnRHAS3"><br>
+<br>
+To patch Oracle9iR2, download the Oracle 9i Release 2 Patch Set 3
+Version 9.2.0.4.0 for Linux x86 from
+</a><a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+<br><br>
+Copy the downloaded "<font color="#0000ff">p3095277_9204_LINUX.zip</font>" file to e.g. <tt>/tmp</tt> and run the following command:
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">cp p3095277_9204_LINUX.zip /tmp</font>
+$ <font color="#0000ff">cd /tmp</font>
+$ <font color="#0000ff">unzip p3095277_9204_LINUX.zip</font>
+Archive:  p3095277_9204_LINUX.zip
+  inflating: 9204_lnx32_release.cpio
+  inflating: README.html
+  inflating: patchnote.css
+$
+$ <font color="#0000ff">cpio -idmv &lt; 9204_lnx32_release.cpio</font>
+Disk1/stage/locks
+Disk1/stage/Patches/oracle.apache.isqlplus/9.2.0.4.0/1/DataFiles/bin.1.1.jar
+Disk1/stage/Patches/oracle.apache.isqlplus/9.2.0.4.0/1/DataFiles/lib.1.1.jar
+...
+
+</pre>
+
+
+To patch the <tt>runInstaller</tt>, run:
+<pre><font color="#0000ff"><b>su - oracle</b></font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>    # it is important that this variable is set!
+2.4.1
+$ <font color="#0000ff">cd /tmp/Disk1/</font>
+$ <font color="#0000ff">./runInstaller</font>
+
+ - Welcome Screen:      <font color="#0000ff"> Click Next</font>
+ - File Locations:      <font color="#0000ff"> Use default values</font>
+ - Available Products:  <font color="#0000ff"> Select "<b>Oracle Universial Installer 2.2.0.18.0</b> !"</font>
+ - Components Locations:<font color="#0000ff"> Accept default values and click Next</font>
+ - Summary:             <font color="#0000ff"> Start the Install</font>
+ - <font color="#0000ff">At the end of the installation, <b>you <u>must</u> exit runInstaller</b>!</font>
+
+</pre>
+
+To patch Oracle9iR2, run:
+<pre><font color="#0000ff"><b>su - oracle</b></font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>    # it is important that this variable is set!
+2.4.1
+$ <font color="#0000ff">cd $ORACLE_HOME/bin</font>
+$ <font color="#0000ff">./runInstaller</font>
+
+ - Welcome Screen:      <font color="#0000ff"> Click Next</font>
+ - File Locations:      <font color="#0000ff"> Use default values</font>
+ - Available Products:  <font color="#0000ff"> Select "<b>Oracle9iR2 Patch Set 3 9.2.0.4.0</b> !"</font>
+ - Summary:             <font color="#0000ff"> Start the Install</font>
+ - <font color="#0000ff">At the end of the installation, exit runInstaller</font>
+
+</pre>
+
+
+You may get the following error:<br>
+<br>
+<font color="#ff0000">Error in invoking target install of makefile /u01/app/oracle/product/9.2.0/network/lib/ins_oemagent.mk.</font>
+<br><br>
+The <tt>/u01/app/oracle/product/9.2.0/install/make.log</tt> file reads:
+<pre><font color="#ff0000">  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcl.o)(.text+0x1cc): In function `get_ora_stmt_handle':
+  : undefined reference to `__ctype_b'
+  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcl.o)(.text+0x124e): In function `OraProcess_Oid':
+  : undefined reference to `__ctype_b'
+  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcl.o)(.text+0x176c): more undefined references to `__ctype_b' follow
+  collect2: ld returned 1 exit status
+  make: *** [dbsnmp] Error 1
+</font></pre>
+
+Click ignore. This will be fixed by applying the patch 3119415 after the 9.2.0.4 patchset has been applied.
+The patch 3119415 cannot be applied while the patch process for the 9.2.0.4 patchset is running.
+<br>
+<br>
+<br>
+After the 9.2.0.4 patchset has been applied, download the patch <tt>p3119415_9204_LINUX.zip</tt> from
+<a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>. See bug 3119415 for more information.
+Also, download the <tt>opatch</tt> Release 2.2.0 utility from
+<a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+See bug 2617419 for more information.
+<br>
+<br>
+To install <tt>opatch</tt>, run:
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">cp p2617419_210_GENERIC.zip /tmp</font>
+$ <font color="#0000ff">cd /tmp</font>
+$ <font color="#0000ff">unzip p2617419_210_GENERIC.zip</font></pre>
+
+Before you apply the 3119415 patch, you need to make sure the <tt>fuser</tt> binary can be found by the oracle user, 
+see the <tt>PATH</tt> environment variable below.
+Otherwise the patch can't be applied because the <tt>fuser</tt> binary is used by <tt>opatch</tt>.
+<br>
+<br>
+To apply the 3119415 patch, run
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">unzip p3119415_9204_LINUX.zip</font>
+$ <font color="#0000ff">cd 3119415</font>
+$ <font color="#0000ff">export PATH=$PATH:/tmp/OPatch</font>
+$ <font color="#0000ff">export PATH=$PATH:/sbin</font>        # the patch needs "fuser" which is located in /sbin
+$ <font color="#0000ff">which opatch</font>
+/tmp/OPatch/opatch
+$ <font color="#0000ff">opatch apply</font>
+</pre>
+<br>
+
+Now you should be able to create a database with <tt>dbca</tt>:
+<pre><font color="#0000ff">su - oracle
+dbca</font></pre>
+
+
+<br><b><a name="PatchingOracleIntelligentAgentOnRHAS3">Patching Oracle Intelligent Agent on RH AS 3</a></b><a name="PatchingOracleIntelligentAgentOnRHAS3"><br>
+<br>
+When you run <tt>"agentctl start"</tt> (Oracle 9.2.0.4), <tt>dbsnmp</tt> will crash:
+</a><pre><a name="PatchingOracleIntelligentAgentOnRHAS3">$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">agentctl start</font>
+<font size="-1"><font color="#ff0000">
+DBSNMP for Linux: Version 9.2.0.4.0 - Production on 07-JAN-2004 19:11:14
+
+Copyright (c) 2003 Oracle Corporation.  All rights reserved.
+
+Starting Oracle Intelligent Agent.../u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1855 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $*
+&gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+/u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1868 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $* &gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+/u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1880 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $* &gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+/u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1892 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $* &gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+
+</font></font></a></pre>
+
+<a name="PatchingOracleIntelligentAgentOnRHAS3">To resolve this problem, apply the patch <tt>p3238244_9204_LINUX.zip</tt> from </a><a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+See bug/patch 3238244 for more information.<br>
+<br>
+<i>Before you apply the patch, make sure the instance is down!</i><br>
+<br>
+
+Also make sure the <tt>opatch</tt> script appears in your <tt>$PATH</tt>.
+See <a href="http://www.puschitz.com/InstallingOracle9i.shtml#PatchingOracle9iR2OnRHAS3">
+"Patching Oracle9iR2 on Red Hat AS 3"</a>
+for information on getting and installing <tt>opatch</tt>.
+To verify if <tt>opatch</tt> is in your <tt>$PATH</tt>, run the <tt>which</tt> command:
+<pre>$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">which opatch</font>
+/tmp/OPatch/opatch
+$</pre>
+
+<br>
+To apply now the patch, run:
+<pre>$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">unzip p3238244_9204_LINUX.zip</font>
+$ <font color="#0000ff">cd 3238244</font>
+$ <font color="#0000ff">export PATH=$PATH:/sbin</font>        # the patch needs "fuser" which is located in /sbin
+$ <font color="#0000ff">opatch apply</font>
+
+</pre>
+
+Now you need to relink <tt>dbsnmp</tt>. This is the binary that crashed when running <tt>agentctl start</tt>.
+To find which makefile handles the linking of <tt>dbsnmp</tt>, you can run:
+<pre>$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">find $ORACLE_HOME -name "*.mk" | xargs grep -l dbsnmp</font>
+/u01/app/oracle/product/9.2.0/network/lib/ins_oemagent.mk
+/u01/app/oracle/product/9.2.0/network/lib/env_oemagent.mk
+$
+
+</pre>
+
+I relinked <tt>dbsnmp</tt> and all associated executables which are maintained by the <tt>ins_oemagent.mk</tt> makefile:
+<pre>$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">cd $ORACLE_HOME/network/lib</font>
+$ <font color="#0000ff">make -f ins_oemagent.mk install</font>
+</pre>
+<br>
+
+Now you should be able to start the agent:
+<pre>$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">agentctl start</font>
+</pre>
+<br>
+
+NOTE: Don't forget to undo the changes (links) to <tt>/usr/bin/gcc</tt> and <tt>/usr/bin/g++</tt> if you
+don't need it any more. Also don't forget the <tt>/etc/ld.so.preload</tt> file.
+<br>
+<br>
+
+
+
+
+
+
+
+<h2><font color="#0000ff"><u><a name="RunningOracleInstallationOnRHELAS4">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 4</a></u></font><u><a name="RunningOracleInstallationOnRHELAS4"></a></u><p></p>
+<u><a name="RunningOracleInstallationOnRHELAS4"></a></u><a name="RunningOracleInstallationOnRHELAS4"></a></h2>
+<a name="RunningOracleInstallationOnRHELAS4"></a><p></p>
+<a name="RunningOracleInstallationOnRHELAS4">
+
+In order to install Oracle9i Release 2 (9.2.0.6) I've applied the 9.2.0.6 patch set for the
+Oracle database server (patch number 3948480) after the Oracle9i Release 2 (9.2.0.4) installation.
+For more information, see
+</a><a href="http://download-east.oracle.com/docs/html/B13670_06/toc.htm#BABIBCAD">
+Oracle9i Release Notes Release 2 (9.2.0.4.0) for Linux x86 - Red Hat Enterprise Linux 4 Certification Update</a>.
+<br>
+<br>
+
+<br><b><a name="InstallingOracle9iR2OnRHAS4">Installing Oracle9iR2 on RH AS 4</a></b><a name="InstallingOracle9iR2OnRHAS4"><br>
+<br>
+
+Before you continue, ensure all the required RPMs are installed, see
+</a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#PackagesForRHELAS4">
+Packages (RPMs) for Red Hat Enterprise Linux Advanced Server 4 (RHEL AS 4)</a>.
+<br>
+<br>
+Also ensure <tt>LD_ASSUME_KERNEL</tt> is set to <tt>2.4.19</tt>
+(see <a href="http://www.puschitz.com/InstallingOracle9i.shtml#SettingOracleEnvironments">
+Setting Oracle Environments</a>):
+<pre>$ <font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>
+2.4.19
+$
+
+</pre>
+
+Now launch <tt><font color="#0000ff">runInstaller</font></tt>:
+<pre><font color="#0000ff"><b>su - oracle</b></font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>
+2.4.19
+$ <font color="#0000ff">/media/cdrom/runInstaller</font>
+
+ - Welcome Screen:      <font color="#0000ff"> Click Next</font>
+ - Inventory Location:  <font color="#0000ff"> Click OK</font>
+ - Unix Group Name:     <font color="#0000ff"> Use "oinstall" and click Next
+                         When asked to run /tmp/orainstRoot.sh, run it before you click Continue</font>
+ - File Locations:      <font color="#0000ff"> Use default values</font>
+ - Available Products:  <font color="#0000ff"> Select "Oracle9i Database 9.2.0.4.0"</font>
+ - Installation Types:  <font color="#0000ff"> Select <b>Custom</b> since we only want to install the software for now</font>
+ - Available Products:  <font color="#0000ff"> Click Next or add some more components.</font>
+ - Components Locations:<font color="#0000ff"> Accept default values and click Next</font>
+ - Privileged Operating System Groups:
+                        <font color="#0000ff"> I used the default values: OSDBA Group = dba, OSOPER Group = dba</font>
+ - Oracle Managent Server Repository:
+                        <font color="#0000ff"> I used the default choice</font>
+ - Create database:     <font color="#0000ff"> Select <b>NO</b> since we first need to patch Oracle database software!</font>
+ - Summary:             <font color="#0000ff"> Start the Install</font>
+ </pre>
+
+
+<br><b><a name="PatchingOracle9iR2OnRHAS4">Patching Oracle9i R2 (9.2.0.4) on RH AS 4</a></b><a name="PatchingOracle9iR2OnRHAS4"><br>
+<br>
+
+Download the patch 3948480 (Oracle9i Patch Set Release 2 (9.2.0.6) Patch Set 5) from </a><a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>
+and execute the following commands:
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">cp p3948480_9206_LINUX.zip /tmp</font>
+$ <font color="#0000ff">cd /tmp</font>
+$ <font color="#0000ff">unzip p3948480_9206_LINUX.zip</font>
+Archive:  p3948480_9206_LINUX.zip
+   creating: Disk1/
+   creating: Disk1/stage/
+   creating: Disk1/stage/Patches/
+...
+
+</pre>
+
+
+Now download the patch 4188455 from <a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+<br>
+This patch is needed for launching the <tt>runInstaller</tt> that came with the patch 3948480 we just downloaded above.
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">cp p4188455_10103_LINUX.zip /tmp</font>
+$ <font color="#0000ff">cd /tmp</font>
+$ <font color="#0000ff">unzip p4188455_10103_LINUX.zip</font>
+Archive:  p4188455_10103_LINUX.zip
+  inflating: oraparam.ini
+  inflating: README.txt
+$
+</pre>
+
+The <tt>/tmp/oraparam.ini</tt> file will now be used for launching the <tt>runInstaller</tt> that came with the patch 3948480.
+<br>
+<br>
+
+To patch the <tt>runInstaller</tt> itself, run:
+<pre><font color="#0000ff"><b>su - oracle</b></font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>
+2.4.19
+$ <font color="#0000ff">/tmp/Disk1/install/runInstaller <b>-paramFile /tmp/oraparam.ini</b></font>
+
+ - Welcome Screen:      <font color="#0000ff"> Click Next</font>
+ - File Locations:      <font color="#0000ff"> Use default values (in my example: /tmp/Disk1/stage/products.xml)</font>
+ - Available Products:  <font color="#0000ff"> Select "<b>Oracle Universial Installer 10.1.0.3.0</b> !"</font>
+ - Summary:             <font color="#0000ff"> Click Install</font>
+ - <font color="#0000ff">At the end of the installation, <b>you <u>must</u> exit runInstaller</b>!</font>
+
+</pre>
+
+<i>Ensure that no Oracle processes are running</i>:
+<pre><font color="#0000ff">ps -ef | grep ora</font>
+
+</pre>
+
+
+Now to patch Oracle9iR2, run:
+<pre><font color="#0000ff"><b>su - oracle</b></font>
+$ <font color="#0000ff">echo $LD_ASSUME_KERNEL</font>    # it is important that this variable is set!
+2.4.19
+$ <font color="#0000ff">/tmp/Disk1/install/runInstaller <b>-paramFile /tmp/oraparam.ini</b></font>
+
+ - Welcome Screen:      <font color="#0000ff"> Click Next</font>
+ - File Locations:      <font color="#0000ff"> Use default values (in my example: /tmp/Disk1/stage/products.xml)</font>
+ - Available Products:  <font color="#0000ff"> Select "<b>Oracle 9iR2 Patchset 9.2.0.6.0</b>"</font>
+ - Summary:             <font color="#0000ff"> Click Install</font>
+                        <font color="#0000ff"> When are asked to run root.sh, run it before you click Continue</font>
+ - <font color="#0000ff">At the end of the installation, exit runInstaller.</font>
+
+</pre>
+
+
+
+After the 9.2.0.6 patchset has been applied, download the patch <tt>4190568</tt> from
+<a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+Also, download the <tt>opatch</tt> utility for release 10.1.0.2 (patch 2617419) from
+<a href="http://metalink.oracle.com/">http://metalink.oracle.com</a>.
+<br>
+<br>
+To install <tt>opatch</tt>, run:
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">cp p2617419_10102_GENERIC.zip /tmp</font>
+$ <font color="#0000ff">cd /tmp</font>
+$ <font color="#0000ff">unzip p2617419_10102_GENERIC.zip</font>
+$ <font color="#0000ff">cp -a /tmp/OPatch/ $ORACLE_HOME</font>
+
+</pre>
+
+
+To apply the 4190568 patch, run
+<pre><font color="#0000ff">su - oracle</font>
+$ <font color="#0000ff">unzip p4190568_9206_LINUX.zip</font>
+$ <font color="#0000ff">cd 4193454</font>
+$ <font color="#0000ff">export PATH=$PATH:$ORACLE_HOME/OPatch</font>
+$ <font color="#0000ff">opatch apply</font>
+
+</pre>
+
+
+If you intend to use Direct I/O Support, you must also download and apply patch 2448994.
+<br>
+<br>
+
+
+Now you should be able to create a database with <tt>dbca</tt>:
+<pre><font color="#0000ff">su - oracle
+dbca
+
+</font></pre>
+
+When <tt>dbca</tt> died on my system with the following error:
+<pre><font color="#ff0000">/u01/app/oracle/product/9.2.0/bin/dbca: line 124: 26649 Segmentation fault      
+$JRE_DIR/bin/jre -DORACLE_HOME=$OH -DJDBC_PROTOCOL=thin -mx64m -classpath $CLASSPATH oracle.sysman.assistants.dbca.Dbca $ARGUMENTS
+</font></pre>
+
+I executed the following command:
+<pre><font color="#0000ff">su - root
+touch /etc/rac_on
+</font></pre>
+
+and restarted <tt>dbca</tt>. If you know a better solution, let me know!
+<br>
+<br>
+
+
+<h2><font color="#0000ff"><u><a name="StartupAndShutdownOfTheOracle9iDatabase">
+Startup and Shutdown of the Oracle 9i Database</a></u></font><u><a name="StartupAndShutdownOfTheOracle9iDatabase"></a></u><p></p>
+<u><a name="StartupAndShutdownOfTheOracle9iDatabase"></a></u><a name="StartupAndShutdownOfTheOracle9iDatabase"></a></h2>
+
+
+<a name="StartupAndShutdownOfTheOracle9iDatabase"><b><tt>sqlplus:</tt></b>
+<br>
+<br>
+<tt>svrmgrl</tt> is not supported any more. You can now do everything with
+<tt>sqlplus</tt>.
+<br>
+
+</a><p><a name="StartupAndShutdownOfTheOracle9iDatabase">For instance, to startup the database, run the following commands:
+</a></p><pre><a name="StartupAndShutdownOfTheOracle9iDatabase">oracle$ <font color="#0000ff">sqlplus /nolog</font>
+SQL&gt; <font color="#0000ff">connect / as sysdba</font>
+SQL&gt; <font color="#0000ff">startup</font></a></pre>
+<a name="StartupAndShutdownOfTheOracle9iDatabase">                                           
+The slash connects you to the schema owned by SYS. So in this example you will be
+connected to the schema owned by SYS with the privilege SYSDBA.
+SYSDBA gives you the following privileges:
+<br>
+&nbsp; - sysoper privileges WITH ADMIN OPTION<br>
+&nbsp; - create database<br>
+&nbsp; - recover database until<br>
+<br>
+
+<tt><b>$ORACLE_HOME/bin/dbstart</b></tt><b> and <tt>$ORACLE_HOME/bin/dbshut</tt></b><br>
+<br>
+
+You can also use <tt>$ORACLE_HOME/bin/dbstart</tt> to startup the database, and
+<tt>$ORACLE_HOME/bin/dbshut</tt> to shutdown the database. You can place 
+<tt>$ORACLE_HOME/bin/dbstart</tt> into the <tt>/etc/rc.d/rc.local</tt> boot script to
+automatically bring up the database at system boot time. To get <tt>$ORACLE_HOME/bin/dbstart</tt>
+and <tt>$ORACLE_HOME/bin/dbshut</tt> working, you need to change the third field for your Oracle
+SID in <tt>/etc/oratab</tt> from "N" to "Y".<br>
+<br>
+For example, for the Oracle SID "test" I changed the line in <tt>/etc/oratab</tt> from:<br>
+</a><pre><a name="StartupAndShutdownOfTheOracle9iDatabase"> test:/u01/app/oracle/product/9.2.0:<b><font color="#0000ff">N</font></b><font color="#0000ff"></font></a></pre>
+<a name="StartupAndShutdownOfTheOracle9iDatabase">to read:
+</a><pre><a name="StartupAndShutdownOfTheOracle9iDatabase"> test:/u01/app/oracle/product/9.2.0:<b><font color="#0000ff">Y</font></b><font color="#0000ff"></font></a></pre>
+
+<a name="StartupAndShutdownOfTheOracle9iDatabase"><br>
+In some cases for <b>9.2.0</b> I also had to copy the init file for my SID "test" from 
+<tt>/u01/app/oracle/admin/test/pfile</tt> to <tt>$ORACLE_HOME/dbs</tt> to get 
+<tt>dbstart</tt> and <tt>dbshut</tt> working:
+
+</a><pre><a name="StartupAndShutdownOfTheOracle9iDatabase"><font color="#0000ff">cp /u01/app/oracle/admin/test/pfile/inittest.ora.642002224936 $ORACLE_HOME/dbs/inittest.ora</font></a></pre>
+
+<a name="StartupAndShutdownOfTheOracle9iDatabase"><i>But first make sure if your init file already exists in <tt>$ORACLE_HOME/dbs</tt></i>!<br>
+<br>
+
+
+</a><h2><a name="StartupAndShutdownOfTheOracle9iDatabase"><font color="#0000ff"><u></u></font></a><font color="#0000ff"><u><a name="OracleInstallationProblemsTipsAndHints">
+Oracle Installation Problems, Tips and Hints</a></u></font><u><a name="OracleInstallationProblemsTipsAndHints"></a></u><p></p>
+<u><a name="OracleInstallationProblemsTipsAndHints"></a></u><a name="OracleInstallationProblemsTipsAndHints"></a></h2>
+
+<a name="OracleInstallationProblemsTipsAndHints"><i>Some of these problems apply only to 9.0.1!</i>
+
+</a><ul>
+<li><a name="OracleInstallationProblemsTipsAndHints"> Do not <tt>cd</tt> to <tt>/mnt/cdrom</tt> to run <tt>./runInstaller!</tt><br>
+</a></li>
+<a name="OracleInstallationProblemsTipsAndHints">If you do so, the installation will fail because you won't be able to change the CDs.<br>
+<br>
+
+</a><li><a name="OracleInstallationProblemsTipsAndHints"> If you forgot to set the <tt>DISPLAY</tt> environment variable (e.g. <tt>export
+DISPLAY=oracleserver:0.0)</tt>, or if you forgot to give the remote console - your Oracle Server - 
+authority to display X information on your desktop PC (e.g. <tt> xhost +oracleserver</tt>), then
+you will get the following error:
+</a></li>
+<pre><a name="OracleInstallationProblemsTipsAndHints">Xlib: connection to ":0.0" refused by server
+Xlib: Client is not authorized to connect to Server</a></pre>
+
+<a name="OracleInstallationProblemsTipsAndHints">In this case, I always had to kill <tt>runInstaller</tt> in Oracle9iR1 (9.0.1) which was still 
+running in the background. If I didn't do this in 9.0.1, <tt>runInstaller</tt> didn't completely come
+up any more without displaying any error messages. You might also want to clean up <tt>/tmp/OraInstall</tt>.
+<br>
+</a></ul>
+
+<ul>
+<li><a name="OracleInstallationProblemsTipsAndHints"> When <tt>runInstaller</tt> starts to configure the tools ("Configuration Tools"), the "Oracle
+Net Configuration Assistant" will sometimes hang. Simply stop the Assistant and restart it, or continue
+the installation. When the rest of the installation is finished, do a "Retry" for "Oracle Net
+Configuration Assistant". This always worked for me.</a></li>
+<a name="OracleInstallationProblemsTipsAndHints">                                           
+</a></ul>
+<a name="OracleInstallationProblemsTipsAndHints">                                           
+</a><ul>
+<li><a name="OracleInstallationProblemsTipsAndHints"> When the system stops responding during the Oracle installation in particular during the database
+creation, then that's probably because you don't have enough RAM or enough swap space. I saw the
+whole system not responding or to "hang" for several minutes when I did not have enough swap space.
+If this happens, simply wait until the system starts to respond again.</a></li>
+</ul>
+
+<ul>
+<li><a name="OracleInstallationProblemsTipsAndHints"> The Oracle installation also runs <tt>make</tt> etc. In a production environment you might
+not have compilers and other development packages installed. Therefore make sure you have temporarily 
+the following packages installed:
+<t>
+gcc,
+cpp,
+glibc-devel,
+compat-libstdc++,
+kernel-headers (for RH 7.1, 7.2, 2.1AS),
+glibc-kernheaders (for RH 7.3, 8.0, 9.0),
+binutils.
+
+See also
+</t></a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#CheckingPackages">
+Checking Packages (RPMs)</a> for more information.
+<br>
+</li>
+
+</ul>
+<ul>
+<li> If for any reason the Oracle9i installation didn't finish successfully, you might want to clean
+up the following files and directories before you start over again:
+<tt>/etc/oraInst.loc /etc/oratab /tmp/&lt;OtherOracleOwnedFiles&gt; $ORACLE_BASE/* </tt>
+</li>
+</ul>
+
+<ul>
+<li>
+Other Problems:
+<br>
+You might want to check out the
+<a href="http://www.oracle.com/forums/forum.jsp?forum=135">
+Oracle on Linux Discussion Forum</a>.
+</li>
+</ul>
+<br>
+
+
+
+<h2><font color="#0000ff"><u><a name="OracleInstallationErrors">
+Oracle Installation Errors</a></u></font><u><a name="OracleInstallationErrors"></a></u><p></p>
+<u><a name="OracleInstallationErrors"></a></u><a name="OracleInstallationErrors"></a></h2>
+
+<a name="OracleInstallationErrors">Here is a list of Oracle 9i (9.0.1 &amp; 9.2.0) installation problems and issues.
+Some issues, errors, problems, and solutions apply only to 9.0.1 and some only to 9.2.0. Since I did not experience all
+of the problems here, I am not able to verify the correctness of all the solutions. However, I experienced
+most of the problems listed here. If you had other problems and you were able to resolve them,
+please drop me an email at webmaster_at_puschitz.com.
+<br>
+<br>
+Here is a list of issues issues, errors, problems and solutions:
+
+</a><ul>
+<li>
+<a name="OracleInstallationErrors"><font color="#ff0000">Log Files
+</font>
+</a></li>
+</ul>
+<blockquote>
+<a name="OracleInstallationErrors">First check always the error logs for 9.2.0 in <tt>/tmp/OraInstall<timestamp></timestamp></tt>
+(e.g <tt>/tmp/OraInstall2002-07-04_09-50-19PM</tt>), and for 9.0.1 in <tt>/tmp/OraInstall</tt>.
+When you get <tt>make</tt> problems, check also the file <tt>$ORACLE_HOME/install/make.log</tt>.<br>
+<br>
+</a></blockquote>
+
+
+<ul>
+<li>
+<a name="OracleInstallationErrors"><font color="#ff0000">
+"Various <tt>make</tt> Problems"
+</font>
+</a></li>
+</ul>
+<blockquote>
+<a name="OracleInstallationErrors">Make sure that <tt>gcc</tt> is installed on your system:
+</a><pre><a name="OracleInstallationErrors">$ <font color="#0000ff">which gcc</font>
+/usr/bin/gcc
+</a></pre>
+<a name="OracleInstallationErrors">Here is the command to find the RPM package name for <tt>/usr/bin/gcc</tt>:
+</a><pre><a name="OracleInstallationErrors">$ <font color="#0000ff">rpm -qf /usr/bin/gcc</font>
+gcc-2.96-98
+</a></pre>
+<a name="OracleInstallationErrors">Check also the other error messages below.
+See also
+</a><a href="http://www.puschitz.com/InstallingOracle9i.shtml#CheckingPackages">
+Checking Packages (RPMs)</a> for more information.
+<br>
+<br>
+</blockquote>
+
+
+<ul><li><tt>
+<font color="#ff0000">
+"Error in invoking target install of makefile /u01/app/oracle/product/9.2.0/ctx/lib/ins_ctx.mk"</font></tt>
+<font color="#ff0000"></font>
+</li>
+</ul>
+<blockquote>
+I saw this error only when I installed Oracle9iR2 (<b>9.2.0</b>).
+This was also the only problem I experienced with <b>Oracle 9i R2</b> on <b>Red Hat 8.0</b>.
+However, this does not necessarily mean that you won't experience other problems described here.
+<br>
+<br>
+When I had this problem, the following errors showed up in <tt>$ORACLE_HOME/install/make.log</tt>:
+<pre>  /lib/libdl.so.2: undefined reference to `_dl_addr@GLIBC_PRIVATE'
+  /lib/libdl.so.2: undefined reference to `_dl_open@GLIBC_PRIVATE'
+  /lib/libdl.so.2: undefined reference to `_dl_close@GLIBC_PRIVATE'
+  /lib/libdl.so.2: undefined reference to `_dl_sym@GLIBC_PRIVATE'
+  /lib/libdl.so.2: undefined reference to `_dl_vsym@GLIBC_PRIVATE'
+</pre>
+This error comes up when the following step is executed:
+<pre>  /usr/bin/make -f ins_ctx.mk install ORACLE_HOME=/u01/app/oracle/product/9.2.0</pre>
+<br>
+Edit the file <tt><font color="#0000ff">$ORACLE_HOME/ctx/lib/env_ctx.mk</font></tt>, go to
+"<tt><font color="#0000ff">INSO_LINK =</font></tt>",
+and add a "<tt><font color="#0000ff">$(LDLIBFLAG)dl</font></tt>" to the line and save it.
+<br>
+<br>
+Here is the full line with the added "<tt>$(LDLIBFLAG)dl</tt>" flag:
+<br>
+<br>
+<tt>INSO_LINK = -L$(CTXLIB) $(LDLIBFLAG)m <b><font color="#0000ff">$(LDLIBFLAG)dl</font></b>
+ $(LDLIBFLAG)sc_ca $(LDLIBFLAG)sc_fa $(LDLIBFLAG)sc_ex $(LDLIBFLAG)sc_da
+ $(LDLIBFLAG)sc_ut $(LDLIBFLAG)sc_ch $(LDLIBFLAG)sc_fi $(LLIBCTXHX) 
+$(LDLIBFLAG)c -Wl,-rpath,$(CTXHOME)lib $(CORELIBS) $(COMPEOBJS)</tt>
+<br>
+<br>
+After that hit retry in the error popup.
+<br>
+<br>
+<br>
+<i>If this didn't work, then try the following:</i><br>
+<br>
+Edit the file <tt><font color="#0000ff">$ORACLE_HOME/ctx/lib/env_ctx.mk</font></tt> again, go to
+"<tt><font color="#0000ff">INSO_LINK =</font></tt>", remove the above entry you made
+and add a "<tt><font color="#0000ff">`cat $(LIBHOME)/sysliblist`</font></tt>" to the line and save it.
+<br>
+<br>
+Here is the full line with the added "<tt>`cat $(LIBHOME)/sysliblist`</tt>" string:
+<br>
+<br>
+<tt>INSO_LINK = -L$(CTXLIB) $(LDLIBFLAG)m <b><font color="#0000ff">`cat $(LIBHOME)/sysliblist`</font></b>
+ $(LDLIBFLAG)sc_ca $(LDLIBFLAG)sc_fa $(LDLIBFLAG)sc_ex $(LDLIBFLAG)sc_da
+ $(LDLIBFLAG)sc_ut $(LDLIBFLAG)sc_ch $(LDLIBFLAG)sc_fi $(LLIBCTXHX) 
+$(LDLIBFLAG)c -Wl,-rpath,$(CTXHOME)lib $(CORELIBS) $(COMPEOBJS)</tt>
+<br>
+<br>
+After that hit retry in the error popup.
+<br>
+<br>
+
+</blockquote>
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+ORA-27123: unable to attach to shared memory segment.<br>
+</font>
+</tt>
+</li>
+</ul>
+<blockquote>
+I saw this error only when I installed Oracle 9i R2 (<b>9.2.0</b>). <br>
+<br>
+This error message came up when the Oracle Database Configuration Assistant was running.
+I executed the following command to temporarily increase the maximum shared memory size:
+<pre><font color="#0000ff">su - root</font>
+# <font color="#0000ff">cat /proc/sys/kernel/shmmax</font>
+33554432
+# <font color="#0000ff">echo `expr 1024 \* 1024 \* 1024` &gt; /proc/sys/kernel/shmmax
+# cat /proc/sys/kernel/shmmax</font>
+1073741824
+#</pre>
+
+Then click "Retry" for the Oracle Database Configuration Assistant.<br>
+<br>
+It is recommended to increase the <tt>shmmax</tt> setting permanently for Oracle9i. So if
+you want to increase the maximum shared memory size permanently, add the following line
+to the <tt><font color="#0000ff">/etc/sysctl.conf</font></tt> file:<br>
+<pre><font color="#0000ff">kernel.shmmax=1073741824</font></pre>
+For more information on setting shared memory parameters for Oracle, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingSharedMemory">
+Setting Shared Memory</a>.
+<br>
+<br>
+</blockquote>
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+ORA-03113: end-of-file on communication channel
+</font>
+</tt></li></ul>
+
+<tt></tt>
+<blockquote>
+I saw this error when I've run the "Database Configuration Assistant" and "<tt>sqlplus</tt>".
+When the "Database Configuration Assistant" gave me this error during Oracle9iR2 (9.2.0)
+installation on Red Hat 2.1 AS, I simply removed the shared memory segments owned by the Oracle user 
+and I restarted the "Database Configuration Assistant". I'm not sure if this is the right way but it always
+worked for me. Here is what I did to get the "Database Configuration Assistant" running again:<br>
+<br>
+<b>Database Configuration Assistant:</b><br>
+<br>
+I executed the <tt>ipcs</tt> command to get the address of the shared memory segments that have
+been allocated by Oracle:
+
+<pre>$ <font color="#0000ff">su - root</font>
+# <font color="#0000ff">ipcs</font>
+
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status
+0x00000000 0          root      600        196608     2
+0x00000001 32769      root      600        655360     2
+0x00000000 458755     oracle    660        4194304    0
+0x00000000 491524     oracle    660        33554432   0
+0x00000000 524293     oracle    660        33554432   0
+0x00000000 557062     oracle    660        33554432   0
+0x00000000 589831     oracle    660        33554432   0
+0x00000000 622600     oracle    660        33554432   0
+0x00000000 655369     oracle    660        33554432   0
+0x00000000 688138     oracle    660        33554432   0
+0x3ecee0b0 720907     oracle    660        4194304    0
+
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems      status
+
+------ Message Queues --------
+key        msqid      owner      perms      used-bytes   messages
+
+#</pre>
+
+Then I removed all shared memory segments that were owned by the Oracle user during the installation with
+the following command:
+<pre># <font color="#0000ff">ipcrm shm 458755 491524 524293 557062 589831 622600 655369 688138 720907</font></pre>
+
+After that I restarted the "Database Configuration Assistant". Once the installation was done I 
+immediately restarted the DB as well.<br>
+<i>Caveat: I'm not sure if this procedure can cause any further problems if this is done during the installation.
+But so far I haven't seen any issues with this approach.</i><br>
+<br>
+<b>sqlplus:</b><br>
+<br>
+If you get this problem in connection with <tt>sqlplus</tt>, then simply make sure that the database
+is down and exit <tt>sqlplus</tt>. After that, follow the procedure above by removing all shared memory 
+segments that belong to the Oracle user. To my knowledge, this should not cause any problems.
+<br>
+<br>
+For more information on shared memory segments, see
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#DeterminingSemaphoreSetsAndSharedMemory">
+Determining Which Semaphore Sets and Shared Memory Segments Belong to Each Oracle Database or Instance</a>.
+<br>
+<br>
+<b>NOTE:</b><br>
+To solve this problem permanently, increase the kernel shmmax size.
+For more information, see 
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#SettingSharedMemory">
+Setting Shared Memory</a> and 
+<a href="http://www.puschitz.com/TuningLinuxForOracle.shtml#SettingSharedMemory">
+Setting Shared Memory</a>.
+<br>
+<br>
+
+
+</blockquote>
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+"Error invoking target install of makefile /u01/app/oracle/product/9.0.1/plsql/lib/ins_plsql.mk"<br>
+"Error invoking target install of makefile /u01/app/oracle/product/9.0.1/precomp/lib/ins-precomp.mk"<br>
+"Error invoking target install of makefile /u01/app/oracle/product/9.0.1/precomp/lib/ins-net-client"<br>
+</font>
+</tt>
+</li>
+</ul>
+                               
+<blockquote>I saw this error only when I installed Oracle 9i (<b>9.0.1</b>).
+People have sent me emails pointing out that the following solution also works for Mandrake 8.1, Mandrake 8.2,
+and for SuSE 8.0.
+<br>
+<br>
+Edit the file <tt><font color="#0000ff">$ORACLE_HOME/bin/genclntsh</font></tt> and change the following line:
+<pre>  LD_SELF_CONTAINED="-z defs"</pre>
+to read:
+<pre><font color="#0000ff">  LD_SELF_CONTAINED=""</font></pre>
+
+After that run the script <tt>$ORACLE_HOME/bin/genclntsh</tt> as the user "oracle" and not as the user "root". 
+Also make sure you have all the Oracle environments set correctly!
+<pre>$ <font color="#0000ff">su <b>-</b> oracle</font>
+$ <font color="#0000ff">$ORACLE_HOME/bin/genclntsh</font>
+Created /u01/app/oracle/product/9.0.1/lib/libclntst9.a
+$</pre>
+                                                                        
+After that hit Retry in the error dialog window. This always worked for me.
+<br>
+<br>
+<b>Here is Oracle's official solution for Oracle 9iR1 and 9iR1 iAS on RedHat 2.1 Advanced Server:</b>
+<br>
+<a href="http://otn.oracle.com/software/products/oracle9i/files/binutils_readme.html">
+http://otn.oracle.com/software/products/oracle9i/files/binutils_readme.html</a>
+<br>
+<br>
+</blockquote>
+
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+"Error in invoking target install of make file /u01/app/oracle/product/9.2.0/network/lib/ins_oemagent.mk"<br>
+</font>
+</tt>
+</li>
+</ul>
+
+<blockquote>
+If you see this error on Red Hat Enterprise Linux 3, follow the guideline at
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#RunningOracleInstallationOnRHELAS3">
+Running Oracle Installation on Red Hat Enterprise Linux Advanced Server 3</a>.
+<br>
+<br>
+On Red Hat 9 I performed the following steps here when the <tt>ORACLE_HOME/install/make.log</tt> file contained the error messages:
+<pre>  ...
+  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcln.o)(.text+0x159d): In function `Nls_ScanCmd':
+  : undefined reference to `__ctype_b'
+  /u01/app/oracle/product/9.2.0/network/lib/libnmi.a(snmitcln.o)(.text+0x1603): more undefined references to `__ctype_b' follow
+</pre>
+
+<br>
+The issue here is that <tt>__ctype_b()</tt> is actually gone for <tt>__ctype_b_loc()</tt> because Red Hat uses a 
+new locale model. However, in <tt>libc.so</tt>, <tt>__ctype_b</tt> is still exported as compatibility symbol; at
+least that's the case with RH 9 glibc-2.3.2-5.
+<i>And here is the reason why some people have this problem with Red Hat 9 and why some don't:</i><br>
+<br>
+
+When you bought the Red Hat 9 CDs in a store, then you will probably find 
+<tt><b>glibc-2.3.2-5.i686.rpm</b></tt> on the first CD. This glibc version exports <tt>__ctype_b()</tt>:
+<pre>$ <font color="#0000ff">rpm -ql glibc-2.3.2-5 | grep libc.so</font>
+/lib/i686/libc.so.6
+/lib/libc.so.6
+/lib/tls/libc.so.6
+$ <font color="#0000ff">nm -a /lib/i686/libc.so.6 | grep __ctype_b</font>
+001315f8 D <b>__ctype_b</b>
+00022340 T __ctype_b_loc
+$ <font color="#0000ff">nm -a /lib/libc.so.6 | grep __ctype_b</font>
+00133c58 D <b>__ctype_b</b>
+000223a0 T __ctype_b_loc
+$</pre>
+
+But when you downloaded Red Hat 9 from redhat.com or from one of the mirror sites, then you will find
+<tt><b>glibc-2.3.2-11.9.i686.rpm</b></tt> on the image. This glibc version does not export <tt>__ctype_b()</tt>. 
+This is also the case with <tt>glibc-devel-2.3.2-27.9.i386.rpm</tt>.
+
+<pre>$ <font color="#0000ff">rpm -ql glibc-2.3.2-11.9 | grep libc.so</font>
+/lib/i686/libc.so.6
+/lib/libc.so.6
+/lib/tls/libc.so.6
+$ <font color="#0000ff">nm -a /lib/i686/libc.so.6 | grep __ctype_b</font>
+00131718 D <b>__ctype_b@GLIBC_2.0</b>
+000223a0 T __ctype_b_loc
+$ <font color="#0000ff">nm -a /lib/libc.so.6 | grep __ctype_b</font>
+00133d58 D <b>__ctype_b@GLIBC_2.0</b>
+000223f0 T __ctype_b_loc
+$</pre>
+
+<br>
+<b>Check the glibc version on your system:</b>
+<br>
+<br>
+First check if the glibc packages on your RH 9 system work with the Oracle installer:
+<pre>$ <font color="#0000ff">rpm -q glibc-2.3.2-5 glibc-common-2.3.2-5 glibc-devel-2.3.2-5</font></pre>
+
+                                                                                                         
+If you got the following error mesages:
+<pre> package glibc-2.3.2-5 is not installed
+ package glibc-common-2.3.2-5 is not installed
+ package glibc-devel-2.3.2-5 is not installed
+</pre>
+then you have glibc packages on your system that don't work with the Oracle installer
+and you need to follow the "Work Around" procedure here.
+<br>
+<i>But if your system has the 2.3.2-5 glibc versions installed, then you are fine and you
+don't need to follow the described "Work Around" procedure!</i>
+<br>
+<br>
+<br>
+
+<b>Work Around Procedure:</b>
+<br>
+<br>
+Since I was not able to find the <tt>glibc-2.3.2-5</tt> RPMs available for download, I'm making
+the RPMs available on my website. These RPMs are copies of the glibc RPMs that came with the RH 9 CDs
+I bought in the store. I do not recommend to use any of the "compat" RPMs from older
+Red Hat distributions since RH 9 contains major changes.
+<br>
+<br>
+Here is the procedure for installing <tt>glibc-2.3.2-5</tt> temporarely on your RH 9 server:
+<br>
+<br>
+Download the 2.3.2-5 glibc RPMs from
+<a href="http://www.puschitz.com/rh9_gcs_download">
+here</a> on my web site.
+<br>
+<br>
+<i>First make sure if these downloaded RPM's are not corrupt and if they were really built and signed by Red Hat.
+You never know if someone fiddled with these RPMs or replaced them.</i>
+To ensure the integrity and origin of these Red Hat's RPMs, run the following commands:
+
+<pre> $ <font color="#0000ff">su - root</font>
+ # <font color="#0000ff">rpm --import /usr/share/rhn/RPM-GPG-KEY</font>  # add Red Hat's PGP public key to the RPM database
+ # <font color="#0000ff">rpm <b>--checksig</b> glibc-2.3.2-5.i686.rpm glibc-common-2.3.2-5.i386.rpm glibc-devel-2.3.2-5.i386.rpm</font>
+ glibc-2.3.2-5.i686.rpm: (sha1) dsa sha1 md5 gpg OK
+ glibc-common-2.3.2-5.i386.rpm: (sha1) dsa sha1 md5 gpg OK
+ glibc-devel-2.3.2-5.i386.rpm: (sha1) dsa sha1 md5 gpg OK
+ #</pre>
+
+Downgrade <tt>glibc, glibc-common, and glibc-devel</tt>:
+
+<pre> # <font color="#0000ff">rpm -Uvh <b>--oldpackage</b> glibc-2.3.2-5.i686.rpm glibc-common-2.3.2-5.i386.rpm glibc-devel-2.3.2-5.i386.rpm</font></pre>
+If you get the following error:
+<pre> error: Failed dependencies:
+         glibc = 2.3.2-11.9 is needed by (installed) glibc-debug-2.3.2-11.9
+         glibc = 2.3.2-11.9 is needed by (installed) glibc-utils-2.3.2-11.9
+         glibc-devel = 2.3.2-11.9 is needed by (installed) glibc-debug-2.3.2-11.9
+         glibc-devel = 2.3.2-11.9 is needed by (installed) nptl-devel-2.3.2-11.9
+</pre>
+then you can temporarily remove these RPMs (glibc-debug, glibc-utils, 
+nptl-devel) from your system until you upgrade the glibc RPMs after your
+ Oracle installation:
+<pre> # <font color="#0000ff">rpm -e glibc-debug glibc-utils nptl-devel</font></pre>
+<br>
+Now try to run <tt><font color="#0000ff">runInstaller</font></tt> again.<br>
+<br>
+After Oracle has been installed, you can upgrade <tt>glibc, glibc-common, and glibc-devel</tt> again. For example:
+<pre> # <font color="#0000ff">rpm -Uvh glibc-2.3.2-11.9.i686.rpm glibc-common-2.3.2-11.9.i386.rpm glibc-devel-2.3.2-11.9.i386.rpm</font></pre>
+<br>
+According to Red Hat, binary compatibility in Red Hat Linux is always 
+guaranteed for
+binaries and shared libraries accross releases, but not for
+.o files nor .a files. However, compatibility is guaranteed
+for .o files and .a files. _within_ a realease.
+Since glibc-2.3.2-5 and glibc-2.3.2-11.9 are from the same
+release, compatibility should be guaranteed for .o files (Oracle's .o 
+files which have been created during the Oracle installation) and .a 
+files.
+<br>
+This means that Oracle should be fine when you upgrade glibc after the Oracle installation.
+<br>
+<br>
+If you have any problems or issues with this solution, or if you have any comments, please let me know. 
+You can find my email address at the bottom of this web site.
+<br>
+<br>
+</blockquote>
+
+
+
+
+<ul>
+<li>
+<pre>$ agentctl start
+<font size="-1"><font color="#ff0000">
+DBSNMP for Linux: Version 9.2.0.4.0 - Production on 07-JAN-2004 19:11:14
+
+Copyright (c) 2003 Oracle Corporation.  All rights reserved.
+
+Starting Oracle Intelligent Agent.../u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1855 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $*
+&gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+/u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1868 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $* &gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+/u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1880 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $* &gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+/u01/app/oracle/product/9.2.0/bin/dbsnmpwd: line 156:  1892 Segmentation fault      nohup $ORACLE_HOME/bin/dbsnmp $* &gt;&gt;$DBSNMP_WDLOGFILE 2&gt;&amp;1
+</font></font></pre>
+</li>
+</ul>
+<blockquote>
+You are probably trying to start the agent on RH AS 3. See
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#PatchingOracleIntelligentAgentOnRHAS3">
+Patching Oracle Intelligent Agent on RH AS 3</a> how to resolve it.
+<br>
+<br>
+</blockquote>
+
+
+
+<ul>
+<li>
+<pre>$ dbca
+<font color="#ff0000">SIGSEGV   11*  segmentation violation
+        stackbase=0x453da000, stackpointer=0x453d9d5c
+Full thread dump:
+    "AWT-EventQueue-0" (TID:0x411d1e20, sys_thread_t:0x453d9e0c,
+state:R) prio=5 *current thread*
+        java.lang.Object.wait(Object.java)
+        java.awt.EventQueue.getNextEvent(EventQueue.java:126)
+...</font></pre>
+
+Or on e.g. RHEL4:
+
+<pre><font color="#ff0000">/u01/app/oracle/product/9.2.0/bin/dbca: line 124: 26649 Segmentation fault 
+$JRE_DIR/bin/jre -DORACLE_HOME=$OH -DJDBC_PROTOCOL=thin -mx64m -classpath $CLASSPATH oracle.sysman.assistants.dbca.Dbca $ARGUMENTS
+</font></pre>
+</li>
+</ul>
+<blockquote>
+If this happens, try the following:<br>
+<pre>$ <font color="#0000ff">su - root
+touch /etc/rac_on</font></pre><font color="#0000ff"></font>
+
+Now try to restart <tt>dbca</tt>.<br>
+<br>
+Another option is to edit <tt>$ORACLE_HOME/bin/dbca</tt> and to put the following lines
+under comment except the line marked in blue:
+<pre> # if [ -f /etc/rac_on ]; then
+ # Run DBCA
+ <font color="#0000ff">$JRE_DIR/bin/jre -native -DORACLE_HOME=$OH ...</font>
+ # else
+ # Run DBCA
+ # $JRE_DIR/bin/jre -DORACLE_HOME=$OH ...
+ # fi
+</pre>
+
+Now try to restart <tt>dbca</tt>.
+
+<br>
+<br>
+</blockquote>
+
+
+
+<ul>
+<li>
+<pre>gcc -o /u01/app/oracle/product/9.2.0/rdbms/lib/oracle -L/u01/app/oracle/product/9.2.0/rdbms/lib/ ...
+...
+<font color="#ff0000">/usr/bin/ld: /u01/app/oracle/product/9.2.0/rdbms/lib/oracle: hidden symbol `__fixunssfdi' in /usr/lib/gcc-lib/i386-redhat-linux/3.2.3/libgcc.a(_fixunssfdi.oS) is referenced by DSO
+
+collect2: ld returned 1 exit status 
+make: *** [/u01/app/oracle/product/9.2.0/rdbms/lib/oracle] Error 1 
+/usr/bin/make -f ins_rdbms.mk ioracle ORACLE_HOME=/u01/app/oracle/product/9.2.0
+</font></pre>
+</li>
+</ul>
+<blockquote>
+I've seen this error on RH AS 3. To fix the linking problem, I executed the following commands:
+<pre># <font color="#0000ff">mv /usr/bin/gcc /usr/bin/gcc323</font>
+# <font color="#0000ff">mv /usr/bin/g++ /usr/bin/g++323</font> 
+# <font color="#0000ff">ln -s /usr/bin/gcc296 /usr/bin/gcc</font> 
+# <font color="#0000ff">ln -s /usr/bin/g++296 /usr/bin/g++</font> 
+</pre>
+
+Now you should be able to relink the <tt>oracle</tt> binary again.<br>
+Once you are done, make sure to revert back the changes you've made above:
+<pre># <font color="#0000ff">mv /usr/bin/gcc323 /usr/bin/gcc</font>
+# <font color="#0000ff">mv /usr/bin/g++323 /usr/bin/g++</font>
+</pre>
+<br>
+</blockquote>
+
+
+
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+./runInstaller: line 58: ./runInstaller: cannot execute binary file.
+</font>
+</tt>
+</li>
+</ul>
+<blockquote>
+You are probably trying to run a 64-bit Oracle version on a 32-bit Linux system. Make sure you downloaded the 
+right Oracle version for your Linux system.
+<br>
+<br>
+To check if <tt>runInstaller</tt> is a 32-bit binary or a 64-bit binary, run the following command:
+
+
+<pre>$ <font color="#0000ff">cd /mnt/cdrom</font>
+$ <font color="#0000ff">file install/linux/runInstaller</font>
+install/linux/runInstaller: ELF <b>32-bit</b> LSB executable, Intel 80386, version 1 (SYSV), for GNU/Linux 2.0.0, dynamically linked (uses shared libs), not stripped
+</pre>
+
+To check if your Linux system is 32-bit system or a 64-bit system, run e.g. the following command:
+<pre>$ <font color="#0000ff">file /sbin/init</font>
+/sbin/init: ELF <b>32-bit</b> LSB executable, Intel 80386, version 1 (SYSV), for GNU/Linux 2.2.5, dynamically linked (uses shared libs), not stripped
+</pre>
+<br>
+</blockquote>
+
+
+
+<ul>
+<li>
+<font color="#ff0000">
+The Oracle installer <tt>runInstaller</tt> hangs at: &nbsp; <tt>Installing Java Runtime Environment... Link pending... Copying README...</tt></font></li>
+<font color="#ff0000"></font>
+</ul>
+
+<blockquote>This problem comes up on RH 9 and on RH AS 3. You probably forgot to set the environment variable
+<tt>LD_ASSUME_KERNEL</tt> to 2.4.1.
+<br>
+<br>
+To rectify this problem, run the following command and restart <tt>runInstaller</tt>:
+<pre>oracle$ <font color="#0000ff">export LD_ASSUME_KERNEL=2.4.1</font></pre>
+For more information on this issue, see
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#RedHat9">
+Red Hat 9</a>.
+<br>
+<br>
+</blockquote>
+
+
+<ul>
+<li>
+<font color="#ff0000">
+Recovery Manager <tt>rman</tt> hangs</font></li>
+<font color="#ff0000"></font>
+</ul>
+
+<blockquote>
+You are probably running the wrong <tt>rman</tt> binary which belongs to the 
+<tt>XFree86-devel</tt> RPM:
+<pre>$ <font color="#0000ff">which rman</font>
+/usr/X11R6/bin/rman</pre>
+<br>
+</blockquote>
+
+
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+Can't find init file for Database "SID".
+</font>
+</tt>
+</li>
+</ul>
+<blockquote>
+I saw this error only with Oracle 9i R2 (<b>9.2.0</b>) when It tried to start the
+database with <tt>dbstart</tt>.<br>
+<br>
+I copied the init file for my SID "test" from <tt>/u01/app/oracle/admin/test/pfile</tt> to
+<tt>$ORACLE_HOME/dbs</tt> to get <tt>dbstart</tt> and <tt>dbshut</tt> working:
+<pre><font color="#0000ff">cp /u01/app/oracle/admin/test/pfile/inittest.ora.642002224936 $ORACLE_HOME/dbs/inittest.ora</font></pre>
+<br>
+</blockquote>
+
+
+
+<ul>
+<li>
+<tt>
+<font color="#ff0000">
+"Error in setting permissions of file/directory /u01/app/oracle/jre/1.1.8/bin/i686/native_threads/.extract_args"</font></tt></li>
+<font color="#ff0000"></font>
+
+</ul>
+<blockquote>
+This happens if you didn't burn your CD correctly.<br>
+Either you burn your CD again to include dot files or you copy the <tt>.extract_args</tt> file
+from your downloaded image to where <tt>runInstaller</tt> complains it is missing.
+<br>
+<br>
+</blockquote>
+                                                                        
+
+<ul>
+<li>
+<pre><font color="#ff0000">ORA-01034: ORACLE not available
+ORA-27101: shared memory realm does not exist
+Linux Error: 2: No such file or directory</font>  or
+<font color="#ff0000">ORA-01034: ORACLE not available</font>
+
+</pre>
+</li>
+</ul>
+<blockquote>
+First check if <tt>ORACLE_SID</tt> is set correctly.
+<br>
+If <tt>ORACLE_SID</tt> is set correctly, then you probably have a trailing slash "/" on the
+<tt>ORACLE_HOME</tt> environment variable. Remove it and try again to connect to sys
+(e.g from <tt>ORACLE_HOME=/u01/app/oracle/product/9.2.0<b><font color="#ff0000">/</font></b></tt> to <tt>ORACLE_HOME=/u01/app/oracle/product/9.2.0</tt>).
+<br>
+<br>
+</blockquote>
+
+
+
+                                                                        
+                                       
+<ul>
+<li>
+<font color="#ff0000">
+<tt>"jre was not found in /tmp/OraInstall/jre/bin/i586/green_threads/jre"</tt></font></li>
+<font color="#ff0000"></font>
+</ul>
+                                                                        
+<blockquote>You are probably running <tt>runInstaller</tt> on a 586 machine, or your AMD CPU gets recognized as
+586 (e.g. AMD K6-III-400). You can check your machine (hardware) type by executing "<tt>uname -m</tt>".
+<i>If you are not running on a 586 or on a AMD machine, try to link jre to java and see if this solves your problem.</i>
+<br>
+<br>
+To rectify the problem with the 586 machine or with the AMD CPU, create a link for <tt>lib</tt> and <tt>bin</tt>
+from <tt>i586</tt> to <tt>i686</tt> and make the <tt>i686</tt> directories read only. For example:<br>
+<pre><font color="#0000ff">ln -s /tmp/OraInstall/jre/bin/i686 /tmp/OraInstall/jre/bin/i586
+ln -s /tmp/OraInstall/jre/lib/i686 /tmp/OraInstall/jre/lib/i586
+chmod u-w /tmp/OraInstall/jre/bin/i686/tmp/OraInstall/jre/lib/i686</font></pre>
+
+Now restart <tt>runInstaller</tt>.
+<br>
+<br>
+</blockquote>
+                                                                        
+
+
+<ul>
+<li>
+<font color="#ff0000">
+<tt>../jre/bin/i386/native_threads/java: error while loading shared libraries: 
+libstdc++-libc6.1-1.so.2: cannot open shared object file: No such file or directory</tt></font></li>
+<font color="#ff0000"></font>
+</ul>
+<blockquote>You probably forgot to install the <tt>compat-libstdc++</tt> RPM which is a package for
+"Standard C++ libraries for Red Hat Linux 6.2 backwards compatibility". To rectify this problem, install
+the <tt>compat-libstdc++</tt> RPM. For example on Red Hat 9:
+<pre><font color="#0000ff">rpm -ivh compat-libstdc++-7.3-2.96.118.i386.rpm</font></pre>
+
+See also
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#CheckingPackages">
+Checking Packages (RPMs)</a> for more information.
+<br>
+<br>
+</blockquote>
+
+
+<ul>
+<li>
+<font color="#ff0000">
+<tt>/u01/app/oracle/jre/1.1.8/bin/../lib/i686/green_threads/libzip.so: 
+symbol errno, version GLIBC_2.0 not defined in file libc.so.6 with link 
+time reference (libzip.so)
+<br>
+Unable to initialize threads: cannot find class java/lang/Thread
+<br>
+Could not create Java VM
+</tt>
+</font>
+</li></ul>
+
+<blockquote>
+I experienced this problem when I was running the Database Configuration Assistant <tt>dbca</tt> on
+Red Hat 9 without setting the <tt>LD_ASSUME_KERNEL</tt> environment variable.
+<br>
+<br>
+To rectify this problem, run the following command on Red Hat 9 and RHEL 3 and restart <tt>dbca</tt>:
+<pre>oracle$ <font color="#0000ff">export LD_ASSUME_KERNEL=2.4.1</font></pre>
+For more information on this issue, see
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#RedHat9">
+Red Hat 9</a>.
+<br>
+<br>
+</blockquote>
+
+
+
+<ul>
+<li>
+<pre>$ lsnrctl start
+OR
+$ lsnrctl status
+<font color="#ff0000">
+LSNRCTL for Linux: Version 9.2.0.4.0 - Production on 14-OCT-2004 14:33:10
+Copyright (c) 1991, 2002, Oracle Corporation. All rights reserved.
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC))) TNS-12541: TNS:no listener
+TNS-12560: TNS:protocol adapter error
+TNS-00511: No listener
+Linux Error: 2: No such file or directory
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=xxxx)(PORT=1521)))
+TNS-12541: TNS:no listener
+TNS-12560: TNS:protocol adapter error
+TNS-00511: No listener
+Linux Error: 111: Connection refused
+</font></pre><font color="#ff0000"></font>
+</li></ul>
+<blockquote>
+One of the possibilities are that the <tt>/var/tmp/.oracle</tt> directory doesn't exist.
+This happened with fresh new Oracle 9.2.0.4.0 CDs on RH AS 3.
+If that's the case, run the following commands:
+<pre><font color="#0000ff">su - root
+mkdir /var/tmp/.oracle
+chown oracle:dba /var/tmp/.oracle</font></pre>
+                                                                        
+                                                                
+Now try to run <tt>lsnrctl start</tt> as <tt>oracle</tt> again.
+<br>
+<br>
+</blockquote>
+
+
+
+
+<ul>
+<li>
+<pre><font color="#ff0000">Exception in thread "main" java.lang.InternalError: Can't connect to X11 window server using 'alpha:0.0' as the value of the DISPLAY variable.
+        at sun.awt.X11GraphicsEnvironment.initDisplay(Native Method)
+        at sun.awt.X11GraphicsEnvironment.<clinit>(X11GraphicsEnvironment.java:59)
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Class.java:120)
+        at java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment(GraphicsEnvironment.java:58)
+        at java.awt.Window.<init>(Window.java:188)
+        at java.awt.Frame.<init>(Frame.java:315)
+        at java.awt.Frame.<init>(Frame.java:262)
+        at oracle.sysman.oii.oiic.OiicInstaller.main(OiicInstaller.java:593)
+</init></init></init></clinit></font></pre><font color="#ff0000"></font>
+</li></ul>
+<blockquote>
+Ensure you followed the instructions at 
+<a href="http://www.puschitz.com/InstallingOracle9i.shtml#StartingrunInstaller">
+Starting runInstaller</a> very closely.
+<br>
+<br>
+NOTE: If you use for example Red Hat Fedora Core 3 as your desktop and you want to install the database on another machine,
+then you need to set the <tt><font color="#0000ff">DisallowTCP</font></tt> entry in
+<tt><font color="#0000ff">/etc/X11/gdm/gdm.conf</font></tt> for the GNOME Display Manager to read:
+<pre><font color="#0000ff">DisallowTCP=false</font></pre>
+
+After that you need to restart your X server. I usually do this with the <tt>init</tt> command:
+<pre><font color="#0000ff">su - root
+init 3
+init 5
+</font></pre>
+<br>
+</blockquote>
+
+
+
+
+
+
+
+<ul>
+<li>
+<font color="#ff0000">
+Other Errors
+</font>
+</li>
+</ul>
+
+<blockquote>
+You might want to check out the
+<a href="http://www.oracle.com/forums/forum.jsp?forum=135">
+Oracle on Linux Discussion Forum</a>.
+<br>
+<br>
+</blockquote>
+
+
+
+<br>
+<br>
+
+
+
+<center><b>Copyright © 2007 PUSCHITZ.COM</b></center>
+<br>
+<center><small>
+The information provided on this website comes without warranty of any kind and is distributed AS IS.
+Every effort has been made to provide the information as accurate as possible, but no warranty or fitness is implied.
+The information may be incomplete, may contain errors or may have become out of date.
+The use of this information described herein is your responsibility, and to use it in your own
+environments do so at your own risk.
+</small></center>
+<small></small>
+<br>
+<br>
+
+
+
+<script src="InstallingOracle9i%20on%20Linux%20%28step%20by%20Step%29_files/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2487276-1";
+urchinTracker();
+</script>
+
+
+</body></html>

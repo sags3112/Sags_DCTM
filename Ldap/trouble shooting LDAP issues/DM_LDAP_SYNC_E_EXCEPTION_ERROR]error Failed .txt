@@ -1,0 +1,29 @@
+
+esg99560
+
+Symptoms
+
+When running the LDAP sync job, the following error is received: 
+
+[DM_LDAP_SYNC_E_EXCEPTION_ERROR]error: "Failed to fetch Enabled LDAP Configs"
+
+Cause
+
+If there is no multiple LDAP Config objects in your environment but still could see an extra_directory_config_id[ ]values in server config object set to a value.
+
+
+
+It may look similar to this: 
+
+extra_directory_config_id[0]: 080004bc80005522
+
+Resolution
+
+Clear the value in the server config object using the following API:
+
+API>remove,c,l,extra_directory_config_id[0]
+...
+OK
+API>reinit,c
+...
+OK

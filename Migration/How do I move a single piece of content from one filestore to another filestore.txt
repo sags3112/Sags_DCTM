@@ -1,0 +1,19 @@
+esg73242 
+
+
+
+You could use migrate_content method to move single content. 
+
+Example: 
+IAPI> execquery,c,,EXECUTE migrate_content FOR <object_id of the dm_content> WITH target_store=<r_object_id of filestore>,log_file= <location of the file> 
+
+IAPI> execquery,c,,EXECUTE migrate_content FOR 0600019480079130 WITH target_store='encrypted_filestore_01',log_file=C:\migrateLog.log' 
+
+You may see the following information in the migrateLog file 
+
+Fri Oct 28 11:07:19 2005 836000 [DM_CONTENT_T_MIGRATE_CONTENT]info: "Begin Content Migration." 
+Fri Oct 28 11:07:19 2005 836000 [DM_CONTENT_T_MIGRATE_CONTENT_ARGUMENTS_SPECIFIED]info: "Arguments specified for MIGRATE_CONTENT: OBJECT_ID = 060134a4800049e3, TARGET_STORE = Encrypted_filestore_02, SOURCE_STORE = <Not Specified>, QUERY = <Not specified>, MAX_MIGRATE_COUNT = 0, BATCH_SIZE = 500, LOG_FILE= C:\migrate_Log.log, REMOVE_ORIGINAL = TRUE" 
+Fri Oct 28 11:07:20 2005 697000 [DM_CONTENT_T_MIGRATE_CONTENT]info: "Updated the a_storage_type attribute of 090134a48000a2c2 to Encrypted_filestore_02" 
+Fri Oct 28 11:07:21 2005 248000 [DM_CONTENT_T_MIGRATE_CONTENT]info: "End Content Migration." 
+
+Verify the content has been moved. Do a dump of the object and check the a_storage_type attribute.

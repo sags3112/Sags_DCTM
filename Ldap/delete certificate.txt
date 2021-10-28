@@ -1,0 +1,74 @@
+
+To remove the certificate, you should be able to go to the dba\secure\ldapdb folder and remove the certificate. Then you need to restart JMS and the docbase.
+However, I have seen it be cached as well. So if after doing the above, they try to install a new one and get an error that it already exists, have them search the appserver for files containing the name of the cert. This should bring back an XML file…if so, remove it. If not, maybe just regular appserver cache
+
+*****
+
+
+
+Golajana, Sagarany idea why we get this in ldap job report
+DM_LDAP_SYNC_E_LDAP_NAMING_EXCEPTION]: Explanationecldapwest.gsm1900.org:636: RemainingName:null: ResolvedName:null: ResolvedObj:null: Exception Class:class javax.naming.CommunicationException: Messageecldapwest.gsm1900.org:636: Cause:com.rsa.ssl.AlertedException: Bad certificate: Exception Detail:javax.naming.CommunicationException: secldapwest.gsm1900.org:636 [Root exception is com.rsa.ssl.AlertedException: Bad certificate]"
+
+
+10:39 PMQiu, Tonyseems that certificate is bad one
+
+
+10:39 PMGolajana, Sagarhmm
+how to delete bad one
+i didn't see meneu
+menu
+
+
+10:40 PMQiu, Tonydelete certificate db $DOCUMENTUM/dba/secure/ldapdb
+then restart JMS server
+
+
+10:40 PMGolajana, Sagarok
+
+
+10:41 PMQiu, Tonythen you can import it again
+
+
+10:41 PMGolajana, Sagarok
+
+
+10:48 PMGolajana, Sagarwhn we import it creates new Ldappb
+folder
+
+
+10:58 PMQiu, Tonyy
+
+
+This conversation is being saved in the Conversation History folder in your Outlook mailbox.
+
+
+11:15 PMGolajana, Sagarfollowing ur SN..
+its not wrking
+
+
+11:15 PMQiu, Tonyok
+
+
+11:15 PMGolajana, Sagarany chance of comming for webex
+I am on webex ith ct
+
+
+11:15 PMQiu, Tonyi have webex at 2
+we can have webex with u at 3
+
+
+11:16 PMGolajana, Sagarok
+
+
+11:17 PMGolajana, Sagarct accepted it..
+i will call u at 3 EST
+thnks in advance
+
+
+11:17 PMQiu, Tonyplease send invitation to block my calendar
+
+
+11:17 PMGolajana, Sagarok
+
+
+This conversation is being saved in the Conversation History folder in your Outlook mailbox.

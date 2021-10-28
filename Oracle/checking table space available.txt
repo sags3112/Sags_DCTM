@@ -1,0 +1,6 @@
+from Tony Qiu to Everyone:
+select privilege from dba_sys_privs where grantee ='repository owner';
+from Tony Qiu to Everyone:
+elect granted_role from dba_role_privs where grantee='repository owner';
+from Tony Qiu to Everyone:
+SELECT tablespace_name FROM dba_tablespaces;

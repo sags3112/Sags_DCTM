@@ -1,0 +1,43 @@
+ SN esg104776
+
+How can I create a default_folder mapped to an attribute such as sAMAccountName?
+
+Symptoms
+LDAP Config object can be configured to pull user information from Microsoft Active Directory.
+However, by default it creates a defauld folder set to /TEMP.  The support notes esg80502 and esg100470 explain that the argument "-create_default_cabinet true" must be added in the dm_LDAPsynchronization job. However, after setting default_folder attribute to sAMAccountName, the LDAP synchronization job will fail with the following error:
+
+2009-04-17 14:14:44 EDT:  ERROR: DmLdapException:: THREAD: http-0.0.0.0-9080-40; MSG: [DM_LDAP_SYNC_E_EXCEPTION_ERROR]error:  "[DFC_OBJECT_BADATTRVALUE] not an absolute folder specification"; ERRORCODE: 100; NEXT: null
+ 
+Cause
+
+For the mapped attribute of ldap config object the following must be set in the LDAP Config obejct:
+
+map_attr          [4]: default_folder                        
+map_val           [4]: /<WhatEverString>/${sAMAccountName}
+map_attr_type     [4]: dm_user
+ 
+Users will have folders in cabinet 'testuser', but the 'testuser' cabinet had to be created.
+map_attr          [4]: default_folder                        
+map_val           [4]: /testuser/${sAMAccountName}
+map_attr_type     [4]: dm_user
+ 
+If the cabinet 'testuser' is not needed, it can be removed:
+map_attr          [4]: default_folder                        
+map_val           [4]: /${sAMAccountName}
+map_attr_type     [4]: dm_user
+ 
+Resolution
+- Login to DA > LDAP Servers > LDAP Config Object > Properties > Mapping > 
+- Under 'Property Mapping' , click 'Add'
+- In Repository Property, select 'User' and 'default_folder'
+- Select 'Expression' radio button
+   Enter /${sAMAccountName} 
+   Click 'Test Expression'
+   Ensure the test is successful
+- Save
+ 
+- Login to DA > Job Management > Jobs > dm_LDAPSynchronization > Properties > Method
+- The argument "-create_default_cabinet" is not needed in CS 6.x 
+ 
+- Save
+- Run synchronization job.

@@ -1,0 +1,44 @@
+In LDAP configuration there are two places where we can specify the port
+SSL port (ssl_port) 
+Non SSL port (port_number – non ssl) 
+
+port_number is mandatory even though if SSL is being used. Now because of some security compliance customer has configured the LDAP not to listen on Non SSL port. Because of this customer is not able to configure the LDAP with Documentum. Do we have any ideas how to get this work? Thanks.
+
+Environment:
+
+
+5.3 Sp2, active directory with SSL, Customer is using SSL, but ssl and non-ssl ports were enabled before, but now they disabled the non-ssl port, but it seems DCTM LDAP configuration needs both the ports unless I am missing something. Thanks.
+
+******************
+We had a bug on this in 5.3 and 6.0.
+
+******************
+Solution:
+
+
+Open port 389 on the directory server 
+save the ldap config object using port 389 
+Use API to update the port from 389 to 636 
+reinitialize (reinit,c) 
+Close port 389 
+
+When you use DA to create ldap config with SSL, you put port number 389 on server tab and save this ldap config object, 
+
+Then you run the following api to reset port number to 636:
+
+ 
+
+ 
+
+   API>retrieve,c,dm_ldap_config
+
+  API>set,c,l,port_number
+
+  DATA>636
+
+  API>save,c,l
+
+  API>reinit,c
+
+ 
+

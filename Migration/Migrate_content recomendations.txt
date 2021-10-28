@@ -1,0 +1,20 @@
+
+Please Find answers below:
+
+   1.Is there any limit of data that could be migrated using this method. How long will this job run for migrating 10 GB of data from one file store to another-- No limit  (Depends on the Network and Resource allocation)
+
+  2.Is there any default and maximum timeout for this method. If so can this be increased. No
+
+   3.The main purpose of the parameter BATCH_SIZE? we are able to find following details about BATCH_SIZE in the file(Content Server DQL  Reference Manual Version 5.3 SP1 page 266 ) -- We Recommed you to set this value to 100 (So that it will be fast)
+
+"BATCH_SIZE controls how many content files are moved in a single transaction within the migration operation.Setting BATCH_SIZE can help protect the operation from overrunning system and database resource limits during the operation."    what does single transaction exactly mean here. Something related to database ? - NO
+
+    4. In the Content Server Administration Guide i am able to find that "Remove the original source" one of the attribute of the MIGRATE_CONTENT method will be true by default but this is not checked by default. I just want to remove the content files from present file storage. should i check it before running the job.- YES
+   
+ 5. Any default size for MAX_MIGRATE_COUNT attribtue. We Recommed you to set this value to 1000
+
+  6. If we are setting "Remove the original source attribute" as true then there should be no worries that each execution of the method attempts to  move content files that have already been migrated in previous execution even after setting MAX_MIGRATE_COUNT=100, since the original source file will be removed from the source in the first execution itself.- YES
+
+ 7. How to enable dm_move_content auditing event and disable after completing this.- Check CS Admin Guide 275 PG for Auditing Content Movement. 
+     Login in to DA nad Navigate to Audit Management -> Select Manage Auditing By Object Type and select dm_sysobject or dmr_content.Now add the dm_move_content event
+s

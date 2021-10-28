@@ -1,0 +1,2 @@
+copy sql pls to oracle \bin folder an re-run the binaries
+

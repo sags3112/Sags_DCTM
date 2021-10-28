@@ -1,0 +1,39 @@
+
+
+esg98437 
+
+How to create a multiple server / single repository for load balancing
+
+Symptoms
+
+Creating a multiple server / single repository for load balancing. There are various configurations documented pertaining to setting up a single server, setting up Distributed environments, and also a Cluster for failover. 
+
+
+Cause
+
+Old Documentation. 
+
+
+Resolution
+
+For a load balanced environment where you have multiple Content Servers and a single repository, the procedure to follow is documented in the Content Server installation guide under "Installing Remote Content-File Servers in Distributed Configurations".
+
+
+
+Although the title is specific to Distributed, this also applies to the multi-server / single repository load balanced environment. This replaces an older procedure in the releases prior to 5.3 whereby the setup required manually creating a second server config object, creating a second install, and then running the configuration and ending at the headstart script.
+
+
+
+This new procedure entails the following:
+
+1. Installing the Content Server on the primary host.
+
+2. Configuring the repository on the primary host
+
+3. Installing Content Server on the second host
+
+4. Running the CFSConfiguration utility on the second host. This utility creates the second server config object, copies over the necessary files such as aek.key, dmpassword.txt, server.ini, etc.
+
+
+
+This process is also used for setting up a Distributed environment. So you can choose to setup a distributed storage location but it is not required for the load balanced portion. Instead, a single filestore can be shared between the two servers. Ensure that the installations of both primary and secondary servers are completed by a domain user account. A user account local to each server (even with the same name) are technically different accounts based on their uid. Using a domain account ensures access to the shared filestore location.

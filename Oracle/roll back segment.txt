@@ -1,0 +1,285 @@
+=============INTERNAL SUPPORT NOTE============ 
+
+When performing a dump/load or some other heavy activities, customers will run into ora-01562 and ora-01682 errors sometimes. See sample error below: 
+
+"Save fail with object with handle <r_object_id> of type dmi_queue_item; table on which save failed was dmi_object_type; error from database system was ora 01562. failed to extend rollback segments. number 3." ora 01628. maximum number extend 121 reach for rollback segment rb2." 
+
+By increasing their rollback segment to unlimited extents, the problems should be fixed. 
+
+Below is an Oracle documentation on how to make Oracle rollback segment with unlimited extents: 
+
+NOTE: Please DO NOTsend this support note to customers. Documentum Support is not suppose to distribute Oracle documentations. Customers should contact Oracle Support to obtain this info. 
+
+================begin===================== 
+
+Subject: TAR#12993837.600 ORA-1628 
+
+Solution Description: 
+===================== 
+
+What you will need to address the issue: 
+======================================== 
+
+* db_block_size 
+* max_extents for the object 
+* name of the tablespace in which the object resides 
+
+How to Obtain the Information: 
+============================= 
+
+db_block_size 
+============= 
+
+From svrmgrl or sqldba issue the following: 
+show parameter db_block_size 
+
+From the init<sid>.ora: 
+
+Look for the parameter db_block_size. If it is not there check 
+for a 
+parameter ifile and check the file that to which it points. 
+Remember, 
+db_block_size is a mandatory parameter (the dba will not start 
+without 
+it) so it must be there. 
+
+max_extents of the object 
+========================= 
+
+Rollback Segment 
+================ 
+
+SELECT max_extents 
+FROM dba_rollback_segs 
+WHERE segment_name = '<rollback segment name>'; 
+
+Temporary Segment 
+================= 
+
+SELECT max_extents 
+FROM dba_tablespaces 
+WHERE tablespace_name = '<tablespace name>'; 
+
+Table Segment 
+============= 
+
+SELECT max_extents 
+FROM dba_tables 
+WHERE table_name = '<table name>' AND owner = '<owner>'; 
+
+Index Segment 
+============= 
+
+SELECT max_extents 
+FROM dba_indexes 
+WHERE index_name = '<index name>' and owner = '<owner>'; 
+
+Solution Description 
+==================== 
+
+Look at the chart below (the chart contains common but not all extent 
+sizes). 
+Compare the max_extents value from the object to the value from the 
+chart for 
+the db_block_size. 
+
+db_block_size Max Extents 
+------------------- ------------------ 
+2K 121 
+4K 249 
+8K 505 
+
+
+Possible Solutions: 
+
+1. If the value of the object's max_extents is less than the 
+max_extents for 
+the db_block_size alter the objects STORAGE clause to the maximum size. 
+
+Rollback Segment 
+================ 
+
+ALTER ROLLBACK SEGMENT rollback_segment STORAGE ( MAXEXTENTS 
+integer); 
+
+
+
+Temporary Segment 
+================= 
+
+ALTER TABLESPACE tablespace DEFAULT STORAGE ( MAXEXTENTS integer); 
+
+
+Table Segment 
+============= 
+
+ALTER TABLE table STORAGE ( MAXEXTENTS integer); 
+
+
+Index Segment 
+============= 
+
+ALTER INDEX index STORAGE ( MAXEXTENTS integer); 
+
+
+2. If the max_extents for the object is greater than or equal to the 
+max_extents for the db_block_size the solution depends on the type of 
+object 
+and the database version. Regardless of the max_extents for the object 
+the 
+maximum number of extents for any object is based on the db_block_size 
+prior 
+to version 7.3. 
+
+
+Version 7.3 and later: 
+========================= 
+
+For version 7.3 and later any object can be altered to UNLIMITED 
+extents. 
+
+Rollback Segment 
+================ 
+
+ALTER ROLLBACK SEGMENT rollback_segment STORAGE ( MAXEXTENTS 
+UNLIMITED); 
+
+
+Temporary Segment 
+================= 
+
+ALTER TABLESPACE tablespace DEFAULT STORAGE ( MAXEXTENTS UNLIMITED); 
+
+
+Table Segment 
+============= 
+
+ALTER TABLE table STORAGE ( MAXEXTENTS UNLIMITED); 
+
+
+Index Segment 
+============= 
+
+ALTER INDEX index STORAGE ( MAXEXTENTS UNLIMITED); 
+
+
+Prior to Version 7.3: 
+======================= 
+
+To resolve max extents error the goal is to store more data in a fixed 
+number 
+of extents. This is done by recreating the object with a larger 
+initial 
+and 
+next extent size. With a larger extent size more data can be stored in 
+the 
+same number of extents. How this is accomplished this depends on the 
+type of 
+object. 
+
+Rollback Segments 
+================= 
+
+To adjust the extent size on a rollback segment the segment must be 
+dropped 
+and recreated. 
+
+1. Alter the rollback segment offline. 
+
+ALTER ROLLBACK SEGMENT rollback_segment OFFLINE; 
+
+2. Wait until the rollback segment status changes to offline. When a 
+rollback segment is altered offline no new transactions are allowed to 
+use the 
+segment but it will not have a status of offline until all active 
+transactions 
+within the segment have been committed or rolled back. 
+
+3. Drop the rollback segment. 
+
+DROP ROLLBACK SEGMENT rollback_segment; 
+
+4. Create the rollback segment with a larger initial and next extent 
+size. 
+
+CREATE ROLLBACK SEGMENT rollback_segment TABLESPACE tablespace 
+STORAGE 
+(INITIAL integer < |K|M> NEXT integer < |K|M>); 
+
+
+Temporary Segments 
+================== 
+
+A temporary segment takes the default storage of the tablespace in 
+which 
+it is 
+created. Alter the initial and next extent size for the tablespace. 
+
+ALTER TABLESPACE tablespace DEFAULT STORAGE (INITIAL integer < 
+|K|M> 
+NEXT 
+integer < |K|M>); 
+
+
+Table Segment 
+============= 
+
+With a table at max extents the table must be recreated. 
+
+1. Export the table. 
+
+EXP username/password FILE=filename TABLE=(table) 
+
+2. If possible rename that table, otherwise drop it. There may not be 
+space 
+available to keep an extra copy of the table, but if there is it is 
+better 
+to be safe. 
+
+DROP TABLE tablename; 
+RENAME old TO new; 
+
+3. Import the table. 
+
+IMP username/password FILE=filename FULL=Y 
+
+4. Alter the storage clause for the table. 
+
+ALTER TABLE table STORAGE (INITIAL integer < |K|M> NEXT integer 
+< |K|M>); 
+
+An export by default has a setting of COMPRESS=Y. The compress option 
+on 
+export effects the import by creating an initial extents large enough 
+to 
+hold 
+the entire table. If sufficient contiguous space is not available for 
+the 
+large extent the import will fail. If this occurs the table will have 
+to be 
+manually recreated with larger initial and next extents and IGNORE=Y 
+used on 
+import. The ignore option ignores that the table exists and imports 
+anyway. 
+Compress=N is not an option because the imported extent size with be 
+the 
+same 
+as it was previously. 
+
+Index Segment 
+============= 
+
+An index will need to be dropped and recreated with a larger initial 
+and 
+and 
+next extent size. If a storage clause did not previously exist in the 
+create 
+statement for the index then one will need to be added. 
+
+DROP INDEX index; 
+
+CREATE INDEX index ON ... STORAGE (INITIAL integer < |K|M> NEXT 
+integer < 
+|K|M>); 
+
+===============end==================

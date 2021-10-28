@@ -1,0 +1,11 @@
+optimizer_mode: FIRST_ROW_10
+  - optimizer_index_cost_adj: 5
+  - optimizer_index_caching: 95
+  - cursor_sharing: FORCE.
+
+*********
+
+'esg102057 recommends ALL_ROWS
+  - esg90914 recommends CHOOSE
+  - esg2309, esg93304 and esg97038 recommends AGAINST using ALL_ROWS
+  - esg4965 (quite old) recommends using COST

@@ -1,0 +1,54 @@
+Symptoms
+Migrating Repository from Unix platform to Windows platform
+Cause
+two different platforms
+Resolution
+Pre Migration:
+Connect to the source docbase and run dm_DWClean, dm_DMFilescan, dm_LogPurge, DMFileReport jobs. 
+Run Consistency check job and verify, there are no errors
+Start the Migration:
+Shut down the current Repository.
+On the target host, create a new Repository (Target Repository) of the same version number as the current Repository.
+Follow the instructions in Installing Documentum Content Server version 5.3.
+· When you create the Repository target, ensure that you use the same Repository name, Repository ID, and Repository owner name and password as the current Repository.
+· Ensure that you use a different database instance from the instance used by the current Repository and that you provide the correct connection information when you install. For example, under Oracle the tnsnames.ora on the host where the Repository target resides should point to the Oracle instance used by the target, not the instance used by the source Repository.
+· Ensure that the Repository target projects to a DocBroker different from the DocBroker used by the current Repository. 
+Apply to the Repository target any patches you applied to the current Repository.
+Connect to the database instance serving the current Repository.
+Using the database vendor’s tools, export all objects owned by the Repository owner and export the schema for the tables comprising the Repository.
+On the current Repository host’s file system, create a backup of the entire $DOCUMENTUM/data/Repository_name directory. This is the directory containing the Repository’s content files.
+Stop the Repository target.
+Connect as the database system administrator to the database instance serving the Repository target. For example, on Oracle, connect as the System account.
+Destroy the existing tablespaces or database using the script in $DOCUMENTUM/dba/config/Repository_name/.
+Remove the physical database file from the file system. The name and location of the physical file are in the create_database script.
+Create new tablespaces or databases for the Repository target using the script in $DOCUMENTUM/dba/config/Repository_name/
+Import the database export taken from the current Repository into the newly-create tablespaces or database.
+Verify that the database tables have the correct value for the new system host name by checking the following values: 
+r_host_name in dm_server_config_s
+host_name
+		dm_mount_point_s
+		target_server in dm_job_s
+		projection_targets in dm_server_config_r
+Connect to the database serving the Repository target as the Repository owner.
+If any of the values in Step 13 are incorrect, use SQL to correct the values.
+Set the server to rebuild the Documentum views with this SQL statement: 
+update dm_type_s set views_valid=0
+Copying the content
+Copying the content from current to target repository is critical
+If Centera is the storage and you wish not migrating data from One Centera to another then move on. 
+If Centera is the storage and you wish to migrate the data from One Centera to another then you need to modify the dm_ca_store object and specify the correct IP address in the a_storage_params attribute. 
+If your data reside on filesystem then you need to make sure that you use ftp or any other utilities to convert the content from UNIX to Windows and put them in a windows file system path.
+Navigate to the DOCUMENTUM/dba/config/Repository_name directory and open the server.ini file in a text editor.
+Ensure that the preserve_existing_types key in the SERVER_STARTUP section is set to TRUE:
+preserve_existing_types=T
+Ensure the database connection is pointing to the correct new database instance
+Save the server.ini file.
+Copy both dbpassword.txt and aek.key from current repository to the target repository.
+Start the server for the Repository target.
+Since the content files of the target reside on a Windows and the content on the current Repository on UNIX, use IDQL to update the file_system_path attribute of the dm_location and dm_mount_point objects to the new location:
+update dm_location objects set file_sysobject_path =’newpath’ where file_system_path=’old path’ 
+update dm_mount_point objects set file_system_path=’newpath’ where file_system_path=’old path’
+Deactivate all jobs by changing the is_inactive attribute on all job objects to TRUE.
+Verify the user_os_name, user_source, user_address attributes of the dm_user type 
+Run the StateOfDocbase reports on current and target docbase. Compare the result and justify any differences.
+Run Consistency Checker job.

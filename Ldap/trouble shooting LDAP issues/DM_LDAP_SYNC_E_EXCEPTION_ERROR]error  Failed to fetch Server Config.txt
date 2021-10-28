@@ -1,0 +1,38 @@
+Symptoms
+
+The following error message appears in the LDAP synchronization report:
+
+[DM_LDAP_SYNC_E_EXCEPTION_ERROR]error:  "Failed to fetch Server Config"; ERRORCODE: 100; NEXT: null
+at com.documentum.ldap.internal.sync.RepositoryHelper.fetchServerConfig
+
+
+
+Cause
+
+The error appears as the server configuration failed to fetch the server config object.
+
+i.e., the ldap_config_id is set to NULL in server config object.
+
+
+
+Resolution
+
+1. Take the dump of server config object:
+
+API>retrieve,c,dm_server_config
+
+API> dump,c,l
+
+2.Check the value ldap_config_id value. 
+
+If it is set to 000000000000000 then...
+
+3. Update the ldap_config_id value to the r_object_id of the LDAP config object:
+
+API> set,c,03...,ldap_config_id
+
+api>save,c,l
+
+api>reinit,c
+
+
