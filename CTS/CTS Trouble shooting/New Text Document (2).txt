@@ -1,0 +1,34 @@
+om.documentum.cts.exceptions.internal.CTSServiceManagerException
+Cause Exception was: An error occurred in the registerServices() method
+java.lang.NullPointerException
+	at com.documentum.cts.services.CTSServiceManager.registerServices(CTSServiceManager.java:251)
+	at com.documentum.cts.services.CTSServiceManager.bootstrapServiceFramework(CTSServiceManager.java:156)
+	at com.documentum.cts.services.CTSServiceManager.getInstance(CTSServiceManager.java:113)
+	at com.documentum.cts.services.ctsserver.CTSServerStartup.main(CTSServerStartup.java:122)
+15:14:31,310  INFO [      main] CTSConfigHandlerImpl -       Encountered the following errors in E:\PROGRA~1\DOCUME~1\CTS\config\CTSServerService.xml
+at line number, 42: The content of element type "CTSServerConfig" must match "(HostName,AgentURL,Product+,MaxTaskThreadJobTime,MonitorThreadSleepTime,ForceJvmExit,BocsConfig?)".
+at line number, 38: Element type "KeepTempFiles" must be declared.
+
+
+15:14:31,388  INFO [      main] CTSConfigHandlerImpl -       Warning: Couldn't Find CTSConfigHeader Element for: E:\PROGRA~1\DOCUME~1\CTS\config\TGService.xml, therefore it must not be a service configuration file and will be ignored by the service manager.
+15:14:31,419 ERROR [      main] CTSServerStartup -       Content Transformation Services startup failed
+com.documentum.cts.exceptions.internal.CTSServiceManagerException
+Cause Exception was: An error occurred in the registerServices() method
+java.lang.NullPointerException
+	at com.documentum.cts.services.CTSServiceManager.registerServices(CTSServiceManager.java:251)
+	at com.documentum.cts.services.CTSServiceManager.bootstrapServiceFramework(CTSServiceManager.java:156)
+	at com.documentum.cts.services.CTSServiceManager.getInstance(CTSServiceManager.java:113)
+	at com.documentum.cts.services.ctsserver.CTSServerStartup.main(CTSServerStartup.java:122)
+15:14:40,091  INFO [      main] CTSConfigHandlerImpl -       Encountered the following errors in E:\PROGRA~1\DOCUME~1\CTS\config\CTSServerService.xml
+at line number, 42: The content of element type "CTSServerConfig" must match "(HostName,AgentURL,Product+,MaxTaskThreadJobTime,MonitorThreadSleepTime,ForceJvmExit,BocsConfig?)".
+t line number
+
+
+Resolution:
+
+
+
+
+Checked the CTSServerService.xml and removed the trailing spaces from the Attributes
+2) Added the KeepTempFiles to the CTSServerConfig Elelment in the  sam file
+3) thn CTS came up aproperly

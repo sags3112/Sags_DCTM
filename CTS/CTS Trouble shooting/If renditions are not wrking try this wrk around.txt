@@ -1,0 +1,65 @@
+file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile document_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.exceptions.internal.CTSServiceException: Media Plugins failed in Transcoding the profile document_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile document_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile document_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile document_to_pdf_rptsfailed to transform the file
+	at com.documentum.cts.impl.services.ctsplugin.CTSPluginHandlerImpl.executeAtomicProfile(CTSPluginHandlerImpl.java:1695)
+	at com.documentum.cts.impl.services.ctsplugin.CTSPluginHandlerImpl.executeProfile(CTSPluginHandlerImpl.java:414)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+
+
+			oR 
+
+file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile convert_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.exceptions.internal.CTSServiceException: Media Plugins failed in Transcoding the profile convert_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile convert_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile convert_to_pdf_rptsfailed to transform the file
+Cause Exception was: 
+com.documentum.cts.plugin.common.CTSPluginException: Media Plugins failed in Transcoding the profile convert_to_pdf_rptsfailed to transform the file
+	at com.documentum.cts.impl.services.ctsplugin.CTSPluginHandlerImpl.executeAtomicProfile(CTSPluginHandlerImpl.java:1695)
+
+
+
+
+IF YOU ENCOUNTER THIS TYPE OF ERROR.. IN CTS.LOG
+
+RESOLUTION:
+
+Browse to:
+C:\Inetpub\wwwroot\ExponentWSA\ExponentWSASettings.xml
+
+Open it with notepad and change:
+
+LogFolder = C:\Adlib Exponent WSA\Log
+ErrorLogType=”EVENTFILE”
+
+To:
+
+LogFolder=”C:\temp”
+ErrorLogType=”EVENTLOG”
+
+Make sure Full permissions are given for ASP.Net user on C:\temp. To do that ie..
+
+Browse to C:\inetpub\wwwroot
+
+Right click on “wwwroot” > Sharing and Security > Add user “ASPNET” and provide full permission on the folder. 
+
+Click on “advanced” tab and replicate the permission to the child object. 
+
+Restart IIS:
+
+•	Open command prompt
+•	Type in “iisreset” (without the “) and enter

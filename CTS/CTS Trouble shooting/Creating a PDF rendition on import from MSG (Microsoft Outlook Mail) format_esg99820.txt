@@ -1,0 +1,37 @@
+esg99820
+
+Creating a PDF rendition on import from MSG (Microsoft Outlook Mail) format
+
+
+Symptoms
+
+If you follow only the "Creating PDF renditions on import" section in the ADTS 6 Admin Guide (page 30) to configure MSG formats for automatic rendition on import, it will probably not work and the following error message can be seen in the CTS log:
+
+"None of the sequence tasks were invoked as no valid profiles or matching formats were found."
+
+
+
+Cause
+
+Register.xml calls document_to_pdf.xml profile. In this profile, the format "msg" is not added out of the box.
+
+
+
+Resolution
+
+You should add following line in the 'Formats' section in the document_to_pdf.xml file:
+
+<Format source="msg" target="pdf"/> 
+
+Steps:
+- Go to System\Media Server\System Profiles.
+- Choose "Show all objects and versions" from the top right corner.
+- Check out document_to_pdf.xml.
+- Open the file in an editor.
+- Add <Format source="msg" target="pdf" /> to the 'Formats' section where the other formats are listed.
+- Save and close the file.
+- Check in the file into the docbase.
+- Restart Content Server and CTS server if needed.
+- Import an msg file and the rendition should be created.
+
+

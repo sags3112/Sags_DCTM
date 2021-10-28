@@ -1,0 +1,49 @@
+Customer had configured to ADTS servers for 1 docbase of heavy load
+
+adts 6.0 sp1 on windows 2003 server
+
+-all of sudden 1 instance stopped wrking
+
+
+Webex
+
+- chked the queue,it not generating from the not wrking instance
+- If we configure 2 cts instances for  1 docbase we get only 1 queue item
+- restarted all adlib and cts services along print spooler ..no lck
+
+
+In the cts logs we see the below error
+
+
+01:00:50,380 ERROR [ Thread-11] CTSProfileManagerImpl -       
+com.documentum.cts.exceptions.internal.CTSProfileServiceException: Invalid section format in registry file. Symbol ] is absent. String is documentum\Com
+Cause Exception was: Exception during updating profile cache mergeCollection_adts
+DfException:: THREAD: Thread-11; MSG: Invalid section format in registry file. Symbol ] is absent. String is documentum\Com; ERRORCODE: ff; NEXT: null
+	at com.documentum.services.dam.impl.transform.MediaProfile.initParameters(MediaProfile.java:417)
+	at com.documentum.services.dam.impl.transform.MediaProfile.getProfileNameAttr(MediaProfile.java:149)
+	at com.documentum.services.cts.impl.profile.CTSProfile___PROXY.getProfileNameAttr(CTSProfile___PROXY.java)
+	at com.documentum.cts.impl.services.ctsprofile.CTSProfileManagerImpl.createProfile(CTSProfileManagerImpl.java:1208)
+	at com.documentum.cts.impl.services.ctsprofile.CTSProfileManagerImpl.addInCache(CTSProfileManagerImpl.java:1060)
+	at com.documentum.cts.impl.services.ctsprofile.CTSProfileManagerImpl.updateCache(CTSProfileManagerImpl.java:2033)
+	at com.documentum.cts.impl.services.ctsprofile.CTSProfileManagerImpl.initialize(CTSProfileManagerImpl.java:323)
+	at com.documentum.cts.impl.services.ctsprofile.CTSProfileManagerImpl.<init>(CTSProfileManagerImpl.java:228)
+	at com.documentum.cts.impl.services.ctsprofile.CTSProfileHandlerImpl.setProfileManagerForDocbase(CTSProfileHandlerImpl.java:550)
+	at com.documentum.cts.impl.services.ctsserver.CTSServerHandlerImpl.initializeQueueProcessors(CTSServerHandlerImpl.java:1325)
+	at com.documentum.cts.impl.services.ctsserver.CTSServerHandlerImpl.run(CTSServerHandlerImpl.java:607)
+	at java.lang.Thread.run(Thread.java:595)
+
+
+
+
+
+Chkcked dfc.properties of 2 cts instances
+
+
+- in wrking cts instance we see the attribute dfc.registry mode=file and file location
+
+jobs ..renderin objects
+
+dfc.registry mode=file or dfc.registry mode=windows
+
+
+- in not wrking instance nothing is there..so we added the above string ..it started processing  

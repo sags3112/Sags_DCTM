@@ -1,0 +1,31 @@
+DTS Issue in 5.3 sp1 but fixed in 5.3 sp2.. not hot fix for this.. we need to install the DTS 5.3 sp2.
+
+
+Issue :
+
+ have a number of users who get errors on trying to create PDF renditions of office documents.
+I can log on (as docbase owner) and create the renditions.  But the user is the Owner of the Document, so I don't know why they can't create the rendition.The log file states that the object does not exist, but it does exist, and is owned by the user who cannot create the rendition (the user has DELETE privs).
+
+Error in log
+
+
+18:09,305 ERROR [ Thread-56] CTSThreadPoolManagerImpl -       Exception in CTSThreadPoolManagerImpl, notification : 
+DfIdNotFoundException:: THREAD: Thread-56; MSG: [DM_API_E_EXIST]error:  "Document/object specified by 090f424380241303 does not exist."
+
+; ERRORCODE: ff; NEXT: null
+	at com.documentum.fc.client.DfSession.getObjectWithCaching(DfSession.java:1597)
+	at com.documentum.fc.client.DfSession.getObjectWithType(DfSession.java:1621)
+	at com.documentum.fc.client.DfSession.getObject(DfSession.java:1418)
+	at com.documentum.cts.impl.services.thread.CTSThreadPoolManagerImpl$TaskThread.run(CTSThreadPoolManagerImpl.java:211)
+	at java.lang.Thread.run(Thread.java:534)
+13:18:09,305 ERROR [ Thread-56] CTSLegacyQueueProcessor -       
+DfIdNotFoundException:: THREAD: Thread-56; MSG: [DM_API_E_EXIST]error:  "Document/object specified by 090f424380241303 does not exist."
+
+; ERRORCODE: ff; NEXT: null
+	at com.documentum.fc.client.DfSession.getObjectWithCaching(DfSession.java:1597)
+	at com.documentum.fc.client.DfSession.getObjectWithType(DfSession.java:1621)
+	at com.documentum.fc.client.DfSession.getObject(DfSession.java:1418)
+	at com.documentum.cts.impl.services.thread.CTSThreadPoolManagerImpl$TaskThread.run(CTSThreadPoolManagerImpl.java:211)
+	at java.lang.Thread.run(Thread.java:534)
+13:18:09,368 ERROR [ Thread-56] CTSLegacyQueueProcessor -       
+DfIdNotFoun

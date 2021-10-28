@@ -1,0 +1,64 @@
+esg104540 
+
+How to configure load balancing/failover capability with CTS products
+
+Advanced Document Transformation Services 6.5 SP1, 6.5, 6.0 SP1, 6.0, 5.3 SP6,Audio/Video Transformation Services 6.5 SP1, 6.5, 6.0 SP1, 6.0, 5.3 SP6,Document Transformation Services 6.5 SP1, 6.5, 6.0 SP1, 6.0, 5.3 SP6,Media Transformation Services 6.5 SP1, 6.5, 6.0 SP1, 6.0, 5.3 SP6,Medical Imaging Transformation Services 6.0,Regulatory Publishing Transformation Services 5.3 SP6,XML Transformation Services 6.5 SP1, 6.5, 6.0, 5.3 SP5
+
+
+
+
+Goal
+
+How to configure load balancing/failover capability with CTS products.
+
+
+
+Cause
+
+CTS [DTS/ADTS/MTS/AVTS/XTS] products do not have an explicit failover capability. However, one can have more than one CTS [DTS/ADTS/MTS/AVTS/XTS] server configured against a repository so that you do not have a single point of failure.
+
+
+
+Resolution
+
+Load balancing can optimize performance by spreading transformation requests between multiple servers. 
+
+Load balancing can be achieved by adjusting settings in the CTSserverservice.xml file, in the cts\config folder. 
+
+By default, CTS products are equipped with a standard load balancing strategy.
+
+ 
+
+The values to modify in the CTSServerService.xml are:
+
+<CTSServer AttributeName="maxQueueItemsToSignOff" AttributeValue="10"/>
+
+<CTSServer AttributeValue="10" AttributeName="thresholdForQueueItemsToSignOff"/>
+
+ 
+
+The functionality of these are outlined as follows:
+
+thresholdForQueueItemsToSignOff:  The is the value of the remaining signed off items that must be reached before the CTS instance signs off more items for processing.
+
+ 
+
+maxQueueItemsToSignOff:  The number of queue items that the CTS instance will sign off for processing on the CTS server.
+
+ 
+
+For example, if the following values are set:
+
+<CTSServer AttributeName="maxQueueItemsToSignOff" AttributeValue="3"/>
+
+<CTSServer AttributeValue="2" AttributeName="thresholdForQueueItemsToSignOff"/>
+
+ 
+
+If there is only one CTS instance and more than 10 items are sent for transformations, then the CTS instance will sign off three items to process.  Once it has processed one file and has two items from the queue still signed off, it will then sign off another three files from the queue.  Once it transforms these three files and has only two left that are signed off it will sign off another three files.  This cycle will continue until the transformation requests for all queue items have been completed.  
+
+Note: You must change these values for both the “dm_mediaserver” and “dm_autorender_win31” queue for each repository.
+
+ 
+
+When only one CTS instance is configured, then modifying these values has no benefit.  But once you add more CTS instances, decreasing the value of these attributes will ensure that transformation requests are distributed more evenly among the instances.

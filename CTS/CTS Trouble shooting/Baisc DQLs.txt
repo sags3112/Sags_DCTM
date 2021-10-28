@@ -1,0 +1,28 @@
+check how many you have in queue:
+
+select count(*) from dmi_queue_item where name in ('dm_autorender_win31','dm_mediaserver')
+
+ 
+
+If you have hundreds of thousands, let me know as we may want to do it through the database. If under 50,000 you should be ok to run by DQL
+
+ 
+
+then to delete:
+
+delete dmi_queue_item objects where  name = 'dm_mediaserver'
+
+delete dmi_queue_item objects where  name = 'dm_autorender_win31'
+
+ 
+
+select * from dm_queue where name= 'dm_autorender_win31' and name= 'dm_mediaserver'
+
+
+select * from dm_queue_item where name= 'dm_mediaserver'
+
+
+commenting out Email notifications
+
+
+ctservice.xml

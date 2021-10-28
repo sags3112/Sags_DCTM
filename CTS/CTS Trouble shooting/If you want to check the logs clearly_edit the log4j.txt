@@ -1,0 +1,38 @@
+STEP 1: Stop the CTS service.
+STEP 2: Rename the CTS "logs" folder and create a new logs folder.
+ 
+By default the files are located under “[CTS home]\logs” folder.
+
+STEP 3: Switch on debugging for CTS and all it’s media plug-ins, 
+By default CTS is set to INFO Level in order to improve the performance.
+
+Steps to change the log level:
+
+1. Go to log4j.properties file under following folder DFC HOME config:
+[DFC HOME]\config
+usually “c:\documentum\config”
+
+2. To get debug information for CTS, change the log level of " log4j.category.com.documentum.cts.impl " and “log4j.category.com.documentum.cts.services” appender to DEBUG
+
+Ex:
+
+FROM:
+log4j.category.com.documentum.cts.impl=INFO, CTSServicesAppender
+log4j.category.com.documentum.cts.services=INFO, CTSServicesAppender
+
+TO:
+log4j.category.com.documentum.cts.impl= DEBUG, CTSServicesAppender
+log4j.category.com.documentum.cts.services= DEBUG, CTSServicesAppender
+
+3. And for each Media Plug-in there is a separate entry.
+For example in order to change Altercast Appender change "log4j.category.com.documentum.cts.plugin.altercast"
+Ex:
+log4j.category.com.documentum.cts.plugin.altercast=INFO, AltercastAppender
+
+STEP 4: Make the transformation or the import request that is failing (while CTS is stopped).
+STEP 5: Run the following DQL to get the queue items and attaché the result to the case.
+DQL> select * from dm_queue where name = 'dm_mediaserver' or name = 'dm_autorender_win31';
+STEP 6: Start CTS services.
+STEP 7: Wait until CTS is initialized and start process the file.
+STEP 8: Zip and attach all the log file files in the logs folder to the case.
+STEP 9: Check the application event viewer for any error messages and attach.

@@ -1,0 +1,50 @@
+To: Somaratna, Chinthana; Suryavanshi, Jay
+Subject: FW: DTS Password
+
+
+ 
+
+I am including two files
+
+CTSServerScript.zip
+
+CTSServerScript-replace.zip
+
+ 
+
+Extract the contents of CTSServerScript.zip to Program Files\Documentum\CTS\docbases\<docbasename>
+
+ 
+
+Then overwrite the extracted CTSServerScript.jar file with the one in the second zip named CTSServerScript-replace.zip
+
+Then run the bat per the support note – check if paths need to be changed – this was written for when installed on C drive
+
+ 
+
+ 
+
+Store the script, setDTSPass.bat in the folder: C:\Program Files\Documentum\CTS\docbases\mydocbase\CTSServerScript\bin
+
+ 
+
+The CTSServerScript\bin folder does not exist, so it must be created.
+
+ 
+
+====setDTSPass.bat:====
+
+@echo off
+
+"C:\PROGRA~1\DOCUME~1\java\1.5.0_12\bin\java" -classpath "C:\PROGRA~1\DOCUME~1\dctm.jar;C:\PROGRA~1\DOCUME~1\CTS\server_install\docbasename\CTSServerScript\lib\CTSServerScript.jar;C:\DOCUME~2\config" com.documentum.ctsscript.password.CTSPasswordUtil %*
+
+To change the DTS Docbase user password:
+
+======================
+
+Log on to the MTS or XTS server and open a command window. 
+Navigate to: C:\Program Files\Documentum\CTS\docbases\mydocbase\CTSServerScript\bin 
+Run: setDTSPass.bat mydocbase <new password> 
+Note: The procedure above assumes that DTS is installed in the default location, C:\Program Files\Documentum\CTS.  If DTS is not installed in this location, then the appropriate substitutions must be made in the procedure above.
+
+ 

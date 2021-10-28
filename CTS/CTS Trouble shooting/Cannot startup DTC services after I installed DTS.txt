@@ -1,0 +1,27 @@
+
+Issue :
+
+esg84000 
+
+Cannot startup DTC services after I installed DTS 
+
+Resolution:
+
+Services to be checked for the issue.
+
+*******Getting error  "error 1053 Service didn't start in timely fashion...."  when starting the AdLib Express Server service.
+
+
+1)One reason could be that the Print Spooler service is not running 
+2) Go to the services console and make sure you have Print Spooler service running
+
+It is a requirement for AdLib Express Server to have Print Spooler in order to control print queues.
+
+
+Def: What the Print Spooler does:
+
+"It Manages all local and network print queues and controls all printing jobs. If this service is stopped, printing on the local machine will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start."
+
+*********
+
+esg82779 

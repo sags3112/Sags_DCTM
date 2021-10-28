@@ -1,0 +1,3 @@
+C:\Program Files\DOcumentum\CTS\AdlibSetup
+file called Adlibinstall.cfg
+in this file there will be a activation id

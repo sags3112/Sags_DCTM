@@ -1,0 +1,19 @@
+
+
+PROBLEM DESCRIPTION:
+------------------------------------
+whne we browse the below URL:
+
+ http://localhost/exponentwsa/exponentwsa.asmx site I get "The page cannot be found".
+
+
+
+Resolution FROM MICROSOFT ( iis ISSUE)
+
+http://support.microsoft.com/kb/315122
+
+*****************
+
+esg110060 (EMC)
+
+HTTP Error- 404 File or Directory not found and HTTP Error 404 - File Not Found while browsing URL http://localhost/exponentwsa/exponentwsa.asmx

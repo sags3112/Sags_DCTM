@@ -1,0 +1,54 @@
+
+How to configure creation of html renditions on import
+
+
+
+Symptoms
+esg91926 
+
+When importing documents, html renditions are not being created automatically.
+
+
+Cause:
+
+The register.xml in System\media server\system profiles is not configured to have documents render to html on import.
+
+
+
+Resolution
+
+The following resolution assumes that the rich media enabled attribute on format object is set to true for the format wanted is rendered into html on import. If this has not been done, please read the administration guide.
+
+
+
+In the register.xml add the following lines under profile sequence
+
+- Stop CTS
+
+
+
+-Check-out register.xml (under System\media server\system profiles)
+
+
+
+- Add  the following changes.
+
+<InnerProfile path="/System/Media Server/System Profiles/document_to_html_dts" waitOnCompletion="false" useTargetFormat="true">
+
+<InnerTokenMapping LocalProfileToken="html" InnerProfileToken="target_format" Literal="true"/>
+
+<InnerTokenMapping LocalProfileToken="true" InnerProfileToken="overwrite_rendition" Literal="true"/>
+
+</InnerProfile>
+
+
+
+-Check-in register.xml
+
+
+
+- Restart CTS
+
+
+
+ 

@@ -1,0 +1,178 @@
+
+esg90604 
+Title:   How to hide the Thumbnails checkbox that appears in Webtop for a rich-media enabled repository 
+
+Symptoms
+
+Hiding the (show) Thumbnails checkbox that appears in Webtop since thumbnail server isn't installed.
+
+
+
+Cause
+
+When installing DTS, the repository is set as rich-media enabled and therefore a Thumbnail checkbox appears in Webtop.
+
+
+Resolution
+
+To hide or remove the Thumbnail checkbox in:
+
+    <root>/webcomponent/config/navigation/doclist/doclist_component.xml
+
+change:
+
+    <dmf:checkbox name='<%=DocList.CONTROL_THUMBNAILS%>' onclick='onClickThumbnails' visible='false' nlsid='MSG_THUMBNAILS' tooltipnlsid='MSG_THUMBNAILS'/>
+
+ 
+
+
+   Note: <root> is the webtop app folder eg: C:\Tomcat\webapps\webtop\
+
+ 
+
+
+It is recommended that the original xml and jsp files be altered or changed. However, these changes in the <root>/custom folder must be made to remove the Thumbnail checkbox.  In addition to the change mentioned above, perform the following actions:
+
+ 
+
+ 
+
+Copy:
+   <root>/webtop/config/objectlist_component.xml 
+
+To:
+
+   <root>/custom/config/objectlist_component.xml
+
+
+
+Copy:
+
+<root>/webtop/classic/objectlist/objectlist.jsp
+
+To:
+
+   <root>/custom/classic/objectlist/objectlist.jsp
+
+
+
+Copy:
+
+   <root>/webtop/config/homecabinet_classic_component.xml
+
+To:
+
+ <root>/custom/config/homecabinet_classic_component.xml
+
+ 
+
+Copy:
+
+   <root>/webtop/classic/homecabinet/homecabinet_classic.jsp
+
+To:
+
+   <root>/custom/classic/homecabinet/homecabinet_classic.jsp
+
+ 
+
+Copy:
+
+   <root>/webcomponent/navigation/doclist/doclist_body.jsp
+
+To:
+
+   <root>/custom/navigation/doclist/doclist_body.jsp
+
+ 
+
+
+
+Edit:
+
+
+   <root>/custom/config/objectlist_component.xml
+Change this xml config file to point to our custom objectlist.jsp
+
+
+
+Remove everything between <scope> and </scope> then add
+
+<component id="objectlist" extends="objectlist:/webtop/config/objectlist_component.xml">
+
+ <pages>
+
+             <start>/custom/classic/objectlist/objectlist.jsp</start>
+
+<thumbnail>/webtop/classic/objectlist/objectlist_thumbnail.jsp</thumbnail>
+
+         </pages>
+
+</component>
+
+ 
+
+Edit:
+
+   <root>/custom/classic/objectlist/objectlist.jsp
+Change this section to point to our custom doclist_body.jsp
+
+      <dmf:form>
+
+         <%@ include file='/custom/navigation/doclist/doclist_body.jsp' %>
+
+      </dmf:form>
+
+  
+
+Edit:
+
+   <root>/custom/navigation/doclist/doclist_body.jsp
+
+Change this section to make the checkbox not visible
+
+<td nowrap align=left><dmf:checkbox name='<%=DocList.CONTROL_THUMBNAILS%>' onclick='onClickThumbnails' visible='false' nlsid='MSG_THUMBNAILS' tooltipnlsid='MSG_THUMBNAILS'/></td>
+
+ 
+
+The home cabinet uses a different page to display the main window on the right, so edit these as well. 
+
+ 
+
+Edit:
+
+  <root>/custom/config/homecabinet_classic_component.xml
+Change this xml config file to point to our custom homecabinet_classic.jsp
+
+Remove everything between <scope> and </scope> then add
+
+<component id="homecabinet_classic" extends="homecabinet_classic:webtop/config/homecabinet_classic_component.xml">
+
+ <pages>
+
+             <start>/custom/classic/homecabinet/homecabinet_classic.jsp</start>
+
+<thumbnail>/webtop/classic/objectlist/objectlist_thumbnail.jsp</thumbnail>
+
+         </pages>
+
+</component>
+
+ 
+
+Edit:
+
+   <root>/custom/classic/homecabinet/homecabinet_classic.jsp
+Change this section to point to our custom doclist_body.jsp
+
+      <dmf:form>
+
+         <%@ include file='/custom/navigation/doclist/doclist_body.jsp' %>
+
+      </dmf:form>
+
+ 
+
+Restart the application server for these changes to take effect.
+Log in to Webtop and check for the presence of the Thumbnail check box.
+To undo these changes, remove these five files from the custom folder and restart the application server.

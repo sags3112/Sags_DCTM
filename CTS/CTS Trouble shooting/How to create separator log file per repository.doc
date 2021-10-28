@@ -1,0 +1,39 @@
+esg95867
+
+Symptoms
+
+How to create separator log file per repository"
+
+
+
+Resolution
+
+If you have multiple repositories configured for a CTS instance, you can create separator log file per repository.
+
+ 
+
+To do this
+
+ 
+
+STEP1: Open log4j.properties under [Documentum]\config
+
+STEP2: Look for “separatelogging” entry.
+
+STEP3: Switching on separate logging by setting "separatelogging" to true.
+
+(CTS will create a separate log file per repository.)
+
+ 
+
+EX:
+
+com.documentum.separatelogging.enabled=true.
+
+ 
+
+STEP4: Stop the CTS service.
+
+STEP5: Restart the CTS service.
+
+STEP6: The CTS log file for each repository will be created (out of the box) under “[CTS home]\docbases\<docbasename>\config\logs” folder per repository.

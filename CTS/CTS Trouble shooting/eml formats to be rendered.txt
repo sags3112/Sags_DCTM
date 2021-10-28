@@ -1,0 +1,14 @@
+few customers requets for eml formats to be rendered:
+
+
+add the below lines in legacy to pdf.xml
+
+and add the line as 
+
+source : eml and pdf
+
+
+<InnerProfile path="/System/Media Server/System Profiles/transformEmlToPDF" waitOnCompletion="false" useTargetFormat="true">
+			<InnerTokenMapping LocalProfileToken="pdf" InnerProfileToken="target_format" Literal="true"/>
+			<InnerTokenMapping LocalProfileToken="false" InnerProfileToken="overwrite_rendition" Literal="true"/>
+		</InnerProfile>

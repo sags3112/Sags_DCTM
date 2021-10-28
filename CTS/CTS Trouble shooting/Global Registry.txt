@@ -1,0 +1,26 @@
+ Issue tracker# 719)
+
+ 
+
+• 5.3x Content Server + 5.3x Global Registry + 5.3x Client
+
+ 
+
+• 5.3x Content Server + 6x Global Registry + 6x Client
+
+ 
+
+• 6x Content Server + 5.3x Global Registry + 5.3x Client
+
+ 
+
+• 6x Content Server + 6x Global Registry + 6x Client
+
+ 
+
+Client=CTS, WP, webtop, DAM any thing that connects to the server.
+
+ 
+
+Thank you,
+

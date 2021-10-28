@@ -1,0 +1,4 @@
+
+Manually creating cts_instance_info type
+
+CREATE TYPE "cts_instance_info" ("product" string(64) REPEATING , "product_version" string(48) REPEATING , "cts_version" string(48) (NOT NULL),"agent_url" string(255) (NOT NULL),"hostname" string(64) (NOT NULL),"status" integer ,"mp_name" string(64) REPEATING , "mp_version" string(48) REPEATING ,"mp_status" integer REPEATING , "inst_type" integer , "websrv_url" string(64)) WITH SUPERTYPE "dm_sysobject" UNIQUE ("hostname")

@@ -1,0 +1,46 @@
+Case description:
+
+ADTS 6 not rendering 
+
+
+
+checked the Logs of the CTS and found error like :
+com.documentum.cts.exceptions.internal.CTSProfileServiceException:
+[DM_VEL_INSTANTIATION_ERROR]error: "Cannot instantiate Java class"
+Cause Exception was: Exception during updating profile cache pdf_processing
+
+
+THere is a known issue with the default install because of corrupted docapps with the installer. It's documented in the 6.1 release note. 
+
+CTS fails to start when con¿gured against the global registry (150077) CTS fails to start successfully when configured against a global registry and results in the
+following error in the CTS_log.txt for all profiles:
+
+Solution is like : The workaround is to manually run the Transformation and Rich_Media_Services
+
+
+Still if you have problem of not rendering the documents:
+
+check the log file.. after chekcing the log file found new error like 
+
+aused by: DfException:: THREAD: Thread-10; MSG: [DFC_BOF_GLOBAL_REGISTRY_NOT_CONFIGURED] A global registry is not configured; ERRORCODE: ff; NEXT: null
+	at com.documentum.fc.client.impl.bof.registry.GlobalModuleRegistry.lookup(GlobalModuleRegistry.java:54)
+
+Solution:
+
+Make sure the GR is active and configured correctly
+
+
+Cause Exception was: Exception during updating profile cache merge_virtualdoc_adts
+DfException:: THREAD: Thread-10; MSG: [DFC_BOF_CANNOT_FIND_OBJECT]  Business object com.documentum.services.dam.df.transform.ICTSService does not exist in docbase ; ERRORCODE: ff; NEXT: null
+
+Solution :
+
+if you recieve the above error.. check the version of ADTS and CS server.
+
+Make sure that If ADTS6 is installed and configured to CS 6 sp1 but not the 5.3 version of CS.
+
+Here Documentation is incorrect like 
+
+if u install the ADTS 6 sp1 u have to configure the CS 6 sp1 not the 5.3 sp5
+
+here the ADTS 6 sp1 tries to check the GR so if u have it its ok ! if not it throws the baove error.

@@ -1,0 +1,28 @@
+
+esg83156 
+
+How to make sure PDF rendition on import work with DTS SP4?
+
+
+
+In DTS SP4 admin guide under "Activating a PDF rendition on import" is says
+
+You need  to make sure the format are set to richmedia_enabled and they are mapped in the register.xml
+Like for Word: 
+<Format target="msw8" source="msw8"/>
+
+However this is not enough 
+
+You also need to add following to register profile under document_to_pdf_dts InnerProfile section
+
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="pdf"/> 
+
+The register profile should look like this:
+
+<ProfileSequence>
+<InnerProfile path="/System/Media Server/System Profiles/document_to_pdf_dts" waitOnCompletion="false" useTargetFormat="true"> 
+<InnerTokenMapping Literal="true" InnerProfileToken="doc_token_targetFormat" LocalProfileToken="pdf"/> 
+<InnerTokenMapping LocalProfileToken="PDFVersion13" InnerProfileToken="doc_token_pdfVersion" Literal="true"/>
+.......
+
+This has been logged as Bug 138310

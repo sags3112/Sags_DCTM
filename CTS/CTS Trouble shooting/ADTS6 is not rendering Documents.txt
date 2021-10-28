@@ -1,0 +1,51 @@
+
+ADTS6 is not rendering Documents:
+
+
+Check the Log file
+
+THere is a known issue with the default install because of corrupted docapps with the installer. It's documented in the 6.1 release note. 
+===
+CTS fails to start when con¿gured against the global
+registry (150077)
+CTS fails to start successfully when configured against a global registry and results in the
+following error in the CTS_log.txt for all profiles:
+com.documentum.cts.exceptions.internal.CTSProfileServiceException:
+[DM_VEL_INSTANTIATION_ERROR]error: "Cannot instantiate Java class"
+Cause Exception was: Exception during updating profile cache pdf_processing
+
+The workaround is to manually run the Transformation and Rich_Media_Services
+docapps against the global registry after configuring the CTS product.
+
+===
+
+esg93948 
+and esg92090 
+
+
+Name: Goldstein, Shelley
+Email: SHELLEY.D.GOLDSTEIN@USA-SPACEOPS.COM
+Primary Phone: 281-282-4021
+
+
+*********
+
+check whethter ct had gloabl registry activated ie
+
+- CTS D6 products need to have a D6 global repository. Any 5.3x docbase
+
+******
+
+replied to CT
+
+Hi Shelly,
+
+As per our  today's Telephonic discussion. I am just summarizing the conversation.
+
+1) Check whether BOF Global Registry is configured correctly? If not Please follow the attached Document (how to enable global registry?)
+2) Please stop the ADTS Service
+3) Re-Run the Transformation and Rich_Media_Services Docapps
+4) Stop/Start the CS Services
+5) start the ADTS Service
+
+ 
