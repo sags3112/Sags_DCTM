@@ -1,0 +1,23 @@
+Installation Issues of Documentum 6 SP1 Content Server on AIX
+
+
+We had done a D6 SP1 installation few days ago and ran into some issues, I thought I will share my expereince with you all so that you know the issues that you may face during the installation of content server on AIX.
+
+ As we started with the installation of Content Server on our AIX system (5.3) we were hit with the following error
+
+“The /tmp filesystem needs 1GB where it has 0 GB Available”  We had more than 1 GB space in both /var/tmp and /tmp.
+
+During this I found an interesting thing that even the D6 Installer guide has lots of typos in it. It says /tmp some place then someother place it says /temp should have 1 GB  free space !!!!
+
+If you are hit with this issue there is a work around,  You have to add the tmp directory location as parameter to the installer.  
+
+That means you have to run the installer with following command line
+
+serverAixSuiteSetup.bin -is:tempdir TMP_DIR 
+
+Where TMP_DIR should point your tmp directory which has more than 1 GB Space.
+
+Another interesting issue is Though the D6 Installer guide in page number 143 says that if you run dm_launch_server_config_program.sh it will set the environment variables such as LIBPATH etc that doesnt really do that. So if you are installing D6 CS on AIX after completing the installtion make sure sure that you edit the profile of install owner and add these paths to it
+
+Happy Installing !!! 
+

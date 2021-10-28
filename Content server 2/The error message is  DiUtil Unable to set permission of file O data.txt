@@ -1,0 +1,15 @@
+trying to install Documentum 6.0 in a test environment, and keep receiving an error when I attempt to create the first repository.  
+
+The error message is:  DiUtil: Unable to set permission of file: O:\data
+
+Unable to get DACL - Access is denied.
+
+********
+
+The Content Server is installed to a local directory, and I am attempting to allocate a repository to a directory on a separate file server(ie docbase data on remote server).  I have allocated space on that file server and given my installation owner domain account Full permissions on that directory ..
+
+
+Finally allocating a repository to a directory on a separate file serverie remote server is not recomonded and its bug in 5.3 and D6
+
+Its problem with NTFS file system not with FAT 32.If you try doing the same in FAT32 its works.
+

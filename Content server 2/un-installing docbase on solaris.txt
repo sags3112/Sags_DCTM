@@ -1,0 +1,7 @@
+
+
+But still if you want to delete Docbase manually,You need remove manually the below folders
+ 
+- $DOCUMENTUM\dba\config\Docbase_name and the start up scripts inside the $DOCUMENTUM\dba
+- $DOCUMENTUM\data\docbase_name  and drop the table space
+ 

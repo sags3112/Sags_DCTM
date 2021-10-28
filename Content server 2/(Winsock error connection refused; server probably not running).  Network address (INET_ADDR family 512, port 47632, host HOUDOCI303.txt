@@ -1,0 +1,21 @@
+ cThe following errors were reported: 
+[DM_SESSION_E_CANT_CONNECT]error:  "Could not connect to docbase (HOU_DM_DEMO) at host (HOUDOCI303) because (Winsock error: connection refused; server probably not running).  Network address: (INET_ADDR: family: 512, port: 47632, host: HOUDOCI303 (34.64.2.115, 22400273))."
+
+
+
+resolution; (esg10262)
+
+To connect to the server from outside the firewall, two things need to be done 
+
+
+1. Open 1489 of port where the documentum server is running. 
+
+2. From the services file find out all the ports that documentum docbases are registered to and open those ports as well. 
+
+If the above ports are not opened then clients cannot connect to the server and dmcl trace 10 will report error similar to the following error. 
+
+
+[DM_SESSION_E_CANT_CONNECT]error: "Could not connect to docbase (US_HOU_DWD_MG) at host (xnethous403) because (Winsock error: network request timed out; network or remote computer is inacces). Network address: (INET_ADDR: family: 2, port: 10013, host: xnethous403 (172.23.4.50, ac170432))." 
+
+
+[DM_SESSION_E_NETWORK_TIMEOUT]error: "The network request timed out; the network may be non-operational or the remote service may be temporarily unavailable" 

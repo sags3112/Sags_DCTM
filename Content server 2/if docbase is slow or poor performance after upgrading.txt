@@ -1,0 +1,15 @@
+
+
+1) Run the job dm_updatestats job by launching trace launch 10 and check the job report
+
+2) **********************************
+Entries needed in init.ora file:
+
+- hash_join_enabled = false
+- optimizer_index_cost_adj = 5
+- optimizer_index_caching = 95
+
+**********************************
+
+
+Run the tkprof on sql statement esg17542 to chk the performance of RDBMS

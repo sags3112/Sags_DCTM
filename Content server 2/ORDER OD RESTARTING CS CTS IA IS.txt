@@ -1,0 +1,61 @@
+2) Your Order depends on what services you are running on the box. 
+
+To stop:
+
+1. Stop method server
+2. Stop docbase
+3. Stop docbroker
+
+To start:
+
+1. Start docbroker
+2. Start docbase
+3. Start method server
+
+
+Reply to the below mail:
+
+Hi Sagar
+
+Thanks. I need bit more info regarding the restart order. Our current
+setup is
+
+Content server (Docbroker,docbase,Java method server)
+
+Index server on a separate windows server
+
+Content transformation services on a separate windows server.
+
+So please let me know restart order for our complete setup
+
+
+Soluton:
+
+Stopping order would be:
+
+1. CTS services
+2. Index Server services
+3. Content Server services
+
+OR
+
+1. Index Server services
+2. CTS services
+3. Content Server services
+
+Stopping services within Index Server and the order would be:
+1. Index Agents
+2. Index Server
+
+Starting order:
+
+1. Content Server services
+2. Index Server services
+3. CTS services
+Or 2 and 3 can be the other way around.
+
+Starting Services within Index Server:
+1. Index Server
+2. Index Agents
+
+Let me know if you have more and guide us whether we can close the ticket.

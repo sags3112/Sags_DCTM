@@ -1,0 +1,7 @@
+On UNIX and Linux, ensure that these environment variables are set in the
+installation owner’s environment:
+— ORACLE_HOME
+— TNS_ADMIN
+This environment variable points to the location of the tnsnames.ora file. The Content
+Server installation program looks first for TNS_ADMIN, then for ORACLE_HOME,
+in order to locate the tnsnames.ora file.

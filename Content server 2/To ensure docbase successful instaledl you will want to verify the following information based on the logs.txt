@@ -1,0 +1,50 @@
+Verifying your install
+To ensure a successful install you will want to verify the following information based on the logs.
+
+ 
+
+Docbase log. Review the docbase log to ensure that it started up appropriately.
+
+PATH-C:\Documentum\dba\logs\<docbasename>.log
+
+JMS log. This log will ensure that your Java Method Server is running.
+
+MEthod Server Wrapper log
+
+C:\Documentum\bea9.2\domains\DctmDomain\serviceConfig\MethodServer
+
+Method Server Log
+
+ 
+
+*Note that if this folder has not been created, that means that the Weblogic server is still starting up, This could take 5-10 minutes depending on machine resources.
+
+ 
+
+C:/Documentum/bea9.2/domains/DctmDomain/servers/DctmServer_MethodServer_<host>/data/MethodServer/logs
+
+ 
+
+To verify that all the Method Server is starting up all of the necessary servlets you will need to access the Weblogic Managed Server Console.
+
+ 
+
+http://localhost:7001/console
+
+ 
+
+You will need to use the same login that you set during the content server installation
+
+user: weblogic, password: weblogic
+
+ 
+
+ 
+
+ 
+
+Modify the Method server to reduce its memory requirement.
+
+C:\Documentum\bea9.2\domains\DctmDomain\startMethodServer.cmd
+
+ 

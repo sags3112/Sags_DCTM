@@ -1,0 +1,7 @@
+If migration fails:
+
+you need to collect logs ie..
+
+install.log, setupError.log and ServerConfigurator.log under $DM_HOME/install
+
+script output file (.out files) under $DOCUMENTUM/dba/config/<docbasename>

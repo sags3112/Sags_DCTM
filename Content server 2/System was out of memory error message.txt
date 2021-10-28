@@ -1,0 +1,29 @@
+What to do when getting "Library Name: oci.dll, Platform Status: System was out of memory" error message?
+
+Content Server 6.7, 6.6, 6.5   
+
+esg125440
+
+Symptoms
+
+When trying to start the docbase (for instance after an upgrade) you see the following error message in the Server Manager:
+
+"Generic Status. What to do when getting "Library Name: oci.dll, Platform Status: System was out of memory" error message"
+
+In the docbase log you can also find error messages like this:
+
+"[DM_SESSION_E_AUTH_PLUGIN_LOAD_ERROR]error:  "Failed to load Authentication Plugin C:\Documentum\dba\auth\dm_kerberos.dll. Reason: Generic Status: Library Open failed, Library Name: C:\Documentum\dba\auth\dm_kerberos.dll, Platform Status: System was out of memory, executable file was corrupt, or relocations were invalid."
+
+Cause
+
+There could be a problem with the ORACLE client installation.  
+
+
+
+Resolution
+
+Ensure that the ORACLE client has been installed correctly.
+
+Check the Release Notes for your ORACLE version and verify that you have installed the correct 32-bit or 64-bit version of the ORACLE client that is suppoted for your Content Server version. 
+
+Re-install the ORACLE if necessary.

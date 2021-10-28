@@ -1,0 +1,143 @@
+esg104025 
+Content Server 6.5 SP1, 6.5, 6.0 SP1, 6.0, 5.3 SP6, 5.3 SP5, 5.3 SP4, 5.3 SP3, 5.3 SP2, 5.3 SP1, 5.3
+
+Symptoms
+
+Deleting a docbase, and at the end of the process the program requests one to run the dm_DeleteTableSpace.sql script to remove the tablespace from the docbase.
+
+
+
+But it is not in the $DOCUMENTUM/server_uninstall/delete_db/<docbase name> folder.   The same goes for the dm_CreateTableSpace.sql which is supposed to be in the $DOCUMENTUM/dba/config/<docbase name> folder which is needed when one wants to copy a repository for testing for example.
+
+
+
+Cause
+
+These files are only created when the server configurator program is used to create the docbase/repository account and tablespace.  If the DBA did that function then those files are never created.
+
+
+
+Resolution
+
+The customer's DBA needs to use scripts from a default installed system as a template.
+
+
+
+Ensure  you get a template for the database in question!!!!
+
+
+
+Here is a dm_DeleteTableSpace.sql template:
+
+
+
+USE master
+GO
+PRINT 'Dropping database DM_yourdocbase_docbase ...'
+GO
+DROP DATABASE DM_MatsonIDM_docbase
+GO
+PRINT 'Complete.'
+GO
+
+
+And a template for dm_CreateTableSpace.sql for Sql Server 2000:
+
+PRINT  ' '
+USE master
+GO
+PRINT 'CREATE DATABASE DM_yourDocbase_docbase ON ( NAME = DM_yourDocbase_docbase,FILENAME = d:\microsoft\sqlserver2000\MSSQL$IDMD01\data\dm_yourDocbase_data1,SIZE = 180MB)'
+GO
+PRINT 'LOG ON ( NAME =DM_yourDocbase_log,FILENAME = d:\microsoft\sqlserver2000\MSSQL$IDMD01\data\dm_yourDocbase_log1,SIZE = 180MB) '
+GO
+CREATE DATABASE DM_yourDocbase_docbase
+ON
+( NAME = 'DM_yourDocbase_docbase',
+FILENAME = 'd:\microsoft\sqlserver2000\MSSQL$IDMD01\data\dm_yourDocbase_data1',
+SIZE = 180MB)
+LOG ON
+( NAME = 'DM_yourDocbase_log',
+FILENAME = 'd:\microsoft\sqlserver2000\MSSQL$IDMD01\data\dm_yourDocbase_log1',
+SIZE = 180MB)
+GO
+PRINT 'Processing user yourDocbase ...'
+GO
+IF NOT EXISTS (SELECT name FROM master.dbo.syslogins
+WHERE name = 'yourDocbase')
+BEGIN
+EXEC sp_addlogin yourDocbase,'password'
+END
+GO
+PRINT 'sp_defaultdb yourDocbase,DM_yourDocbase_docbase'
+GO
+sp_defaultdb yourDocbase,DM_yourDocbase_docbase
+GO
+PRINT 'USE DM_yourDocbase_docbase'
+GO
+USE DM_yourDocbase_docbase
+GO
+PRINT 'sp_changedbowner yourDocbase'
+GO
+sp_changedbowner yourDocbase
+GO
+PRINT 'USE master '
+GO
+USE master
+GO
+PRINT 'sp_grantdbaccess yourDocbase'
+GO
+sp_grantdbaccess yourDocbase
+GO
+PRINT 'Complete.'
+GO
+
+
+
+And one for Oracle:
+
+/* This tablespace will be used for repository.  */
+/* In the following path the Oracle datafile will        */
+/* be created for the tablespace used by Documentum      */
+/* server. Please make sure it is a valid path for       */
+/* your Oracle configuration.                            */
+set echo on
+spool C:\Documentum\dba\config\docbase\dm_CreateTableSpace.out
+CREATE TABLESPACE DM_docbase_docbase
+DATAFILE 
+'C:\ORACLE\PRODUCT\10.1.0\ORADATA\DCTM\dm_docbase20080207143744_db.dbf'
+SIZE 180M REUSE;
+ALTER DATABASE
+DATAFILE
+'C:\ORACLE\PRODUCT\10.1.0\ORADATA\DCTM\dm_jdocbase20080207143744_db.dbf'
+AUTOEXTEND ON NEXT 10M MAXSIZE 1024M;
+/* Create Oracle user account with password for the Repository owner. */
+GRANT CONNECT TO docbase IDENTIFIED BY "&1" ;
+/* Grant privileges to the Repository owner in order  */
+/* to create and maintain database objects used by */
+/* repository server.                      */
+GRANT CREATE ANY VIEW,RESOURCE,UNLIMITED TABLESPACE to docbase ;
+/* Make the newly created tablespace the DEFAULT for any tables */
+/* or indexes created by the Repository owner.                     */
+/* Make the standard Oracle TEMPORARY tablespace the default    */
+/* for any temporary tables created by the Repository owner.       */
+/* Please make sure the name of the TEMPORARY tablespace is     */
+/* valid for your Oracle configuration.  The default name is    */
+/* either temporary_data or temp depending upon Oracle version. */
+ALTER USER docbase
+DEFAULT TABLESPACE DM_docbase_docbase
+TEMPORARY TABLESPACE TEMP;
+CREATE TABLESPACE DM_docbase_index
+DATAFILE
+'C:\ORACLE\PRODUCT\10.1.0\ORADATA\DCTM\dm_docbase20080207143744_ind.dbf'
+SIZE 180M REUSE;
+ALTER DATABASE
+DATAFILE
+'C:\ORACLE\PRODUCT\10.1.0\ORADATA\DCTM\dm_docbase20080207143744_ind.dbf'
+AUTOEXTEND ON NEXT 10M MAXSIZE 1024M;
+GRANT select_catalog_role TO docbase;
+spool off
+disconnect;
+exit;
+
+
+Ensure  you get a template for the database in question!!!!

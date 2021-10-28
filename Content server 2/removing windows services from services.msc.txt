@@ -1,0 +1,7 @@
+open command prommpt
+
+Select the service u want and note the service name
+
+
+C:\> sc delete "DMJavaMethodServer"
+

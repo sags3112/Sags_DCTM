@@ -1,0 +1,34 @@
+ [DM_AUDITTRAIL_E_AUDIT_ALREADY_AUDITED] error
+
+Symptoms
+
+When upgrading docbase to 6.5, you may get the following error message during upgrade.
+
+
+
+The installer failed to execute the Enables audit default script. For more information, please read output file: /app/dmadmin/dba/config/honsm001/dm_defaultevent_set.out.
+
+
+
+In dm_defaultevent_set.out, you can see the following error message.
+
+
+
+Connect to docbase honsm001
+Start running dm_defaultevent_set.ebs script on docbase honsm001
+[DM_AUDITTRAIL_E_AUDIT_ALREADY_AUDITED]error:  "Event dm_default_set on object 0000000000000000 is already being audited."
+
+
+Failed to enable the dm_default_set event audit on dm_docbase_config
+
+
+
+Cause
+
+The event has already been registered.
+
+
+
+Resolution
+
+The event already ran one time, the next run indicates that the event is registered. This is to be expected. You can safely ignore this error.

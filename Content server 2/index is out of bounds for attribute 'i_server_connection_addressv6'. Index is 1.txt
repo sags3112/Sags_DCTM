@@ -1,0 +1,29 @@
+2012-06-08 17:41:34,211 INFO  [STDOUT] 2012-06-08 17:41:34,195 ERROR [main] [com.documentum.mthdservlet.DoMethod] - Could not start Documentum Java Method Server
+com.documentum.fc.client.impl.typeddata.ValueIndexException: index is out of bounds for attribute 'i_server_connection_addressv6'. Index is 1. Maximum index is 0.
+
+
+This conversation is being saved in your Outlook Inbox folder.
+
+
+
+
+
+Resol:
+
+Hi kotteswaran,
+
+ 
+I think this is the solution.
+
+https://solutions.emc.com/emcsolutionview.asp?id=esg120620
+
+ 
+Edit the server.ini of every docbase on your Content Server and add this: "Ip_mode=V4ONLY"
+
+ 
+Restart you Content Server(s) afterwards.
+
+ 
+KR,
+
+Oliver

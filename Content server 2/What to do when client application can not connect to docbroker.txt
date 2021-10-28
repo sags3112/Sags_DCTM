@@ -1,0 +1,26 @@
+
+
+
+
+What to do when client application can not connect to docbroker?
+
+
+The error message looks like the following:
+[DM_DOCBROKER_E_NETWORK_ERROR]error: "An error occured performing a network operation: (Unknown error code 104 (_nl_error_ = 0)). Network specific error: (Extended network error: 0)."
+[DM_DOCBROKER_E_CONNECT_FAILED]error: "Unable to connect to DocBroker. Clients please check your dmcl.ini file for a correct host. Server please check your server.ini or target attributes in server config. Network address: (INET_ADDR: family: 2, port: 1489, host: testserver.dom.com (100.101.102.104, testone))."
+[DM_DOCBROKER_E_REQUEST_FAILED_E]error: "The Docbroker request failed."
+
+On one particular case, the problem was caused by an external Java application that was installed on the system and was establishing connection to the docbroker on port 1489 and not releasing it. Therefore it was maxing up the connections available on the docbroker and the Application Server could not establish new connections. 
+
+By design, there can be no more than 20 connections established on a single docbroker which can be verified with    "nestat - an | grep 1489".
+ 
+One way to determine if there is another application that keeps establishing connections is to shut down the application server and see if the port 1489 is realeased, i.e. the number of connections go less than 20.
+
+On Windows, you can use "netstat -b" in order to determine the program's name involved in creating each connection 
+
+
+
+Fix:
+
+
+esg98291 

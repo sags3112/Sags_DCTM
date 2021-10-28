@@ -1,0 +1,7 @@
+
+The database_conn key in the server.ini file must match exactly the database entry in the tnsnames.ora file. If it does not, you see this error:
+
+Error - Failed to obtain database connection information corresponding to the repository from the server.ini file. String index out of range: -1
+
+Please read error log /tmp/installation_owner_name.ServerInstaller.log
+for more information. If you see this error, modify the database_conn key in the server.ini file and continue with the installation or upgrade.

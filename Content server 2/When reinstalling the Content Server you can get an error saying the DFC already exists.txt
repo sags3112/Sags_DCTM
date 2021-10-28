@@ -1,0 +1,16 @@
+esg91192 
+
+Symptoms
+After uninstalling the Content Server, when you attempt to reinstall the Content Server, you can get an error stating that the DFC already exists and the installation will halt. 
+
+
+
+Cause
+
+The unistaller did not remove the vpd.properties file.
+
+
+
+Resolution
+
+Go to the home directory of dmamdin and delte the vdp.properties file. Then, try the install again.  It should get past this error and you will be able to complete the reinstall of the Content Server.

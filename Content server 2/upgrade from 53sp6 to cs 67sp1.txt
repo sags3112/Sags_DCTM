@@ -1,0 +1,51 @@
+Even though 5.3sp6 does not support on w2008r2 -64bit, however, it is  workable solution as following, we have done with several customer.
+
+1)	 Install windows 2008r2 64bit on  new 64bit machine
+2)	Install 6.7sp1 docbase on 64bit windows2008r2 with same docbase name, installation owner and docbase id
+3)	Clone docbase 5.3sp6  from windows 2003 to new windows2008r2 machine
+4)	Then do upgrade from 5.3sp6  to 6.7sp1.
+
+
+
+
+********************
+
+
+Thanks Russell,
+
+I will suggest to take the first approach (upgrade the OS, not start the repository, upgrade CS and repository). This is what I thought… I just never “liked” upgrading Windows OSs.
+As for cloning the 5.3 SP6 into Windows 2008, it does not work… Customer cannot install CS 5.3 SP6 on W2K8…
+
+Regards,
+Andrea Paci
+
+From: Kavanagh, Russell 
+Sent: miércoles, 29 de febrero de 2012 18:44
+To: Paci, Andrea; Server_Support (Documentum)
+Subject: RE: Content Server upgrade from 5.3 SP6 to 6.7 SP1 on Windows
+
+Hi Andrea,
+
+You are right in that there isn't a common OS for both versions.
+The in place upgrade assumes that there is an upgrade path from the Windows 2003 OS to Windows 2008 64 bit OS.
+If that exists, we would upgrade the OS first but not have the repository running at that time. Once complete, the 6.7 install would be performed then the upgrade. In this case you should not see an error with the OS.
+If it doesn't exist, they would first need to clone the 5.3 SP6 to this new Windows 2008 server and not test it. Basically clone it then upgrade without testing it after the copy.
+
+Russell
+
+From: Paci, Andrea 
+Sent: Wednesday, February 29, 2012 12:21 PM
+To: Server_Support (Documentum)
+Subject: Content Server upgrade from 5.3 SP6 to 6.7 SP1 on Windows
+
+Hello, 
+
+I am having issues upgrading Content Server from 5.3 SP6 to 6.7 SP1. There is no common OS version for both and the installer checks the OS version... It’s a supported upgrade path but there I cannot find how to actually do it.
+
+Currently running Content Server 5.3 SP6 on Windows Server 2003 SP2 (32-bit version) with Oracle (they just upgraded this from 5.2.5 SP3...).
+Customer is targeting to run Content Server 6.7 SP1 64 Bit on Windows Server 2008 R2 SP1 x64 Edition (it seems to be the only one compatible with Native 64-bit Content Server) with Oracle.
+
+Any ideas?
+
+Regards,
+Andrea Paci 

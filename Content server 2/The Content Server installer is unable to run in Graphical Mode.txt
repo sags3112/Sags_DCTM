@@ -1,0 +1,36 @@
+esg128611
+
+Symptoms
+
+Content Server Installer is unable to run in Graphical mode, even when the xClock and xCalender works fine on Linux environment.
+
+
+
+Cause
+
+The Linux environment might be missing the 32-bit packages required to run Documentum Content Server Installer.
+
+
+
+Resolution
+
+Check whether the below OS packages (32- bit versions) are installed on the environment, 
+
+
+
+libgcc.i686-libgcc-4.4.5-6.el6.i686.rpm 
+glibc.i686 - glibc-2.12-1.25.el6.i686.rpm
+nss-softokn-freebl.i686- nss-softokn-freebl-3.12.9-3.el6.i686.rpm
+libXau-1.0.5-1.el6.i686.rpm 
+libxcb-1.5-1.el6.i686.rpm 
+libX11.i686 - libX11-1.3-2.el6.i686.rpm
+libXext.i686 - libXext-1.1-3.el6.i686.rpm
+libXi.i686 - libXi-1.3-3.el6.i686.rpm
+liblibXtst.i686 - libXtst-1.0.99.2-3.el6.i686.rpm
+compat-libstdc++.i686 - compat-libstdc++-33-3.2.3-69.el6.i686.rpm
+
+
+
+Install the missing packages and Unset the JAVA_HOME Environment variable and the Installer should work fine now.
+
+

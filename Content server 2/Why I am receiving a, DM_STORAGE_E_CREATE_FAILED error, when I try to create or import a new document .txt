@@ -1,0 +1,61 @@
+esg23325
+
+u knoWhy I am receiving a, DM_STORAGE_E_CREATE_FAILED error, when I try to create or
+
+
+
+
+One of the reason you are getting the following error while creating or importing new document may be due to running out of disk space where you have your filestores 
+
+
+Solution: Add more space or create a new filestore on a different location and associate your types with new filestore. 
+
+
+
+Cannot make copy of the document 'Test Template'. 
+
+08/07/03 08:59:37 AM, File r:\Desktop Client\DTC 4.3.1\Desktop Client\Services\Progress Monitor\DcProgressMonitor.cpp, Line 330 
+
+
+Command saveasnew returned an invalid document/object id. 
+
+08/07/03 08:59:37 AM, Error 256 
+
+
+Cannot save Test Template sysobject. 
+
+08/07/03 08:59:37 AM, Error 256 
+
+
+Cannot create storage file E:\DOCUMENTUM\data\EMDC_Projects\content_storage_01\00008235\80\03\01\5f 
+
+08/07/03 08:59:37 AM, Error 256 
+
+
+DfException@324:: THREAD: main; MSG: [DM_API_E_BADOBJ]error: "Command saveasnew returned an invalid document/object id." 
+
+
+[DM_SYSOBJECT_E_CANT_SAVE]error: "Cannot save Test Template sysobject." 
+
+
+[DM_STORAGE_E_CREATE_FAILED]error: "Cannot create storage file E:\DOCUMENTUM\data\EMDC_Projects\content_storage_01\00008235\80\03\01\5f"; ERRORCODE: 100; NEXT: null 
+
+at com/documentum/fc/server/session/DfiSessionDMCL.dmAPIGet 
+
+at com/documentum/fc/client/DfTypedObjectL.get 
+
+at com/documentum/fc/client/DfPIntObjectL.apiGet 
+
+at com/documentum/fc/client/DfPersistentObject.apiGet 
+
+at com/documentum/fc/client/DfSysObject.saveAsNew 
+
+at com/documentum/operations/DfCopyObjects.copyDocument 
+
+at com/documentum/operations/DfCopyObjects.executeCopy 
+
+at com/documentum/operations/DfCopyObjects.execute 
+
+at com/documentum/operations/DfOperation.execute 
+
+at com/documentum/operations/DfOperationWrapper.execute 

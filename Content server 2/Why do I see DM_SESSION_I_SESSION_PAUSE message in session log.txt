@@ -1,0 +1,22 @@
+esg93863 
+cs 53sp5
+
+Symptoms
+
+[DM_SESSION_I_SESSION_PAUSE]info:  "Session ************* paused."
+
+
+
+Cause
+
+If you connect to the Docbase with Documentum Administrator (DA), a session will be created, and you will see in the corresponding session log:    Mon Oct 31 12:09:23 2005 546000 [DM_SESSION_I_SESSION_START]info:  "Session 01001ec68001a507 started for user dmadmin."    If you do not work on DA for more than 5 minutes, the session will go into a paused state, and you will see in the session log:  Mon Oct 31 12:15:06 2005 140000 [DM_SESSION_I_SESSION_PAUSE]info:  "Session 01001ec68001a507 paused."    
+
+
+
+If a client session times out, the server removes the process to save resources, the session parameters are saved in the dmcl and the session is in a 'PAUSED' state.  The client session time is defined by the client_session_timeout parameter in the server.ini.   In parallel the session ID  is saved on the server in LIST_SESSIONS.    What cause the transition between the session states"  Active -> Paused : session timeout handled by client_session_timeout in the server  Paused-> Active: by doing something with the timed out session    Inactive (or paused) session, is just an entry in the session list, no resources are used. 
+
+
+
+Resolution
+
+This is only an informational message generated at session pause. No action is required.

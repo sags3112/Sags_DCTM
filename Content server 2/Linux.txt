@@ -1,0 +1,9 @@
+Installation of linux ( ubantu 8.0) server
+
+checklist ;
+
+1) check whic drive u want to install ubantu 8.0
+
+2) chek for errors by clicking on the  drive ie .. right clik on the drive and say properties and select tools and clik on error- checking.
+
+3) change the setting in the bios like .. boot with CD.

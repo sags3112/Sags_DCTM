@@ -1,0 +1,10 @@
+
+open up the Services, get the process name (click on properties  of the docbase service)...then go into a CMD prompt and type net start DmServerdocbasename
+
+
+
+Note: unless it is running, then yo have to stop it first
+
+
+
+c:\> net Start Dmserverdocbasename

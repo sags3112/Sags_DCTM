@@ -1,0 +1,43 @@
+[DFC_BOF_DOWNLOAD_ERROR] error
+
+
+
+Symptoms
+
+When using an SBO or TBO, the user encounters the following error: 
+
+[DFC_BOF_DOWNLOAD_ERROR] Failed to download and cache module
+
+
+
+
+Cause 
+
+
+The dfc.properties file has incorrect information, or the Documentum cache has not been cleaned.
+
+
+
+Resolution
+
+Check the %DOCUMENTUM%\config\dfc.properties file and make sure you have entries for dfc.bof.registry.repository, dfc.bof.registry.username and dfc.bof.registry.password.
+
+
+
+Note that the dfc.bof.registry.password should be an encrypted version of the user password.  Refer to the documentation for information about how to generate the encrypted string.
+
+ 
+
+For instance: 
+
+dfc.bof.registry.repository=MY-DOCBASE
+
+dfc.bof.registry.username=dm_bof_registry
+
+dfc.bof.registry.password=Ck7Pf64nJ8Qnbe2HrYkZtg\=\=
+
+ 
+
+Clean the Documentum cache by deleting all files and directories under: 
+
+%DOCUMENTUM%\cache\
