@@ -1,0 +1,20 @@
+
+
+Hi SelvaKumar,
+
+This is Sagar working along with Samba for Documentum Server Support. As samba is on leave for next couple of days I am handling the case 21746942. We tried to call the contact number which you provided (2128915873).
+
+Issue: Tomcat method service, overwrites its Previous log if we restart tomcat.
+
+Even though this is a question we need few more details to clarify and provide you the resolution. Can you please provide your contact number so that we can call you to discuss the issue.
+
+
+Solution
+
+
+Hi SelvaKumar,
+
+As per our Telephonic conversation:
+
+1) If the method server is started from service and the old log will be overwritten with new time stamp .You may rename the old log file manually so that after restarting old log file  will not overwritten and will save the log with new time stamp. In order to have log file renamed automatically you have to contact Documentum Developer Support
+

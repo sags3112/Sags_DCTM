@@ -1,0 +1,20 @@
+ there exists no event with which you could detect that a was queried by ..or was send But in your case  you could generate a new dm_audittrail object
+
+API> create,c,dm_auditrail
+API>  set,c,<newObjID>,event_name,.....
+API> set,c,<newObjID>,audited_obj_id, <DocId>
+API>  save,c,.....
+
+set its attributes in the way you need it. 
+
+In general
+
+
+You have system events and application events. System events are events recognized by Content Server (e.g. checkin, destroy). You can turn them on or off and when they occur, the Content Server will take care of creating a dm_audittrail object. Application events (or custom events if you prefer) are application-specific. It is the responsibiilty of the application to create them. You can do that with the DFC method I pointed out. That code can be inside a TBO, SBO, directly in your webapp It doesn't really matter but it's your job to call that method with the appropriate parameters.
+
+Use IDfAuditTrailManager.createAudit to create a dm_audittrail object for your requiremnt
+
+
+http://www.bluefishgroup.com/2004/the-content-server-audit-facility/#head6
+
+Check more for Content Server Admin guide for : Auditing application events

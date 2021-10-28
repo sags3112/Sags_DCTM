@@ -1,0 +1,51 @@
+
+
+Content Server 6.5, 6.0, 5.3 SP6   
+
+How to dump value from iapi  idql to a file directly
+
+Symptoms
+
+You might want to dump a list of commands and results resulting from a dql using idql / iapi. This could be a required when you want to list a set of object ids for the fulltext re-indexing
+
+
+
+Resolution
+
+To achive this you can create two files (in the bin location)
+
+
+commandfile.txt and result.txt file.
+
+
+
+run the following from your CS bin folder (where you would have the iapi, idql exe)
+
+bin> iapi32 <REPOSITORY> -U<USERNAME> -P<PASSWORD> -R<COMMANDFILE> > <RESULTFILE>
+
+
+
+For example
+
+bin>iapi32 reponame -Udmadmin -Ppassword -Riapifilecommand.txt > result.txt
+
+
+
+(in the command file here i use api to run a dql) so i put:
+
+?,c,select r_object_id from dm_message_archive
+
+
+
+once it runs , check the result.txt
+
+it should have logged the trace of the command and  result object id.
+
+For more information check 
+iapi32.exe -help
+syntax: iapi32.exe <docbase> [-U<username>] [-P<password>] [-D<domain>] [-K<secure flag>] [-R<input file>] [-i|-I] [-v] [-l<log file>] [-Q] [-F<failure level>]
+
+
+
+
+

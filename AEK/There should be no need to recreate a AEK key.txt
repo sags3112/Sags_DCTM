@@ -1,0 +1,28 @@
+On an upgrade in place or coping a repository, there should be no need to delete an AEK key.
+
+For copy a repository - you are copying it, from source to target.
+
+Note: like platforms only, otherwise you do need to follow Sn to clear 
+
+ 
+
+Try to delete the $DOCUMENTUM_SHARED/config/dfc.keystore first
+
+This should resolve 90% of your issues.
+
+ 
+
+If that does not work you can clear the entries in database listed in some of these support notes.
+
+27127    AEK key 5.2.5
+
+74708   AEK key 5.3
+
+96192    AEK key D65
+
+esg27045  AEK ******
+
+ 
+
+Note if you delete the aek key you will have to rebuild every encrypted password. (database, ldap , federation …)
+

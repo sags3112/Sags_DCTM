@@ -1,0 +1,21 @@
+Goal
+
+How do I set up an audit trail entry to show a user being removed from a group?
+
+
+
+Resolution
+
+There is no specific audit action for adding or removing users.  What you need to do is setup a specific audit event for the dm_save event against the users_name attribute for dm_group.
+
+In the Audit section of Documentum Administrator (DA), select dm_group to add a new audit to the dm_group type.  Click on the 'Select Attributes' link.  Add the users_names attribute and select 'OK'.  Then, add an event for the dm_save event and select 'OK'.  When you are done, you should see an audit that looks like the following:
+
+Object Name        Criteria             Events
+
+dm_group    App Code : None                 dm_save
+                    Lifecycle : None 
+                    Lifecycle State : None 
+                   Attributes : users_names
+
+
+Since there is no specific event to account for adding/removing a user to a group, there is no best way to do this.  You have to experiment with this until you get the type of results in your audit trail that you want.

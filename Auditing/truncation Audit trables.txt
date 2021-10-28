@@ -1,0 +1,25 @@
+esg110083 
+
+
+What are tables to be truncated if audit trial count exceeds more than 60,00,000 
+
+
+Truncate Audit trail tables from SQL:
+
+- Dm_audittrail_group_r;
+- Dm_audittrail_group_s;
+- Dm_audittrial_acl_r;
+- Dm_audittrial_acl_s; 
+- dm_audittrail_s; 
+
+SQL> UPDATE dm_type_s SET views_valid = 0; 
+
+SQL> Commit
+
+Now log in to DA,Make the job active
+
+60,00,000
+10823351
+
+
+

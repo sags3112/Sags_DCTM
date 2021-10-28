@@ -1,0 +1,35 @@
+
+esg4029 
+What are the SQL statements needed to delete and recreate a custom attribute on a custom type when using a MS SQL Server docbase?
+
+Before doing this make sure you have a backup of your database! It is recommend that the SQL Server DBA perform these operations. 
+
+PLEASE NOTE: THIS IS NOT SUPPORTED OR RECOMMENDED, SO YOU TAKE THESE STEPS AND THIS WORKAROUND AT YOUR OWN RISK. 
+
+Here is what you need to do (Exact syntax cannot be given as it is not known exactly what your table looks like.): 
+
+1) Make sure the attribute you removed has been deleted from the dm_type_r table using these queries: 
+
+select r_object_id_i from dm_type_s where name='<type name>' 
+
+select * from dm_type_r where attr_name='<attribute name the was removed>' and r_object_id_i= <id returned from previous query> 
+(If this returns 0 rows then proceed to step 2) 
+
+2) Run sp_help on your custom type tablename to get the table definition & save the output to a file for future use. 
+sp_help <tablename> 
+
+3) Create a table with a new name that is identical to the original table, (based the sp_help output from step ) but WITHOUT the column that needs to be removed. 
+
+4) Insert the rows from the columns needed in the original table to the new table: 
+
+insert into new_table (select <column> from <original_table>) 
+
+5) Drop the original table 
+
+6) Rename the new table to the same name as the original: 
+
+sp_rename 'old name', 'new name' 
+
+7) Create the same indexes on the new table per the sp_help output in step 2. 
+
+8) At this point you should be able to add the attribute back to your custom type.

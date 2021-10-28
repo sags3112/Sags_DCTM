@@ -1,0 +1,11 @@
+delete from dm_sysobject_r where r_object_id in (select r_object_id from dm_sysobject_s where r_object_type='<type name>')
+delete from dm_type_r where r_object_id in (select r_object_id from dm_type_s where name='<type name>')
+delete from dmi_dd_common_info_r where r_object_id in (select r_object_id from dmi_dd_common_info_s where type_name = '<type name>')
+delete from dmi_object_type where r_object_id in (select r_object_id from dm_sysobject_s where r_object_type='<type name>')
+delete from dmi_type_info_r where r_object_id in (select r_object_id from dmi_type_info_s where r_type_name='<type name>')
+ 
+ 
+delete from dmi_type_info_s where r_type_name='<type name>'
+delete from dmi_dd_common_info_s where type_name = '<type name>'
+delete from dm_type_s where name='<type name>'
+delete from dm_sysobject_s where r_object_type='<type name>'

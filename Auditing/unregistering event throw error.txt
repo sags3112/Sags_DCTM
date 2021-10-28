@@ -1,0 +1,11 @@
+They tried to unregister them via API without success:
+
+API>unregister,c,030139668000018e,dm_save
+...
+Error processing command:DfException:: THREAD: http-8585-1; MSG: [DM_EVENT_E_NOT_REGISTERED]error:  "User dmadmin has not registered event dm_save for sysobject named '030139668000018e'."; ERRORCODE: 100; NEXT: null
+…
+
+They then tried and changed the attribute is_audittrail from 1 to zero in the dmi_audittrail table via DQL and after that they were able to unregister the configurations via API.
+
+Is this a known issue? What should they do in order to be able to delete them from DA or API without using the DQL workaround?
+

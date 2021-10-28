@@ -1,0 +1,53 @@
+ c
+
+
+
+
+  
+
+
+This script can be run using awk, gawk or dmawk to parse an RPC trace from DFC.
+ 
+
+Syntax:
+
+awk -f trace_rpc_histD65.awk trace_filename > output_filename
+
+ 
+
+It will provide details on when work is being performed, and when there are pauses between requests.
+
+ 
+
+In addition, the min, max, avg and count of each RPC call is reported.
+
+ 
+
+Finally, all queries found in the DFC trace are listed in descending order of response time.
+
+ 
+
+DFC tracing should be enabled using the following settings:
+
+ 
+dfc.tracing.enable=true
+
+dfc.tracing.verbose=true
+
+dfc.tracing.max_stack_depth=0
+
+dfc.tracing.include_rpcs=true
+
+dfc.tracing.mode=compact
+
+dfc.tracing.include_session_id=true
+
+# optional settings
+
+dfc.tracing.dir=c\:/temp/trace
+
+dfc.tracing.file_prefix=dfctrace
+
+ 
+
+Any other dfc.tracing.XXXX settings may change the output format and make the script unusable.

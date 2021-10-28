@@ -1,0 +1,71 @@
+Symptoms
+
+Degraded performance of Java Method Server.in installations with multiple Docbases or frequent usage of custom java methods.
+
+
+
+Cause
+
+Installations with multiple Docbases or frequent usage of custom java methods.
+
+
+
+Resolution
+
+Run multiple instances of the Java Method Server.  Instances may be assigned to individual Docbases or App Servers defined in serverconfig to distribute load.
+
+
+
+Assumptions
+
+Content Serve installed into default location
+Installation Owner is dmadmin
+
+
+Procedure for UNIX:
+
+Shutdown JMS to be cloned.
+Copy the tomcat directory:  cp -R $DM_HOME/tomcat $DM_HOME/tomcat2
+Clear out the work directory, temp directory, and logs directory in tomcat2:  
+Edit the server.xml file located in ../tomcat2/conf
+Change the shutdown port to 9008
+
+Change the connector port to 9081
+
+You may choose any two unused ports.
+
+Edit the setenv.sh file located in ../tomcat2/bin
+Change the setting for CATALINA_BASE variable to /<DM_HOME path>/tomcat2
+
+Update the server configuration Application Server URIs that will use the new JMS.
+Start the new Tomcat Server by running the ../tomcat2/bin/startup.sh
+Procedure for Windows
+
+
+
+Stop the Windows Service (Documentum Java Method Server) of the JMS to be cloned.
+Copy C:\Documentum\Product\5.3\tomcat   C:\Documentum\Product\5.3\tomcat2
+Clear out the work directory, temp directory, and logs directory in tomcat2
+Edit the server.xml file located in tomcat2\conf
+Change the shutdown port to 9008
+
+Change the connector port to 9081
+
+You may choose any two unused ports.
+
+Edit the service.bat file in tomcat2\bin
+Change the setting for  CATALINA_BASE variable to C:\Documentum\Product\5.3\tomcat2
+
+Change the setting for the SERVICE_NAME to DmJavaMethodServer2
+
+Change the setting for the PR_DISPLAYNAME to "Documentum Java Method Server 2
+
+Run the modified service.bat to create the new JMS windows service:
+Start command window
+
+C:> cd C:\Documentum\Product\5.3\tomcat2\bin
+
+C:> service.bat install dmadmin <password>
+
+Update the server configuration Application Server URIs that will use the new JMS.
+Start the Windows Service (Documentum Java Method Server 2)

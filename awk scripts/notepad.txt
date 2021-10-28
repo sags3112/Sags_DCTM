@@ -1,0 +1,12 @@
+cd "C:\Documents and Settings\hatad\My Documents\lab"
+
+Syntax:
+
+awk -f trace_rpc_histD65.awk trace_filename > output_filename
+
+      
+Awk –f traceD6.awk <myfolder_verify.txt>myfolder_verify.txt_seqentialCalls.txt 
+Awk –f trace_rpc_histD6.awk <myfolder_verify.txt>myfolder_verify.txt_performanceSummary.txt 
+Awk –f repeat.awk <myfolder_verify.txt>myfolder_verify.txt_repeatingDQL.txt 
+Awk –f object_breakdown.awk <myfolder_verify.txt>myfolder_verify.txt_object_breakdown.txt 
+

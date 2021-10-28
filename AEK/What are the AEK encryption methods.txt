@@ -1,0 +1,3 @@
+See esg92935
+
+The encryption components used for securing content with Content Server 5.3 SPx are RSA BSAFE Crypto-C and SSL-C components. The encryption algorithm flag used is AI_DES_EDE3_CBCPadIV8 which performs three-key DES in EDE mode as defined in ANSI X9.17 using the outer-CBC mode. This AI is initialized with an 8-Byte IV and operates on data that is of any Byte length. The padding mode is PKCS #5, which makes the ciphertext 1 to 8 Bytes longer than the plaintext. 

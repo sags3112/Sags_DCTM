@@ -1,0 +1,100 @@
+
+
+Symptoms
+
+Degraded performance of BEA Weblogic Java Method Server in installations with multiple Docbases or frequent usage of custom java methods.
+
+
+
+Cause
+
+Installations with multiple Docbases or frequent usage of custom java methods.
+
+
+
+Resolution
+
+Run multiple instances of the Java Method Server.  Instances may be assigned to individual Docbases or App Servers defined in serverconfig to distribute load.
+
+
+
+Assumptions
+
+Content Server installed into default locations
+Installation Owner is dmadmin
+The new Java Method Server is created in the existing BEA Weblogic Domain
+The name of the new Method Server is "DctmServer_MethodServer_Two"
+The port for the new Method Server is 9081.
+Procedure
+
+ Login to the Weblogic Server Administration Console at http://<CSHost>:7001/console 
+Where <CSHost> is the Content Server Host Name. The username is "weblogic" and the password is the password entered during Content Server Installation.
+
+Create a new server:
+Select Servers from Domain Configurations – Environment.  All servers are listed on the Summary of Servers page.
+Select the Lock & Edit button
+Select (check) the server named DctmServer_MethodServer_<CSHost>
+Select the Clone button:  The Clone a Server page is displayed.
+Enter the Server Name, "DctmServer_MethodServer_Two"
+Enter the Server Listen Port, 9081
+Select Ok to save.  The new server is listed on the Summary of Servers page.
+Select the Activate Changes button to save.  The message "All changes have been activated. No restarts are necessary." is displayed at the top of the Summary of Servers page.
+ 
+Return to the console home page and select Deployments from Domain Configurations – Your Deployed Resources. A list of applications is displayed on the Summary of Deployments page.
+ 
+For each application, acs, bpm, dfs, ServerApps, … to deploy:
+Select the application to deploy to the new server. The application Settings page is displayed
+Select the Targets tab.  The applications current server targets are shown as a comma separated list. The list does not contain the name of the new server. 
+Select the Lock & Edit button
+Select (check) the listed component (application)
+Select the Change Targets button.  A list of all available servers is displayed. The new server is not selected (checked).
+Select (check) the new server
+Select the Yes button to save
+Select the Activate Changes button to save.  The applications current server targets are shown as a comma separated list. The list now contains the name of the new server.
+ 
+Verify deployments for the new server
+Return to the Summary of Servers page
+Select the new server to display the server’s settings page.
+Select the Deployments tab.
+All applications are listed.
+ 
+Log in to the Content Server host as the installation owner (dmadmin)
+Create startup and shutdown scripts for new server
+ 
+Navigate to ...\bea9.2\domains\DctmDomain which is located in the Documentum User Directory.
+Copy startMethodServer.cmd to startMethodServerTwo.cmd
+Edit startMethodServerTwo.cmd.  Change all occurrences of the server name "DctmServer_MethodServer_<CSHost>" to the name of the new server, "DctmServer_MethodServer_Two"
+Copy stopMethodServer.cmd to stopMethodServerTwo.cmd
+Edit stopMethodServerTwo.cmd. Change all occurrences of the server name "DctmServer_MethodServer_<CSHost>" to then name of the new server, "DctmServer_MethodServer_Two"
+ 
+Edit the Windows Documentum Java Method Server service to add a component for the new server:
+ 
+Navigate to …\DctmDomain\ServiceConfig\MethodServer\Conf
+Edit DmMethodServer.xml. 
+ 
+Copy and paste the <component name="Managed Server"> section to create a new server component.
+Change the <component> name to "Managed Server Two". 
+Change the <start> command to startMethodServerTwo.cmd
+Change the <status> section to command to use the name of the new server, "DctmServer_MethodServer_Two"
+Change the <stop> command to stopMethodServerTwo.cmd
+Change the <heartbeat> url port number to 9081
+Save the file
+ 
+Stop the Documentum Java Method Server. This could take several minutes
+Start the Documentum Java Method Server. This could take several minutes
+ 
+Examine log file, DmMethodServerService.log , located in …\DctmDomain\ServiceConfig\MethodServer to verify startup.
+ 
+Verify status of new server and state of deployed applications
+Return to the Summary of Servers page
+Verify that the new server is in the Running state
+Select the new server to display the server’s settings page.
+Select the Deployments tab.
+Verify that the applications are in the Active state
+ 
+Test new server by entering the following URLs in a browser.
+http://<CSHost>:9081/DoMethod/servlet/DoMethod
+http://<CSHost>:9081/ACS/servlet/ACS
+http://<CSHost>:9081/DoMethod/servlet/DoMethod
+ 
+Edit the Docbase Server Configuration or ACS configuration to use the newly configured server.
