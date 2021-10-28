@@ -1,0 +1,106 @@
+
+
+PROBLEM DESCRIPTION:
+------------------------------------
+
+
+The customer has multiple content servers for a repository. The primary content server and repository are upgraded to 6.5 Sp3. The binaries on the second content sever is updated and we would like to know if we could stop the secondary content server configuration 6.5 sp3 (dm_launch_server_config_program.sh) during execution of the  Headstart script.
+
+1.	Does the headstart script updates the acs.properties file used by the JBoss Method Server?
+2.	what are the impacts/workarounds of canceling the configuration program before the script updates the acs.properties file from the secondary content servers?
+3.	What is the recommended time in the process to terminate the headstart script?
+4.	What are the validation to perform to see to check if the secondary content servers are installed correctly besides checking for the attributes in the dm_server_config object?
+5.	Are there other unknowns (gotcha) that may appear if the Headstart script is not executed on the secondary content servers? 
+
+
+36486896
+
+53sp5 - sp6
+
+Upgrade to 65sp3
+
+
+8:12 PMGolajana, Sagarrussell
+In load balanced env...
+After upgrading primary server..do we also need to upgrade secondary server
+
+
+8:13 PMKavanagh, Russellof course
+
+
+8:13 PMGolajana, Sagarok
+
+
+8:13 PMKavanagh, Russellhow did they set it up
+
+
+8:13 PMGolajana, Sagarand we need to skip those scripts
+
+
+8:13 PMKavanagh, Russelldid they manually create second server or use CFS
+
+
+8:13 PMGolajana, Sagarwill chk now
+
+
+8:14 PMKavanagh, Russellok...if they manually created it (not using CFS) then yes. Stop at the headstart. If using CFS, they can run the CFS as part of the upgrade
+
+
+8:14 PMGolajana, Sagarok
+
+
+8:15 PMGolajana, Sagarthat means by using CFS they need to run the scriptsie upgrade
+
+
+8:15 PMKavanagh, Russellif using CFS, when they install the new binaries, they then run the CFS configurator correct
+
+
+8:15 PMGolajana, Sagarya
+Will the headstart.ebs script will update the acs.properties
+
+
+8:17 PMKavanagh, Russellno...they need to manually run the acs ebs script
+we have it in the install guide
+
+
+8:17 PMGolajana, Sagarok
+got it
+
+
+8:17 PMGolajana, Sagarseen th chapter
+will take care
+thks for the info
+
+
+8:17 PMKavanagh, Russellnp
+
+
+This conversation is being saved in the Conversation History folder in your Outlook mailbox.
+
+
+
+*********
+
+Conf call:
+
+- Cusotmer is having 4 CS one docbase (Multiple cs and one docbase) not sure how they have configured Manaul or CFS ?
+- they want to upgrade from 53sp5 to 65sp3
+- informed them like they need to upgrade 53sp6 first and then to cs 65sp3
+
+- In multiple CS upgrade sequence's we have 2 options:
+
+If it's manual configuration by ie setuped by installing  new cs's on separate machines ( bynot using CFS) then you need to stop at the headstart scripts not need to run the  scripts 
+
+ie.cancel the process before running the repository configuration scripts.
+
+
+- by using CFS:
+
+Upgrade cs and run the scripts on priamry server upgrade docbase and run the CFS as part of the upgrade Run the dm_acs_install.ebs script:
+
+which we have it in the install guide pg 110 chapter 9 cs 65sp2 on all 4 servers
+
+
+
+
+

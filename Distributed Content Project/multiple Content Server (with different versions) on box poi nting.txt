@@ -1,0 +1,26 @@
+Qstion:
+
+We would like to know the impact and more information on impact of having multiple Content Server (with different versions) on AIX box poi nting to the same Database on a separate machine.  It is like mulitpl Content Servers with single repository. Basically we are supporting the Failover.
+
+The architecture is to have 2 content servers (may be different versions) on same AIX box. Both Content servers pointing to same Database. The Client is configured with BIG IP which is routed through Virtual IPs. We don't use secondary storage entry in dmcl.ini, it will be taken careof by VIP configuration.
+
+Environment is: AIX, CS 5.3 sp5, Index Server, Centera, Oracle on Solaris. Custom application based on WDK
+
+Quesions:
+
+Does EMC has case study on such architecture?
+Any major issues with this configuration?
+Any performance issues?
+Others?
+
+
+Solution:
+
+
+this would not be a supported configuration. You should not have multiple content servers of different versions servicing a single repository. The repository should be of the same version of the content server which created it. A content server of another version should not connect to this docbase.
+
+You can have multiple content servers on one AIX machine but again, they need to be treated completely separate.
+
+Multiple CS connected to same docbase should be same version/release. As to BigIP and performance issues, this is EMC Consultant engament. We do not provide cases studies.
+
+Performance measurements depends on many factors, such as HW, usage base, peak usage, etc.

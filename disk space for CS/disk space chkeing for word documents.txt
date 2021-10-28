@@ -1,0 +1,20 @@
+esg3910
+
+Is there a way to calculate the disk space used by documents of a particular format for old (non-CURRENT) versions?
+
+The following example illustrates how to determine the disk space used for Word 6 documents. To determine the disk space used for another format, replace 'msw6' with the full_format of the target document set. 
+
+
+The following is a query that determines the disk space used by all documents of the format 'msw6' and that are marked CURRENT: 
+
+
+select SUM(content_size) from dmr_content where full_format = 'msw6' and any parent_id_i in (select r_object_id_i from dm_document) 
+
+
+To get all versions simply add the key word (all) after the select statement: 
+
+
+select SUM(content_size) from dmr_content where full_format = 'msw6' and any parent_id_i in (select r_object_id_i from dm_document (all)) 
+
+
+To derive the total disk space used by non-CURRENT versions, subtract the CURRENT number from the total for all versions. 

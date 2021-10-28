@@ -1,0 +1,38 @@
+esg96565 
+
+
+Unable to verify a successful DFS install.
+
+
+
+
+Cause
+
+
+
+
+The documentation to verify the install is not clear.
+
+
+
+
+Resolution
+
+
+
+Access the WSDL for various services that are installed as part of DFS. If the WSDL XMLis being properly served through a browser, the basic DFS install is working. For example, try the following URL after the install (substitute your host and port number below)
+
+
+
+http://myhost:8888/services/core/QueryService"wsdl
+
+
+
+(Note: For the above URL to work, replace the " with a question mark.) 
+
+
+
+
+
+The above URL should work to confirm a successful basic installation. To confirm  docbase connectivity, please run one of the sample consumers provided with DFS SDK.
+
